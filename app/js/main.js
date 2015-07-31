@@ -6,11 +6,7 @@ require({
     'vendor/three'
 ], function(THREE) {
 
-    var scene, camera, renderer;
-    var geometry, material, mesh;
-    var gameContainer;
-
-    var game;
+    var game, gameContainer;
 
     init();
     animate();
@@ -31,9 +27,6 @@ require({
 
 
         game.renderLoop();
-
-
-
     }
 
 });
