@@ -1,10 +1,10 @@
 {
-    "name": "temp",
-    "version": "0.0.0",
-    "dependencies": {
-        "threejs": "",
-        "requirejs": "~2.1.9",
-        "jquery": ""
-    }
+  "name": "temp",
+  "version": "0.0.0",
+  "dependencies": {
+    "threejs": "",
+    "requirejs": "~2.1.9",
+    "jquery": "",
+    "lodash": "~3.10.0"
+  }
 }
-
