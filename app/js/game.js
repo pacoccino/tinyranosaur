@@ -62,16 +62,21 @@ function Game(THREE) {
 
         };
 
+        var loadModel = function(index) {
+            if(index >= models.length) {
+                callback && callback();
+            }
 
-        for (var i = 0; i < 1 /*models.length*/; i++) {
-            var model = models[i];
-
+            var model = models[index];
             loaderObj.load( model.url, function ( object ) {
                 model.object = object;
 
-                callback && callback();
+                index++;
+                loadModel(index);
             });
-        }
+        };
+
+        loadModel(0);
     }
 
     function populateScene(scene) {
