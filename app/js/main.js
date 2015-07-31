@@ -9,13 +9,14 @@ require({
     var game, gameContainer;
 
     init();
-    animate();
 
     function init() {
 
         game = new Game(THREE);
 
-        game.init();
+        game.init(function() {
+            animate();
+        });
 
         gameContainer = $("#game-container");
         gameContainer.append( game.getRendererElement());

@@ -1,44 +1,83 @@
 function Game(THREE) {
 
-    var scene, camera, renderer;
-    var geometry, material, mesh;
+    var _scene, _camera, _renderer;
 
-    var tyranosaur;
+    var _tyranosaur;
 
-    this.init = function() {
 
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
 
-        camera.position.z = 1000;
+    this.init = function(readyCallback) {
 
-        tyranosaur = new Tyranosaur();
-        scene.add( tyranosaur.getMesh() );
+        _scene = new THREE.Scene();
 
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        _camera.position.z = 1000;
+
+        var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        _scene.add( light );
+
+        var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight.position.set( 0, 1, 0 );
+        _scene.add( directionalLight );
+
+        _renderer = new THREE.WebGLRenderer();
+        _renderer.setSize( window.innerWidth, window.innerHeight );
+
+        loadModels(function() {
+            populateScene(_scene);
+
+            readyCallback && readyCallback();
+        });
     };
 
     this.renderLoop = function() {
 
-        tyranosaur.rotate();
+        _tyranosaur.rotate();
 
-
-        renderer.render( scene, camera );
+        _renderer.render( _scene, _camera );
     };
 
     this.getRendererElement = function() {
-        return renderer.domElement;
+        return _renderer.domElement;
     };
 
 
     function onWindowResize(){
 
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
+        _camera.aspect = window.innerWidth / window.innerHeight;
+        _camera.updateProjectionMatrix();
 
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        _renderer.setSize( window.innerWidth, window.innerHeight );
 
+    }
+
+    function loadModels(callback) {
+
+        var manager = new THREE.LoadingManager();
+        var loaderObj = new THREE.ObjectLoader(manager);
+
+        manager.onProgress = function ( item, loaded, total ) {
+
+            console.log( item, loaded, total );
+
+        };
+
+
+        for (var i = 0; i < 1 /*models.length*/; i++) {
+            var model = models[i];
+
+            loaderObj.load( model.url, function ( object ) {
+                model.object = object;
+
+                callback && callback();
+            });
+        }
+    }
+
+    function populateScene(scene) {
+        _tyranosaur = new Tyranosaur();
+
+        scene.add(_tyranosaur.getObject());
     }
 
     window.addEventListener( 'resize', onWindowResize, false );
