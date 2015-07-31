@@ -6,7 +6,8 @@
         },
         "files": {
             "three.js": "threejs/build/three.js",
-            "require.js": "requirejs/require.js"
+            "require.js": "requirejs/require.js",
+            "jquery.js": "jquery/dist/jquery.js"
         }
     }
 }
