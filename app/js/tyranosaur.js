@@ -1,5 +1,6 @@
 function Tyranosaur() {
 
+    var self = this;
     var geometry, material, mesh;
     var object;
 
@@ -20,11 +21,11 @@ function Tyranosaur() {
         mesh = new THREE.Mesh( geometry, material );
     };
 
-    this.getObject = function() {
+    self.getObject = function() {
         return object;
     };
 
-    this.rotate = function() {
+    self.rotate = function() {
         object.rotation.x += 0.01;
         object.rotation.y += 0.02;
     };

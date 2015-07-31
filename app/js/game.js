@@ -1,55 +1,33 @@
 function Game(THREE) {
 
-    var _scene, _camera, _renderer;
+    var self = this;
+    var _renderer;
 
-    var _tyranosaur;
+    self.init = function(readyCallback) {
 
-
-
-    this.init = function(readyCallback) {
-
-        _scene = new THREE.Scene();
-
-        _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        _camera.position.z = 1000;
-
-        var light = new THREE.AmbientLight( 0x404040 ); // soft white light
-        _scene.add( light );
-
-        var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-        directionalLight.position.set( 0, 1, 0 );
-        _scene.add( directionalLight );
+        _scene = new MainScene();
 
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
 
         loadModels(function() {
-            populateScene(_scene);
-
-            readyCallback && readyCallback();
+            _scene.populate();
         });
+
+        readyCallback && readyCallback();
     };
 
-    this.renderLoop = function() {
+    self.renderLoop = function() {
 
-        _tyranosaur.rotate();
+        _scene.step();
 
-        _renderer.render( _scene, _camera );
+        _renderer.render( _scene.scene, _scene.camera );
     };
 
-    this.getRendererElement = function() {
+    self.getRendererElement = function() {
+
         return _renderer.domElement;
     };
-
-
-    function onWindowResize(){
-
-        _camera.aspect = window.innerWidth / window.innerHeight;
-        _camera.updateProjectionMatrix();
-
-        _renderer.setSize( window.innerWidth, window.innerHeight );
-
-    }
 
     function loadModels(callback) {
 
@@ -59,12 +37,12 @@ function Game(THREE) {
         manager.onProgress = function ( item, loaded, total ) {
 
             console.log( item, loaded, total );
-
         };
 
         var loadModel = function(index) {
             if(index >= models.length) {
                 callback && callback();
+                return;
             }
 
             var model = models[index];
@@ -79,10 +57,12 @@ function Game(THREE) {
         loadModel(0);
     }
 
-    function populateScene(scene) {
-        _tyranosaur = new Tyranosaur();
+    function onWindowResize(){
 
-        scene.add(_tyranosaur.getObject());
+        _scene.camera.aspect = window.innerWidth / window.innerHeight;
+        _scene.camera.updateProjectionMatrix();
+
+        _renderer.setSize( window.innerWidth, window.innerHeight );
     }
 
     window.addEventListener( 'resize', onWindowResize, false );
