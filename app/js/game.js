@@ -14,6 +14,8 @@ function Game(THREE) {
             _scene.populate();
         });
 
+        var userInput = new UserInput(this, self.getRendererElement());
+
         readyCallback && readyCallback();
     };
 
