@@ -69,6 +69,11 @@ module.exports = function(grunt) {
                     '**/*.html'
                 ]
             }
+        },
+        shell: {
+            firebaseDeploy: {
+                command: 'firebase deploy'
+            }
         }
     });
 
@@ -76,6 +81,13 @@ module.exports = function(grunt) {
         grunt.task.run([
             'connect:livereload',
             'watch'
+        ]);
+    });
+
+    grunt.registerTask('deploy', function () {
+        grunt.task.run([
+            'bowercopy',
+            'shell:firebaseDeploy'
         ]);
     });
 
