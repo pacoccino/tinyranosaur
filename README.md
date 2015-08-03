@@ -1,6 +1,8 @@
 Tinyranosaur
 ===================
 
+[https://tinyranosaur.firebaseapp.com](https://tinyranosaur.firebaseapp.com)
+
 Your are a tyranosaur. But you are so small. Run for your life !
 
 ### Libraries used
@@ -30,3 +32,4 @@ $ grunt serve
 * Intro scene
 * Bundling
 * User input
+* Poo to slow ennemies
