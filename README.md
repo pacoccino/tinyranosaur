@@ -9,7 +9,7 @@ Your are a tyranosaur. But you are so small. Run for your life !
 
 ### Installation
 
-All you need is need npm.
+All you need is npm.
 
 ```sh
 $ npm install -g grunt bower
