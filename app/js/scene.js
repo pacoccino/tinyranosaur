@@ -1,6 +1,7 @@
-function MainScene() {
+function MainScene(game) {
 
     var self = this;
+    var _game = game;
 
     var _tyranosaur;
 
@@ -47,12 +48,17 @@ function MainScene() {
       	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
       	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
       	self.scene.add(skyBox);
+
+        addEvents();
     };
+
+    function addEvents() {
+    }
 
     // Remplissage de la scene avec les modèles
     self.populate = function() {
 
-        _tyranosaur = new Tyranosaur();
+        _tyranosaur = new Tyranosaur(_game);
         _tyranosaur.getObject().position.y = 30;
 
         self.scene.add(_tyranosaur.getObject());

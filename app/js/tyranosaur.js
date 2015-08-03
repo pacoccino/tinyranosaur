@@ -1,6 +1,8 @@
-function Tyranosaur() {
+function Tyranosaur(game) {
 
     var self = this;
+    var _game = game;
+
     var geometry, material, mesh;
     var object;
 
@@ -23,7 +25,13 @@ function Tyranosaur() {
         material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 
         mesh = new THREE.Mesh( geometry, material );
+
+        addEvents();
     };
+
+    function addEvents() {
+        _game.events.playerAdvance = self.moveForward;
+    }
 
     self.getObject = function() {
         return object;
@@ -40,8 +48,11 @@ function Tyranosaur() {
         rotationStep *= -1;
       }
       object.rotation.y += rotationStep;
-
     };
+
+    self.moveForward = function() {
+        object.translateZ(1);
+    }
 
     constructor();
 }

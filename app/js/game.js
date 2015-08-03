@@ -5,7 +5,7 @@ function Game(THREE) {
 
     self.init = function(readyCallback) {
 
-        _scene = new MainScene();
+        _scene = new MainScene(this);
 
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
@@ -13,6 +13,8 @@ function Game(THREE) {
         loadModels(function() {
             _scene.populate();
         });
+
+        this.events = {};
 
         var userInput = new UserInput(this, self.getRendererElement());
 
