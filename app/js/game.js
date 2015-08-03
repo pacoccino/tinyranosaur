@@ -1,9 +1,12 @@
 function Game(THREE) {
 
     var self = this;
-    var _renderer;
+    var _renderer, _scene;
 
     self.init = function(readyCallback) {
+
+        self.inputDispatcher = new THREE.EventDispatcher();
+        self.clock = new THREE.Clock(true);
 
         _scene = new MainScene(this);
 
@@ -13,8 +16,6 @@ function Game(THREE) {
         loadModels(function() {
             _scene.populate();
         });
-
-        this.events = {};
 
         var userInput = new UserInput(this, self.getRendererElement());
 

@@ -2,6 +2,8 @@ function UserInput (game, domElement) {
     this.game = game;
     this.domElement = domElement;
 
+    var id = this.game.inputDispatcher;
+
     var KEYS = {
         UP: 'Z',
         DOWN: 'S',
@@ -37,23 +39,34 @@ function UserInput (game, domElement) {
     function onKeyDown( event ) {
         switch(event.keyCode) {
             case KEYS.UP:
-                game.events.playerAdvance();
-                console.log("UP");
+                id.dispatchEvent( {type:'advance_start'} );
                 break;
             case KEYS.DOWN:
-                console.log("DOWN");
                 break;
             case KEYS.LEFT:
-                console.log("LEFT");
+                id.dispatchEvent( {type:'left_start'} );
                 break;
             case KEYS.RIGHT:
-                console.log("RIGHT");
+                id.dispatchEvent( {type:'right_start'} );
                 break;
         }
     }
 
     function onKeyUp( event ) {
 
+        switch(event.keyCode) {
+            case KEYS.UP:
+                id.dispatchEvent( {type:'advance_stop'} );
+                break;
+            case KEYS.DOWN:
+                break;
+            case KEYS.LEFT:
+                id.dispatchEvent( {type:'left_stop'} );
+                break;
+            case KEYS.RIGHT:
+                id.dispatchEvent( {type:'right_stop'} );
+                break;
+        }
     }
 
     this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );

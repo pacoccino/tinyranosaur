@@ -34,7 +34,7 @@ function MainScene(game) {
 
         // Sol
 
-        var floorMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
+        var floorMaterial = new THREE.MeshBasicMaterial( { color: 0x125612, side: THREE.DoubleSide } );
       	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
       	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
       	floor.position.y = -0.5;
@@ -53,7 +53,50 @@ function MainScene(game) {
     };
 
     function addEvents() {
+        _game.inputDispatcher.addEventListener('advance_start', playerAdvance);
+        _game.inputDispatcher.addEventListener('advance_stop', playerStop);
+        _game.inputDispatcher.addEventListener('left_start', playerLeft);
+        _game.inputDispatcher.addEventListener('left_stop', playerStopRotate);
+        _game.inputDispatcher.addEventListener('right_start', playerRight);
+        _game.inputDispatcher.addEventListener('right_stop', playerStopRotate);
     }
+
+    function cameraFollow(object) {
+
+        self.camera.position.copy(object.position);
+        self.camera.rotation.copy(object.rotation);
+        self.camera.translateZ(-80);
+        self.camera.translateY(60);
+        self.camera.lookAt(object.position);
+    }
+
+    var playerAdvance = function() {
+        if(_sceneReady) {
+            _tyranosaur.moveForward();
+        }
+    };
+
+    var playerStop = function() {
+        if(_sceneReady) {
+            _tyranosaur.stopForward();
+        }
+    };
+
+    var playerLeft = function() {
+        if(_sceneReady) {
+            _tyranosaur.moveLeft();
+        }
+    };
+    var playerRight = function() {
+        if(_sceneReady) {
+            _tyranosaur.moveRight();
+        }
+    };
+    var playerStopRotate = function() {
+        if(_sceneReady) {
+            _tyranosaur.stopRotate();
+        }
+    };
 
     // Remplissage de la scene avec les modèles
     self.populate = function() {
@@ -72,7 +115,8 @@ function MainScene(game) {
 
         if(!_sceneReady) return;
 
-        _tyranosaur.idleAnimation();
+        _tyranosaur.moveFrame();
+        cameraFollow(_tyranosaur.getObject());
     };
 
 
