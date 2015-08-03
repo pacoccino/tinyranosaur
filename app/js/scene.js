@@ -6,13 +6,18 @@ function MainScene() {
 
     var _sceneReady = false;
 
+    // Construction initiale de la scene
     var constructor = function() {
 
         self.scene = new THREE.Scene();
 
+        // Camera
+
         self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         self.camera.position.y = 100;
         self.camera.position.z = 500;
+
+        // Lumières
 
         var light = new THREE.AmbientLight( 0x404040 ); // soft white light
         self.scene.add( light );
@@ -21,8 +26,12 @@ function MainScene() {
         directionalLight.position.set( 0, 1, 0 );
         self.scene.add( directionalLight );
 
+        // Axes
+
       	var axes = new THREE.AxisHelper(100);
       	self.scene.add( axes );
+
+        // Sol
 
         var floorMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
       	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
@@ -32,14 +41,15 @@ function MainScene() {
       	self.scene.add(floor);
 
 
-      	// make sure the camera's "far" value is large enough so that it will render the skyBox!
+      	// Skybox
+
       	var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
-      	// BackSide: render faces from inside of the cube, instead of from outside (default).
       	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
       	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
       	self.scene.add(skyBox);
     };
 
+    // Remplissage de la scene avec les modèles
     self.populate = function() {
 
         _tyranosaur = new Tyranosaur();
@@ -51,6 +61,7 @@ function MainScene() {
 
     };
 
+    // Callback a chaque render
     self.step = function() {
 
         if(!_sceneReady) return;
