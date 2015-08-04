@@ -5,6 +5,7 @@
     "threejs": "",
     "requirejs": "~2.1.9",
     "jquery": "",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "firebase": "~2.2.9"
   }
 }

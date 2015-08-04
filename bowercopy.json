@@ -8,7 +8,8 @@
             "three.js": "threejs/build/three.js",
             "require.js": "requirejs/require.js",
             "jquery.js": "jquery/dist/jquery.js",
-            "lodash.js": "lodash/lodash.js"
+            "lodash.js": "lodash/lodash.js",
+            "firebase.js": "firebase/firebase.js"
         }
     }
 }
