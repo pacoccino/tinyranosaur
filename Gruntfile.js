@@ -74,6 +74,16 @@ module.exports = function(grunt) {
             firebaseDeploy: {
                 command: 'firebase deploy'
             }
+        },
+        karma: {
+            unit: {
+                configFile: 'tests/karma.conf.js',
+                singleRun: true,
+                autoWatch: false
+            },
+            tdd: {
+                configFile: 'tests/karma.conf.js'
+            }
         }
     });
 
@@ -91,5 +101,9 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'serve']);
+
+    grunt.registerTask('tdd', ['karma:tdd']);
+    grunt.registerTask('unit', ['karma:unit']);
+
+    grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'bowercopy', 'serve']);
 };
