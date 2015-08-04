@@ -7,12 +7,28 @@ require({
 ], function(THREE) {
 
     var game, gameContainer;
+    var _authentication;
 
-    init();
+    authenticate(function() {
+      init();
+    });
+
+    function authenticate(callback) {
+
+      var authentication = new Authentication();
+      authentication.auth(function(success) {
+        if(success) {
+          _authentication = authentication;
+          callback && callback();
+        }
+      });
+    }
 
     function init() {
 
         game = new Game(THREE);
+
+        game.multiplayer = _authentication.getMultiplayer();
 
         game.init(function() {
             animate();

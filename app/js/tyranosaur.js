@@ -16,11 +16,13 @@ function Tyranosaur(game) {
             return;
         }
 
-        model.object.rotation.y = -Math.PI/2;
-        model.object.scale.set(0.5, 0.5, 0.5);
-        model.object.updateMatrix();
+        var modelObject = model.object.clone();
+
+        modelObject.rotation.y = -Math.PI/2;
+        modelObject.scale.set(0.5, 0.5, 0.5);
+        modelObject.updateMatrix();
         _object = new THREE.Object3D();
-        _object.add(model.object);
+        _object.add(modelObject);
 
         addEvents();
     }
@@ -79,11 +81,18 @@ function Tyranosaur(game) {
         _actualVelocity.position.z += acceleration * (_targetVelocity.position.z - _actualVelocity.position.z);
         _actualVelocity.rotation.y += acceleration * (_targetVelocity.rotation.y - _actualVelocity.rotation.y);
 
-        if(_actualVelocity.z < _targetVelocity.z) {
+        if(_actualVelocity.position.z < _targetVelocity.z) {
             _actualVelocity.position.z = Math.min(_actualVelocity.position.z, _targetVelocity.position.z);
         }
-        else if(_actualVelocity.z > _targetVelocity.z) {
-            _actualVelocity.position.z = Math.max(_actualVelocity.position.z, _targetVelocity.position.z);
+        else if(_actualVelocity.rotation.y > _targetVelocity.rotation.y) {
+            _actualVelocity.rotation.y = Math.max(_actualVelocity.rotation.y, _targetVelocity.rotation.y);
+        }
+
+        if(Math.abs(_actualVelocity.position.z) < 0.5) {
+            _actualVelocity.position.z = 0;
+        }
+        else if(Math.abs(_actualVelocity.rotation.y) < 0.1) {
+            _actualVelocity.rotation.y = 0;
         }
 
         _object.translateZ(_actualVelocity.position.z * delta);

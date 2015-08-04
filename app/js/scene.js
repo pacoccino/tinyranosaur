@@ -7,6 +7,8 @@ function MainScene(game) {
 
     var _sceneReady = false;
 
+    var _players = {};
+
     // Construction initiale de la scene
     var constructor = function() {
 
@@ -103,8 +105,26 @@ function MainScene(game) {
 
         _tyranosaur = new Tyranosaur(_game);
         _tyranosaur.getObject().position.y = 30;
+        updateMultiplayerState(_tyranosaur.getObject());
 
         self.scene.add(_tyranosaur.getObject());
+
+        _game.multiplayer.others.on("child_added", function(snapshot) {
+          if(snapshot.key() !== _game.multiplayer.authId) {
+            addPlayer(snapshot);
+          }
+        });
+        _game.multiplayer.others.on("child_changed", function(snapshot) {
+          if(snapshot.key() !== _game.multiplayer.authId) {
+            updatePlayer(snapshot);
+          }
+        });
+
+        _game.multiplayer.others.on("child_removed", function(snapshot) {
+          if(snapshot.key() !== _game.multiplayer.authId) {
+            removePlayer(snapshot);
+          }
+        });
 
         _sceneReady = true;
 
@@ -116,8 +136,54 @@ function MainScene(game) {
         if(!_sceneReady) return;
 
         _tyranosaur.moveFrame();
+        updateMultiplayerState(_tyranosaur.getObject());
         cameraFollow(_tyranosaur.getObject());
     };
+
+    function addPlayer(snap) {
+      var userId = snap.key();
+      var player = snap.val();
+      _players[userId] = player;
+      player.position = player.position || [0,0,0];
+      player.rotation = player.rotation || [0,0,0, "XYZ"];
+
+      var tyrano = new Tyranosaur(_game);
+      player.tyrano = tyrano;
+
+      var object = tyrano.getObject();
+      object.position.fromArray(player.position);
+      object.rotation.fromArray(player.rotation);
+      self.scene.add(tyrano.getObject());
+    }
+
+    function updatePlayer(snap) {
+      var userId = snap.key();
+      var newVal = snap.val();
+      var player = _players[userId];
+      player.position = newVal.position || [0,0,0];
+      player.rotation = newVal.rotation || [0,0,0, "XYZ"];
+
+      var tyrano = player.tyrano;
+      var object = tyrano.getObject();
+      object.position.fromArray(player.position);
+      object.rotation.fromArray(player.rotation);
+    }
+
+    function removePlayer(snap) {
+      var userId = snap.key();
+      var player = _players[userId];
+      self.scene.remove(player.tyrano.getObject());
+      delete _players[userId];
+    }
+
+    function updateMultiplayerState(object) {
+      var ref = _game.multiplayer.me;
+
+      ref.update({
+        "position": object.position.toArray(),
+        "rotation": object.rotation.toArray()
+      });
+    }
 
 
     constructor();
