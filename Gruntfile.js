@@ -15,6 +15,17 @@ module.exports = function(grunt) {
     // Configure the app path
     var base = 'app';
 
+    var fbMessage = "";
+    var launchFirebaseMessage = function (err, stdout, stderr, cb) {
+        fbMessage = stdout;
+        grunt.task.run([ 'shell:firebaseDeployMessage' ]);
+        cb();
+    };
+    var getFirebaseCommandMessage = function() {
+        var firstLine = fbMessage.split("\n")[0];
+        return 'firebase deploy -m "' + firstLine + '"';
+    };
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         bowercopy: grunt.file.readJSON('bowercopy.json'),
@@ -73,6 +84,17 @@ module.exports = function(grunt) {
         shell: {
             firebaseDeploy: {
                 command: 'firebase deploy'
+            },
+            firebaseDeployMessage: {
+                command: getFirebaseCommandMessage
+            },
+            getRevAndFbD: {
+                command: 'git log -1',
+                options: {
+                    callback: launchFirebaseMessage,
+                    stdout: false,
+                    stderr: false
+                }
             }
         },
         karma: {
@@ -98,6 +120,13 @@ module.exports = function(grunt) {
         grunt.task.run([
             'bowercopy',
             'shell:firebaseDeploy'
+        ]);
+    });
+
+    grunt.registerTask('deploym', function () {
+        grunt.task.run([
+            //'bowercopy',
+            'shell:getRevAndFbD'
         ]);
     });
 

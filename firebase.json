@@ -1,9 +1,17 @@
 {
-  "firebase": "tinyranosaur",
-  "public": "app",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**"
-  ]
+    "firebase": "tinyranosaur",
+    "public": "app",
+    "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+    ],
+    "rules": "config/firebase-security.json",
+    "redirects": [
+        {
+            "source": "*",
+            "destination": "/",
+            "type": 301
+        }
+    ]
 }
