@@ -130,14 +130,17 @@ function MainScene(game) {
 
     };
 
+
+    var updateThrottler = _.throttle(updateMultiplayerState, 100);
     // Callback a chaque render
     self.step = function() {
 
         if(!_sceneReady) return;
 
         _tyranosaur.moveFrame();
-        updateMultiplayerState(_tyranosaur.getObject());
         cameraFollow(_tyranosaur.getObject());
+
+        updateThrottler(_tyranosaur.getObject());
     };
 
     function addPlayer(snap) {
