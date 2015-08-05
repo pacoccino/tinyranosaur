@@ -27,9 +27,9 @@ $ grunt serve
 ### TODO
 
 * Environnement
-* Multiplayer
+* Multiplayer interface to firebase
 * Gameplay
 * Intro scene
 * Bundling
-* User input
-* Poo to slow ennemies
+* Poo to slow down ennemies
+* Move players with animations
