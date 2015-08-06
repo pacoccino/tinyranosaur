@@ -70,12 +70,20 @@ function UserInput (game, domElement) {
         }
     }
 
+    function dropKeys() {
+
+        _ed.dispatchEvent( {type:'advance_stop'} );
+        _ed.dispatchEvent( {type:'left_stop'} );
+        _ed.dispatchEvent( {type:'right_stop'} );
+    }
+
     _domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
     _domElement.addEventListener( 'mousedown', onMouseDown, false );
     _domElement.addEventListener( 'mousewheel', onMouseWheel, false );
     _domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
     window.addEventListener( 'keydown', onKeyDown, false );
-    window.addEventListener( 'keyup', onKeyUp, false );
+    window.addEventListener( 'keyup', onKeyUp, false );;
+    window.addEventListener( 'blur', dropKeys, false );
 
     _game.inputDispatcher = _ed;
 }
