@@ -3,9 +3,7 @@ function Tyranosaur(game) {
     var self = this;
     var _game = game;
 
-    var _object;
-
-    var rotationStep = 0.02;
+    var _object, _hasMoved;
 
     function constructor() {
 
@@ -24,27 +22,14 @@ function Tyranosaur(game) {
         _object = new THREE.Object3D();
         _object.add(modelObject);
 
-        addEvents();
-    }
-
-    function addEvents() {
+        _hasMoved = true;
     }
 
     self.getObject = function() {
         return _object;
     };
 
-    self.rotate = function() {
-        _object.rotation.x += 0.01;
-        _object.rotation.y += 0.02;
-    };
-
     self.idleAnimation = function() {
-      var angle_max = Math.PI/5;
-      if(_object.rotation.y + rotationStep > angle_max || _object.rotation.y + rotationStep < -angle_max) {
-        rotationStep *= -1;
-      }
-      //_object.rotation.y += rotationStep;
     };
 
     var maxVelocity = 60;
@@ -95,9 +80,23 @@ function Tyranosaur(game) {
             _actualVelocity.rotation.y = 0;
         }
 
-        _object.translateZ(_actualVelocity.position.z * delta);
-        _object.rotateOnAxis(new THREE.Vector3(0,1,0), _actualVelocity.rotation.y * delta);
+        var zTrans = _actualVelocity.position.z * delta;
+        var yRot = _actualVelocity.rotation.y * delta;
+
+        if(zTrans > 0 || yRot > 0) {
+            _hasMoved = true;
+            _object.translateZ(zTrans);
+            _object.rotateOnAxis(new THREE.Vector3(0,1,0), _actualVelocity.rotation.y * delta);
+        }
     };
+
+    self.hasMoved = function() {
+        return _hasMoved;
+    };
+
+    self.resetMoved = function() {
+        _hasMoved = false;
+    }
 
     constructor();
 }

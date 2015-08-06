@@ -105,9 +105,8 @@ function MainScene(game) {
 
         _tyranosaur = new Tyranosaur(_game);
         _tyranosaur.getObject().position.y = 30;
-        updateMultiplayerState(_tyranosaur.getObject());
-
         self.scene.add(_tyranosaur.getObject());
+        updateMultiplayerState(_tyranosaur);
 
         _game.multiplayer.on('player.new', addPlayer);
         _game.multiplayer.on('player.update', updatePlayer);
@@ -126,7 +125,7 @@ function MainScene(game) {
         _tyranosaur.moveFrame();
         cameraFollow(_tyranosaur.getObject());
 
-        updateThrottler(_tyranosaur.getObject());
+        updateThrottler(_tyranosaur);
     };
 
     function addPlayer(event) {
@@ -165,11 +164,14 @@ function MainScene(game) {
         delete _players[userId];
     }
 
-    function updateMultiplayerState(object) {
-        _game.multiplayer.emit( {
-            type:'me.update',
-            object: object
-        });
+    function updateMultiplayerState(tyranosaur) {
+        if(tyranosaur.hasMoved()) {
+            _game.multiplayer.emit( {
+                type:'me.update',
+                object: tyranosaur.getObject()
+            });
+            tyranosaur.resetMoved();
+        }
     }
 
     constructor();
