@@ -1,8 +1,8 @@
 function UserInput (game, domElement) {
-    this.game = game;
-    this.domElement = domElement;
+    var _game = game;
+    var _domElement = domElement;
 
-    var id = this.game.inputDispatcher;
+    var _ed = new THREE.EventDispatcher();
 
     var KEYS = {
         UP: 'Z',
@@ -10,6 +10,7 @@ function UserInput (game, domElement) {
         LEFT: 'Q',
         RIGHT: 'D'
     };
+
     function convertKeysToCharCode(keys) {
         var properties = Object.getOwnPropertyNames(keys);
         for (var i = 0; i < properties.length; i++) {
@@ -39,15 +40,15 @@ function UserInput (game, domElement) {
     function onKeyDown( event ) {
         switch(event.keyCode) {
             case KEYS.UP:
-                id.dispatchEvent( {type:'advance_start'} );
+                _ed.dispatchEvent( {type:'advance_start'} );
                 break;
             case KEYS.DOWN:
                 break;
             case KEYS.LEFT:
-                id.dispatchEvent( {type:'left_start'} );
+                _ed.dispatchEvent( {type:'left_start'} );
                 break;
             case KEYS.RIGHT:
-                id.dispatchEvent( {type:'right_start'} );
+                _ed.dispatchEvent( {type:'right_start'} );
                 break;
         }
     }
@@ -56,24 +57,25 @@ function UserInput (game, domElement) {
 
         switch(event.keyCode) {
             case KEYS.UP:
-                id.dispatchEvent( {type:'advance_stop'} );
+                _ed.dispatchEvent( {type:'advance_stop'} );
                 break;
             case KEYS.DOWN:
                 break;
             case KEYS.LEFT:
-                id.dispatchEvent( {type:'left_stop'} );
+                _ed.dispatchEvent( {type:'left_stop'} );
                 break;
             case KEYS.RIGHT:
-                id.dispatchEvent( {type:'right_stop'} );
+                _ed.dispatchEvent( {type:'right_stop'} );
                 break;
         }
     }
 
-    this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-    this.domElement.addEventListener( 'mousedown', onMouseDown, false );
-    this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
-    this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
+    _domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+    _domElement.addEventListener( 'mousedown', onMouseDown, false );
+    _domElement.addEventListener( 'mousewheel', onMouseWheel, false );
+    _domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
     window.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'keyup', onKeyUp, false );
 
+    _game.inputDispatcher = _ed;
 }
