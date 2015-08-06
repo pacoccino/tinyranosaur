@@ -114,11 +114,13 @@ function MainScene(game) {
             addPlayer(snapshot);
           }
         });
-        _game.multiplayer.others.on("child_changed", function(snapshot) {
+
+        /*_game.multiplayer.others.on("child_changed", function(snapshot) {
           if(snapshot.key() !== _game.multiplayer.authId) {
             updatePlayer(snapshot);
           }
-        });
+        });*/
+        _game.multiplayerI.on('player.update', updatePlayerI)
 
         _game.multiplayer.others.on("child_removed", function(snapshot) {
           if(snapshot.key() !== _game.multiplayer.authId) {
@@ -172,6 +174,19 @@ function MainScene(game) {
       object.rotation.fromArray(player.rotation);
     }
 
+    function updatePlayerI(event) {
+      var userId = event.key;
+      var newVal = event.data;
+      var player = _players[userId];
+      player.position = newVal.position || [0,0,0];
+      player.rotation = newVal.rotation || [0,0,0, "XYZ"];
+
+      var tyrano = player.tyrano;
+      var object = tyrano.getObject();
+      object.position.fromArray(player.position);
+      object.rotation.fromArray(player.rotation);
+    }
+
     function removePlayer(snap) {
       var userId = snap.key();
       var player = _players[userId];
@@ -180,12 +195,16 @@ function MainScene(game) {
     }
 
     function updateMultiplayerState(object) {
-      var ref = _game.multiplayer.me;
+      _game.multiplayerI.emit( {
+        type:'me.update',
+        object: object
+      });
+      /*var ref = _game.multiplayer.me;
 
       ref.update({
         "position": object.position.toArray(),
         "rotation": object.rotation.toArray()
-      });
+      });*/
     }
 
 

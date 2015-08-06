@@ -29,6 +29,7 @@ require({
         game = new Game(THREE);
 
         game.multiplayer = _authentication.getMultiplayer();
+        game.multiplayerI = new Multiplayer(_authentication);
 
         game.init(function() {
             animate();
