@@ -17,7 +17,6 @@ function Authentication() {
       if (error) {
         console.log("Login Failed!", error);
       } else {
-        console.log("Authenticated successfully with payload:", authData);
         _auth = authData;
         addUser(_auth);
         callback && callback(true);

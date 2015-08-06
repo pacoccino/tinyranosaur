@@ -23,6 +23,8 @@ function Tyranosaur(game) {
         _object.add(modelObject);
 
         _hasMoved = true;
+
+        addEvents();
     }
 
     self.getObject = function() {
@@ -96,6 +98,28 @@ function Tyranosaur(game) {
 
     self.resetMoved = function() {
         _hasMoved = false;
+    }
+
+    var _pood = false;
+    function poo() {
+        if(_pood) return;
+
+        var pooGeometry = new THREE.SphereGeometry(8, 8, 8);
+        var pooMaterial = THREE.MeshBasicMaterial({ // TODO Switch to lambert
+            color: '0xFF0000'
+        });
+
+        var pooMesh = new THREE.Mesh(pooGeometry, pooMaterial);
+        var poo = new THREE.Object3D();
+        poo.add(pooMesh);
+
+        poo.position.copy(_object.position);
+
+        _pood = true;
+    }
+
+    function addEvents() {
+        _game.inputDispatcher.addEventListener('poo', poo);
     }
 
     constructor();

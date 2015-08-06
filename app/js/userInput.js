@@ -8,7 +8,8 @@ function UserInput (game, domElement) {
         UP: 'Z',
         DOWN: 'S',
         LEFT: 'Q',
-        RIGHT: 'D'
+        RIGHT: 'D',
+        P: 'P'
     };
 
     function convertKeysToCharCode(keys) {
@@ -49,6 +50,9 @@ function UserInput (game, domElement) {
                 break;
             case KEYS.RIGHT:
                 _ed.dispatchEvent( {type:'right_start'} );
+                break;
+            case KEYS.P:
+                _ed.dispatchEvent( {type:'poo'} );
                 break;
         }
     }
