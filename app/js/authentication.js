@@ -29,7 +29,7 @@ function Authentication() {
     _firebase.unauth();
   };
 
-  this.getMultiplayer = function() {
+  this.getFirebase = function() {
     if(!_auth) return null;
     var playersRef = _firebase.child("players");
 
