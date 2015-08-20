@@ -7,11 +7,12 @@ Your are a tyranosaur. But you are so small. Run for your life !
 
 ### Libraries used
 * ThreeJS
+* NodeJs
+* Firebase
 * Lodash
+* jQuery
 
 ### Installation
-
-All you need is npm.
 
 ```sh
 $ npm install -g grunt bower
@@ -21,15 +22,20 @@ $ npm install
 ### Running
 
 ```sh
-$ grunt serve
+$ npm start
 ```
 
 ### TODO
 
+**GAME**
 * Environnement
-* Multiplayer interface to firebase
 * Gameplay
 * Intro scene
 * Bundling
 * Poo to slow down ennemies
+* Eat ennemies
 * Move players with animations
+
+**SERVER**
+* Store users and session in mongo
+* Re-implement firebase api w/o storage w/ socket.io
