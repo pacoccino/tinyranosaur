@@ -36,15 +36,9 @@ authenticatorRouter.get('/connect', function(req, res, next) {
 });
 
 authenticatorRouter.get('/all', function(req, res, next) {
-  Users.getAll(function(users) {
+  Users.getAllPublic(function(users) {
 
-      var result = [];
-      for(var i=0; i<users.length; i++) {
-          var user = users[i];
-          result.push(_.pluck(user, ['_id', 'name']));
-      }
-
-      res.send(users);
+      res.json(users);
   });
 
 });

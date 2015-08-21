@@ -8,19 +8,52 @@
 
 </head>
 <body>
-<form action="">
+<h1>SocketIO sandbox</h1>
+<h2><b>My name : </b><span id="my-name"></span></h2>
+<form id="form-connect" action="">
     <input type="text" name="name" id="name"/>
     <button type="submit">Connect</button>
 </form>
+<form id="form-position" action="">
+    <input type="text" name="position" id="position"/>
+    <button type="submit">Update position</button>
+</form>
+
+User list
+<ul></ul>
 
 <script>
-    var socket = io('http://localhost:8888');
-    socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
+    var socket = io('http://localhost:8888/game');
+
+    var _me = null;
+
+    var addUser = function(user) {
+        var ulist = $('ul');
+        ulist.append("<li id='"+user._id+"'>Name : " + user.name +", Position : " + user.position + "</li>");
+    };
+    var updateUser = function(user) {
+        var liUser = $('#'+user._id);
+        liUser.replaceWith("<li id='"+user._id+"'>Name : " + user.name +", Position : " + user.position + "</li>");
+    };
+
+    socket.on('game state', function (state) {
+        _me = state.me;
+        $('#my-name').text(_me.name);
+        var users = state.users;
+        for(var i=0; i<users.length; i++) {
+            addUser(users[i]);
+        }
     });
 
-    $('form').submit(function(){
+    socket.on('new player', function (user) {
+        addUser(user);
+    });
+
+    socket.on('update position', function (user) {
+        updateUser(user);
+    });
+
+    $('#form-connect').submit(function(){
         var name = $('#name').val();
 
         var req = {
@@ -28,6 +61,14 @@
             method: 'GET'
         };
         console.log(req);
+
+        return false;
+    });
+
+    $('#form-position').submit(function(){
+        var position = $('#position').val();
+
+        socket.emit('update position', position);
         return false;
     });
 </script>

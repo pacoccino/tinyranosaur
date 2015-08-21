@@ -5,6 +5,7 @@ var expressSession = require('express-session');
 var socketio = require('socket.io');
 
 var gameApiRouter = require('./routers/api');
+var Game = require('./modules/game');
 var authRouter = require('./routers/auth');
 
 var app = express();
@@ -32,9 +33,4 @@ console.log('Listening on 8888');
 var server = app.listen(8888);
 var io = socketio(server);
 
-io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
-});
+Game.listen(io);
