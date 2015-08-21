@@ -8,7 +8,7 @@ function Multiplayer(authentication) {
     _ed.addEventListener('me.update', function(event) {
         var ref = _firebase.me;
 
-        var object = event.object;
+        var object = event.params;
 
         ref.update({
             "position": object.position.toArray(),

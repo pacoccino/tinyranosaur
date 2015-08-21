@@ -32,6 +32,7 @@ require({
 
         game.init(function() {
             animate();
+            game.multiplayer.listen();
         });
 
         gameContainer = $("#game-container");

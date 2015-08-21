@@ -6,18 +6,15 @@ var Game = {};
 var listenUpdatePosition = function(io, user) {
 
     return function(position) {
-        console.log('Updating position of '+user._id + ":" + position);
-        user.position = position;
+        user.tyranosaur.move(position);
 
         var options = user.toPublic();
-        //user.socket.broadcast.emit('update position', options);
-        io.emit('update position', options);
+        io.emit('player update', options);
     };
 };
 
 var diffuseGameState = function(user) {
     Users.getAllPublic(function(users) {
-        //users = _.reject(users, {_id: user._id});
         var state = {
             me: user.toPublic(),
             users: users
@@ -28,7 +25,7 @@ var diffuseGameState = function(user) {
 
 
 var announcePlayer = function(io, user) {
-    user.socket.broadcast.emit('new player', user.toPublic());
+    user.socket.broadcast.emit('player new', user.toPublic());
 };
 
 Game.listen = function(io) {
@@ -41,7 +38,7 @@ Game.listen = function(io) {
             diffuseGameState(user);
             announcePlayer(gameIo, user);
 
-            socket.on('update position', listenUpdatePosition(gameIo, user));
+            socket.on('player update', listenUpdatePosition(gameIo, user));
         })
     });
 /*

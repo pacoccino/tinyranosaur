@@ -16,9 +16,9 @@ function Game(THREE) {
 
       loadModels(function() {
         _scene.populate();
+          readyCallback && readyCallback();
       });
 
-      readyCallback && readyCallback();
     };
 
     self.renderLoop = function() {

@@ -23,10 +23,13 @@
         <script src="js/vendor/firebase.js"></script>
         <script src="js/vendor/lodash.js"></script>
 
+        <!-- socket -->
+        <script src="/socket.io/socket.io.js"></script>
+
         <!-- Modules -->
         <script src="js/game.js"></script>
         <script src="js/authentication.js"></script>
-        <script src="js/multiplayer.js"></script>
+        <script src="js/multiplayerSocket.js"></script>
         <script src="js/models.js"></script>
         <script src="js/scene.js"></script>
         <script src="js/userInput.js"></script>
@@ -44,4 +47,8 @@
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
             e.src='//www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X');ga('send
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+
+    </body>
+</html>

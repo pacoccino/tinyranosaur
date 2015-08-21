@@ -108,9 +108,9 @@ function MainScene(game) {
         self.scene.add(_tyranosaur.getObject());
         updateMultiplayerState(_tyranosaur);
 
-        _game.multiplayer.on('player.new', addPlayer);
-        _game.multiplayer.on('player.update', updatePlayer);
-        _game.multiplayer.on('player.leave', removePlayer);
+        _game.multiplayer.on('player new', addPlayer);
+        _game.multiplayer.on('player update', updatePlayer);
+        _game.multiplayer.on('player leave', removePlayer);
 
         _sceneReady = true;
     };
@@ -129,11 +129,11 @@ function MainScene(game) {
     };
 
     function addPlayer(event) {
-        var userId = event.key;
-        var player = event.data;
+        var userId = event.player._id;
+        var player = {};
         _players[userId] = player;
-        player.position = player.position || [0,0,0];
-        player.rotation = player.rotation || [0,0,0, "XYZ"];
+        player.position = event.player.tyranosaur.position || [0,0,0];
+        player.rotation = event.player.tyranosaur.rotation || [0,0,0, "XYZ"];
 
         var tyrano = new Tyranosaur(_game);
         player.tyrano = tyrano;
@@ -145,11 +145,10 @@ function MainScene(game) {
     }
 
     function updatePlayer(event) {
-        var userId = event.key;
-        var newVal = event.data;
+        var userId = event.player._id;
         var player = _players[userId];
-        player.position = newVal.position || [0,0,0];
-        player.rotation = newVal.rotation || [0,0,0, "XYZ"];
+        player.position = event.player.tyranosaur.position || [0,0,0];
+        player.rotation = event.player.tyranosaur.rotation || [0,0,0, "XYZ"];
 
         var tyrano = player.tyrano;
         var object = tyrano.getObject();
@@ -158,7 +157,7 @@ function MainScene(game) {
     }
 
     function removePlayer(event) {
-        var userId = event.key;
+        var userId = event._id;
         var player = _players[userId];
         self.scene.remove(player.tyrano.getObject());
         delete _players[userId];
@@ -166,9 +165,15 @@ function MainScene(game) {
 
     function updateMultiplayerState(tyranosaur) {
         if(tyranosaur.hasMoved()) {
+
+            var object = tyranosaur.getObject();
+
             _game.multiplayer.emit( {
-                type:'me.update',
-                object: tyranosaur.getObject()
+                type:'player update',
+                params: {
+                    "position": object.position.toArray(),
+                    "rotation": object.rotation.toArray()
+                }
             });
             tyranosaur.resetMoved();
         }

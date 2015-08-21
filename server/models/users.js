@@ -1,3 +1,5 @@
+var Tyranosaur = require('./tyranosaur');
+
 var users = [];
 
 var idGenerator = function() {
@@ -38,7 +40,7 @@ User.prototype.toPublic = function() {
     var publicUser = {};
     publicUser._id = this._id;
     publicUser.name = this.name;
-    publicUser.position = this.position;
+    publicUser.tyranosaur = this.tyranosaur.getState();
 
     return publicUser;
 };
@@ -47,6 +49,7 @@ var Users = {};
 
 Users.create = function(cb) {
     var user = new User();
+    user.tyranosaur = new Tyranosaur();
     _userList.push(user);
     cb(user);
 };
@@ -64,15 +67,6 @@ Users.getAll = function(cb) {
 
 Users.getBySocket = function(socket) {
     return _.find(_userList, {socket: socket});
-};
-
-Users.toPublic = function(user) {
-    var publicUser = {};
-    publicUser._id = user._id;
-    publicUser.name = user.name;
-    publicUser.position = user.position;
-
-    return publicUser;
 };
 
 Users.getAllPublic = function(cb) {
