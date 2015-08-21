@@ -72,6 +72,13 @@ module.exports = function(grunt) {
                     base + '/css/**/*.css',
                     '**/*.html'
                 ]
+            },
+            mochaTest: {
+                files: ["server/**/*.js", "tests/specsServer/**/*.js"],
+                options: {
+                    reload: true
+                },
+                tasks: "simplemocha:server"
             }
         },
         shell: {
@@ -134,6 +141,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('unitServer', ['simplemocha:server']);
+    grunt.registerTask('tddServer', ['simplemocha:server', 'watch:mochaTest']);
 
     grunt.registerTask('tddClient', ['karma:tddClient']);
     grunt.registerTask('unitClient', ['karma:unitClient']);
