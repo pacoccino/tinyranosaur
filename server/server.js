@@ -2,6 +2,7 @@ var express = require('express'); // Express web server framework
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
+var socketio = require('socket.io');
 
 var gameApiRouter = require('./routers/api');
 var authRouter = require('./routers/auth');
@@ -27,4 +28,13 @@ app.use('/auth', authRouter);
 app.use('/gameapi', gameApiRouter);
 
 console.log('Listening on 8888');
-app.listen(8888);
+
+var server = app.listen(8888);
+var io = socketio(server);
+
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
