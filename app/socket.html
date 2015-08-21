@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <title></title>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io('http://localhost:8888');
-        socket.on('news', function (data) {
-            console.log(data);
-            socket.emit('my other event', { my: 'data' });
-        });
-    </script>
+    <script src="/js/vendor/jquery.js"></script>
+
 </head>
 <body>
+<form action="">
+    <input type="text" name="name" id="name"/>
+    <button type="submit">Connect</button>
+</form>
+
+<script>
+    var socket = io('http://localhost:8888');
+    socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+    });
+
+    $('form').submit(function(){
+        var name = $('#name').val();
+
+        var req = {
+            url: '/auth/connect?name='+name,
+            method: 'GET'
+        };
+        console.log(req);
+        return false;
+    });
+</script>
 
 </body>
 </html>
