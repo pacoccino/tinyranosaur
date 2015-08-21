@@ -91,14 +91,24 @@ module.exports = function(grunt) {
             }
         },
         karma: {
-            unit: {
-                configFile: 'tests/karma.conf.js',
+            unitClient: {
+                configFile: 'tests/karmaClient.conf.js',
                 singleRun: true,
                 autoWatch: false
             },
-            tdd: {
-                configFile: 'tests/karma.conf.js'
+            tddClient: {
+                configFile: 'tests/karmaClient.conf.js'
             }
+        },
+        simplemocha: {
+            options: {
+                timeout: 3000,
+                ignoreLeaks: false,
+                ui: 'bdd',
+                reporter: 'tap'
+            },
+
+            server: { src: ['tests/specsServer/**/*.js'] }
         }
     });
 
@@ -123,9 +133,11 @@ module.exports = function(grunt) {
         ]);
     });
 
+    grunt.registerTask('unitServer', ['simplemocha:server']);
 
-    grunt.registerTask('tdd', ['karma:tdd']);
-    grunt.registerTask('unit', ['karma:unit']);
+    grunt.registerTask('tddClient', ['karma:tddClient']);
+    grunt.registerTask('unitClient', ['karma:unitClient']);
+    grunt.registerTask('test', ['karma:unitServer', 'karma:unitClient']);
 
     grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'bowercopy', 'serve']);
 };
