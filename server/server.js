@@ -10,6 +10,8 @@ var authRouter = require('./routers/auth');
 
 var app = express();
 
+var PORT = process.env.PORT || 8888;
+
 app.use(cookieParser());
 app.use(expressSession({
   secret:'somesecrettokenhere',
@@ -30,7 +32,7 @@ app.use('/gameapi', gameApiRouter);
 
 console.log('Listening on 8888');
 
-var server = app.listen(8888);
+var server = app.listen(PORT);
 var io = socketio(server);
 
 Game.listen(io);
