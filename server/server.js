@@ -30,7 +30,7 @@ app.get('/route', function(req, res) {
 app.use('/auth', authRouter);
 app.use('/gameapi', gameApiRouter);
 
-console.log('Listening on 8888');
+console.log('Listening on '+PORT);
 
 var server = app.listen(PORT);
 var io = socketio(server);
