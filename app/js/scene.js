@@ -130,11 +130,18 @@ function MainScene(game) {
     };
 
     function checkIfICollide() {
+        /*
         for (var i = 0; i < _players.length; i++) {
-            var obj = _players[i];
-
-        }
+            var player = _players[i];
+            if(_myTyranosaur.collideWith(player.tyranosaur)) {
+                eatPlayer(player);
+            }
+        }*/
     }
+
+    function eatPlayer(player) {
+        console.log("I ate someone, but who ?");
+    };
 
     function addPlayer(event) {
         var userId = event.player._id;
