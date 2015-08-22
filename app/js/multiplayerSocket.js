@@ -1,6 +1,6 @@
 // Interface to firebase
 
-function Multiplayer(authentication) {
+function Multiplayer_Socket() {
 
     var self = this;
 
@@ -42,7 +42,8 @@ function Multiplayer(authentication) {
         });
 
         _socket.on("player update", function(player) {
-            if(player._id === self.me._id) return;
+            // TODO chec pk self.me._id === undefined
+            if(!self.me._id || player._id === self.me._id) return;
 
             _ed.dispatchEvent( {
                 type: 'player update',

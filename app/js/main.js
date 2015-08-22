@@ -9,6 +9,7 @@ require({
     var game, gameContainer;
     var _authentication;
 
+    /*
     authenticate(function() {
       init();
     });
@@ -22,13 +23,16 @@ require({
           callback && callback();
         }
       });
-    }
+    }*/
+
+    init();
 
     function init() {
 
         game = new Game(THREE);
 
-        game.multiplayer = new Multiplayer(_authentication);
+        //game.multiplayer = new Multiplayer(_authentication);
+        game.multiplayer = new Multiplayer_Socket();
 
         game.init(function() {
             animate();

@@ -4,7 +4,7 @@ function Authentication() {
 
   function addUser(auth) {
     var playersRef = _firebase.child("players");
-    var myRef = playersRef.child(auth.uid)
+    var myRef = playersRef.child(auth.uid);
     myRef.set({
       provider: auth.provider
     });

@@ -1,6 +1,6 @@
 // Interface to firebase
 
-function Multiplayer(authentication) {
+function Multiplayer_Firebase(authentication) {
 
     var _ed = new THREE.EventDispatcher();
     var _firebase = authentication.getFirebase();
