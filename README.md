@@ -1,7 +1,7 @@
 Tinyranosaur
 ===================
 
-[https://tinyranosaur.firebaseapp.com](https://tinyranosaur.firebaseapp.com)
+[https://tinyranosaur.herokuapp.com/](https://tinyranosaur.herokuapp.com/)
 
 Your are a tyranosaur. But you are so small. Run for your life !
 
