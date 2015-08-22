@@ -2,3 +2,6 @@ node_modules
 .idea
 app/js/vendor
 bower_components
+npm-debug.log
+.DS_Store
+/*.env
