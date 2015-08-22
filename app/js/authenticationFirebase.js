@@ -1,5 +1,5 @@
-function Authentication() {
-  var _firebase = new Firebase("https://tinyranosaur.firebaseio.com/");
+function Authentication_Firebase() {
+  var _firebase = new Firebase(GameConfig.FireBaseUrl);
   var _auth = null;
 
   function addUser(auth) {

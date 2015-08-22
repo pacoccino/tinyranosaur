@@ -9,18 +9,31 @@ var listenUpdatePosition = function(io, user) {
         user.tyranosaur.move(position);
 
         var options = user.toPublic();
-        io.emit('player update', options);
+        Users.getAll(function(users) {
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+                user.socket.volatile.emit('player update', options);
+            }
+        });
+
+        //io.emit('player update', options);
     };
 };
 
 var diffuseGameState = function(user) {
     Users.getAllPublic(function(users) {
         var state = {
-            me: user.toPublic(),
             users: users
         };
         user.socket.emit('game state', state);
     });
+};
+
+var welcomePlayer = function(user, welcomed) {
+    var welcomeMessage = {};
+    welcomeMessage._id = user._id;
+    welcomeMessage.name = user.name;
+    user.socket.emit('welcome', welcomeMessage, welcomed);
 };
 
 
@@ -35,11 +48,13 @@ Game.listen = function(io) {
         Users.create(function(user) {
             user.socket = socket;
 
-            diffuseGameState(user);
-            announcePlayer(gameIo, user);
+            welcomePlayer(user, function() {
+                diffuseGameState(user);
+                announcePlayer(gameIo, user);
 
-            socket.on('player update', listenUpdatePosition(gameIo, user));
-        })
+                socket.on('player update', listenUpdatePosition(gameIo, user));
+            });
+       })
     });
 /*
     gameIo.on('disconnect', function(socket) {

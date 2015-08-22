@@ -1,13 +1,10 @@
 // Interface to firebase
 
-function Multiplayer_Socket() {
-
-    var self = this;
+function Multiplayer_Socket(authentification) {
 
     var _ed = new THREE.EventDispatcher();
-    var _socket = io('http://localhost:8888/game');
-
-    this.me = {};
+    var _auth = authentification;
+    var _socket = _auth.socket;
 
     this.emit = function(event) {
         _socket.emit(event.type, event.params);
@@ -20,12 +17,10 @@ function Multiplayer_Socket() {
     this.listen = function() {
 
         _socket.on("game state", function(state) {
-            self.me._id = state.me._id;
-
             for(var i=0; i<state.users.length; i++) {
                 var player = state.users[i];
 
-                if(player._id === self.me._id) continue;
+                if(player._id === _auth._id) continue;
 
                 _ed.dispatchEvent( {
                     type: 'player new',
@@ -42,8 +37,7 @@ function Multiplayer_Socket() {
         });
 
         _socket.on("player update", function(player) {
-            // TODO chec pk self.me._id === undefined
-            if(!self.me._id || player._id === self.me._id) return;
+            if(player._id === _auth.info._id) return;
 
             _ed.dispatchEvent( {
                 type: 'player update',
@@ -58,6 +52,8 @@ function Multiplayer_Socket() {
 
             });
         });
+
+        _auth.listenReady();
     };
 
 }

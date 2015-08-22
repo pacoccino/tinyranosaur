@@ -3,7 +3,7 @@ function MainScene(game) {
     var self = this;
     var _game = game;
 
-    var _tyranosaur;
+    var _myTyranosaur;
 
     var _sceneReady = false;
 
@@ -74,39 +74,39 @@ function MainScene(game) {
 
     var playerAdvance = function() {
         if(_sceneReady) {
-            _tyranosaur.moveForward();
+            _myTyranosaur.moveForward();
         }
     };
 
     var playerStop = function() {
         if(_sceneReady) {
-            _tyranosaur.stopForward();
+            _myTyranosaur.stopForward();
         }
     };
 
     var playerLeft = function() {
         if(_sceneReady) {
-            _tyranosaur.moveLeft();
+            _myTyranosaur.moveLeft();
         }
     };
     var playerRight = function() {
         if(_sceneReady) {
-            _tyranosaur.moveRight();
+            _myTyranosaur.moveRight();
         }
     };
     var playerStopRotate = function() {
         if(_sceneReady) {
-            _tyranosaur.stopRotate();
+            _myTyranosaur.stopRotate();
         }
     };
 
     // Remplissage de la scene avec les modèles
     self.populate = function() {
 
-        _tyranosaur = new Tyranosaur(_game);
-        _tyranosaur.getObject().position.y = 30;
-        self.scene.add(_tyranosaur.getObject());
-        updateMultiplayerState(_tyranosaur);
+        _myTyranosaur = new Tyranosaur(_game);
+        _myTyranosaur.getObject().position.y = 30;
+        self.scene.add(_myTyranosaur.getObject());
+        //updateMultiplayerState(_myTyranosaur);
 
         _game.multiplayer.on('player new', addPlayer);
         _game.multiplayer.on('player update', updatePlayer);
@@ -116,17 +116,25 @@ function MainScene(game) {
     };
 
 
-    var updateThrottler = _.throttle(updateMultiplayerState, 100);
+    var updateThrottler = _.throttle(updateMultiplayerState, GameConfig.updateInterval);
     // Callback a chaque render
     self.step = function() {
 
         if(!_sceneReady) return;
 
-        _tyranosaur.moveFrame();
-        cameraFollow(_tyranosaur.getObject());
+        _myTyranosaur.moveFrame();
+        cameraFollow(_myTyranosaur.getObject());
+        checkIfICollide();
 
-        updateThrottler(_tyranosaur);
+        updateThrottler(_myTyranosaur);
     };
+
+    function checkIfICollide() {
+        for (var i = 0; i < _players.length; i++) {
+            var obj = _players[i];
+
+        }
+    }
 
     function addPlayer(event) {
         var userId = event.player._id;
@@ -147,6 +155,7 @@ function MainScene(game) {
     function updatePlayer(event) {
         var userId = event.player._id;
         var player = _players[userId];
+        if(!player) return; // TODO check pk on en arrive la
         player.position = event.player.tyranosaur.position || [0,0,0];
         player.rotation = event.player.tyranosaur.rotation || [0,0,0, "XYZ"];
 

@@ -9,30 +9,28 @@ require({
     var game, gameContainer;
     var _authentication;
 
-    /*
+
     authenticate(function() {
       init();
     });
 
     function authenticate(callback) {
 
-      var authentication = new Authentication();
+      var authentication = new Authentication_Socket();
       authentication.auth(function(success) {
         if(success) {
           _authentication = authentication;
           callback && callback();
         }
       });
-    }*/
-
-    init();
+    }
 
     function init() {
 
         game = new Game(THREE);
 
         //game.multiplayer = new Multiplayer(_authentication);
-        game.multiplayer = new Multiplayer_Socket();
+        game.multiplayer = new Multiplayer_Socket(_authentication);
 
         game.init(function() {
             animate();

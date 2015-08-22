@@ -98,14 +98,14 @@ function Tyranosaur(game) {
 
     self.resetMoved = function() {
         _hasMoved = false;
-    }
+    };
 
-    var _pood = false;
+    var _poos = false;
     function poo() {
-        if(_pood) return;
+        if(_poos.length > 0) return;
 
         var pooGeometry = new THREE.SphereGeometry(8, 8, 8);
-        var pooMaterial = THREE.MeshBasicMaterial({ // TODO Switch to lambert
+        var pooMaterial = new THREE.MeshBasicMaterial({ // TODO Switch to lambert
             color: '0xFF0000'
         });
 
@@ -115,12 +115,18 @@ function Tyranosaur(game) {
 
         poo.position.copy(_object.position);
 
-        _pood = true;
+        _game.getScene().scene.add(poo);
+
+        _poos.push(poo);
     }
 
     function addEvents() {
         _game.inputDispatcher.addEventListener('poo', poo);
     }
+
+    self.collideWith = function(ennemyTyra) {
+        return false;
+    };
 
     constructor();
 }

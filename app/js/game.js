@@ -15,7 +15,7 @@ function Game(THREE) {
       _scene = new MainScene(this);
 
       loadModels(function() {
-        _scene.populate();
+          _scene.populate();
           readyCallback && readyCallback();
       });
 
@@ -31,6 +31,10 @@ function Game(THREE) {
     self.getRendererElement = function() {
 
         return _renderer.domElement;
+    };
+
+    self.getScene = function() {
+        return _scene;
     };
 
     function loadModels(callback) {
