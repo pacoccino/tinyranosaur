@@ -45,7 +45,7 @@
         "time-grunt": "^1.0.0"
     },
     "scripts": {
-        "postinstall": "./node_modules/bin/grunt bowercopy",
+        "postinstall": "./node_modules/.bin/grunt bowercopy",
         "start": "node server/server.js",
         "test": "grunt test"
     }
