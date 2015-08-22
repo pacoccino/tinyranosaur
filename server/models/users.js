@@ -1,4 +1,5 @@
 var Tyranosaur = require('./tyranosaur');
+var _ = require('lodash');
 
 var users = [];
 
@@ -66,6 +67,7 @@ Users.getAll = function(cb) {
 
 
 Users.getBySocket = function(socket) {
+    // TODO search by socket doesnt work
     return _.find(_userList, {socket: socket});
 };
 

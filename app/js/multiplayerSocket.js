@@ -20,7 +20,7 @@ function Multiplayer_Socket(authentification) {
             for(var i=0; i<state.users.length; i++) {
                 var player = state.users[i];
 
-                if(player._id === _auth._id) continue;
+                if(player._id === _auth.info._id) continue;
 
                 _ed.dispatchEvent( {
                     type: 'player new',

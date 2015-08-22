@@ -106,7 +106,7 @@ function MainScene(game) {
         _myTyranosaur = new Tyranosaur(_game);
         _myTyranosaur.getObject().position.y = 30;
         self.scene.add(_myTyranosaur.getObject());
-        //updateMultiplayerState(_myTyranosaur);
+        updateMultiplayerState(_myTyranosaur);
 
         _game.multiplayer.on('player new', addPlayer);
         _game.multiplayer.on('player update', updatePlayer);

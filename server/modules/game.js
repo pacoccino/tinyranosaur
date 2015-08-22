@@ -54,19 +54,15 @@ Game.listen = function(io) {
 
                 socket.on('player update', listenUpdatePosition(gameIo, user));
             });
-       })
-    });
-/*
-    gameIo.on('disconnect', function(socket) {
-        var user = Users.getBySocket(socket);
 
-        if(user) {
-            Users.delete(user._id);
-        }
-        else {
-            console.error('Unable to Users.getBySocket');
-        }
-    });*/
+            socket.on('disconnect', function(socket) {
+
+                Users.delete(user._id);
+                gameIo.emit('player leave', user._id);
+            });
+        });
+    });
+
 };
 
 module.exports = Game;
