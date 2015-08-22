@@ -1,48 +1,51 @@
 {
-  "name": "tinyranosaur",
-  "version": "0.0.1",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pakokrew/tinyranosaur"
-  },
-  "author": "Pacien Boisson <pacienboisson@gmail.com>",
-  "keywords": [
-    "tyranosaur",
-    "threejs",
-    "game",
-    "3d"
-  ],
-  "dependencies": {},
-  "devDependencies": {
-    "body-parser": "^1.13.3",
-    "chai": "^3.2.0",
-    "cookie-parser": "^1.3.5",
-    "express": "^4.13.3",
-    "express-session": "^1.11.3",
-    "grunt": "^0.4.5",
-    "grunt-bowercopy": "^1.1.0",
-    "grunt-contrib-connect": "^0.8.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-jsonlint": "^1.0.4",
-    "grunt-karma": "^0.12.0",
-    "grunt-newer": "^1.1.0",
-    "grunt-shell": "^1.1.2",
-    "grunt-simple-mocha": "^0.4.0",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.13.4",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.0",
-    "load-grunt-tasks": "^3.1.0",
-    "lodash": "^3.10.1",
-    "mocha": "^2.2.5",
-    "phantomjs": "^1.9.17",
-    "socket.io": "^1.3.6",
-    "time-grunt": "^1.0.0"
-  },
-  "scripts": {
-    "install": "grunt bowercopy",
-    "start": "node server/server.js",
-    "test": "grunt test"
-  }
+    "name": "tinyranosaur",
+    "version": "0.0.2",
+    "engines": {
+        "node": "0.12.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pakokrew/tinyranosaur"
+    },
+    "author": "Pacien Boisson <pacienboisson@gmail.com>",
+    "keywords": [
+        "tyranosaur",
+        "threejs",
+        "game",
+        "3d"
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "body-parser": "^1.13.3",
+        "chai": "^3.2.0",
+        "cookie-parser": "^1.3.5",
+        "express": "^4.13.3",
+        "express-session": "^1.11.3",
+        "grunt": "^0.4.5",
+        "grunt-bowercopy": "^1.1.0",
+        "grunt-contrib-connect": "^0.8.0",
+        "grunt-contrib-jshint": "^0.10.0",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-jsonlint": "^1.0.4",
+        "grunt-karma": "^0.12.0",
+        "grunt-newer": "^1.1.0",
+        "grunt-shell": "^1.1.2",
+        "grunt-simple-mocha": "^0.4.0",
+        "jasmine-core": "^2.3.4",
+        "karma": "^0.13.4",
+        "karma-jasmine": "^0.3.6",
+        "karma-phantomjs-launcher": "^0.2.0",
+        "load-grunt-tasks": "^3.1.0",
+        "lodash": "^3.10.1",
+        "mocha": "^2.2.5",
+        "phantomjs": "^1.9.17",
+        "socket.io": "^1.3.6",
+        "time-grunt": "^1.0.0"
+    },
+    "scripts": {
+        "install": "grunt bowercopy",
+        "start": "node server/server.js",
+        "test": "grunt test"
+    }
 }
