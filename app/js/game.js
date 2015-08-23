@@ -12,6 +12,7 @@ function Game(THREE) {
 
       var userInput = new UserInput(this, self.getRendererElement());
 
+      self.inputDispatcher = userInput.ed;
       _scene = new MainScene(this);
 
       loadModels(function() {

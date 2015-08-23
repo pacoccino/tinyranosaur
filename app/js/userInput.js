@@ -89,5 +89,5 @@ function UserInput (game, domElement) {
     window.addEventListener( 'keyup', onKeyUp, false );;
     window.addEventListener( 'blur', dropKeys, false );
 
-    _game.inputDispatcher = _ed;
+    this.ed = _ed;
 }
