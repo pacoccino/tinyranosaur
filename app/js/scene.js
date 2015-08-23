@@ -141,7 +141,7 @@ function MainScene(game) {
 
     function eatPlayer(player) {
         console.log("I ate someone, but who ?");
-    };
+    }
 
     function addPlayer(event) {
         var userId = event.player._id;
