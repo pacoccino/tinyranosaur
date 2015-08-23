@@ -43,6 +43,7 @@
     "karma": "^0.13.4",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.0",
+    "mocha": "^2.2.5",
     "phantomjs": "^1.9.17"
   },
   "scripts": {
