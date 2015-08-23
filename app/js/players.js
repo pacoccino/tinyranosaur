@@ -1,6 +1,6 @@
 function Player(game) {
     this.game = game;
-    this._id = "";
+    this._id = Helpers.idGenerator();
     this.name = "";
     this.tyranosaur = null;
 }
@@ -23,9 +23,19 @@ Players.prototype.new = function() {
     var player = new Player(this.game);
 
     this._playerList.push(player);
+
+    return player;
 };
 
-Players.prototype.delete = function(id) {
+Players.prototype.delete = function(player) {
+    var id;
+    if(player instanceof Player) {
+        id = player._id;
+    }
+    else {
+        id = player;
+    }
+
     var index  = _.findIndex(this._playerList, {_id: id});
     this._playerList.splice(index, 1);
 };
