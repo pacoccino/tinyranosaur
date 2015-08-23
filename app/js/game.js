@@ -5,20 +5,23 @@ function Game(THREE) {
 
     self.init = function(readyCallback) {
 
-      self.clock = new THREE.Clock(true);
+        self.clock = new THREE.Clock(true);
 
-      _renderer = new THREE.WebGLRenderer();
-      _renderer.setSize( window.innerWidth, window.innerHeight );
+        _renderer = new THREE.WebGLRenderer();
+        _renderer.setSize( window.innerWidth, window.innerHeight );
 
-      var userInput = new UserInput(this, self.getRendererElement());
+        var userInput = new UserInput(this, self.getRendererElement());
 
-      self.inputDispatcher = userInput.ed;
-      _scene = new MainScene(this);
+        self.inputDispatcher = userInput.ed;
 
-      loadModels(function() {
-          _scene.populate();
-          readyCallback && readyCallback();
-      });
+        self.players = new Players(this);
+
+        _scene = new MainScene(this);
+
+        loadModels(function() {
+            _scene.populate();
+            readyCallback && readyCallback();
+        });
 
     };
 

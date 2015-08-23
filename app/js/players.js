@@ -5,12 +5,24 @@ function Player(game) {
     this.tyranosaur = null;
 }
 
-Player.prototype.initFromServer = function(serverPlayer) {
+Player.prototype.init = function(serverPlayer) {
+    this.tyranosaur = new Tyranosaur(this.game);
+};
+
+Player.prototype.updateFromServer = function(serverPlayer) {
     this._id = serverPlayer._id;
     this.name = serverPlayer.name;
 
-    this.tyranosaur = new Tyranosaur(this.game);
+    var object = this.tyranosaur.getObject();
+    var serverTyra = serverPlayer.tyranosaur;
+
+    if(serverTyra.position.length !== 3 || serverTyra.rotation.length !== 4) {
+        console.error("Invalid server data for player");
+    }
+    object.position.fromArray(serverTyra.position);
+    object.rotation.fromArray(serverTyra.rotation);
 };
+
 
 
 function Players(game) {

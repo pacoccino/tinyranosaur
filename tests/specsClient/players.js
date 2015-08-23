@@ -5,29 +5,52 @@ describe('Players class', function() {
             var player = new Player(game);
             expect(player._id).toBeDefined();
             expect(player._id.length).toBe(10);
-            console.log(player._id)
             expect(player.name).toBe("");
             expect(player.tyranosaur).toBeNull();
         });
 
-        it('init from server', function() {
+        it('init', function() {
+            var player = new Player(game);
+
+            player.init();
+            expect(player.tyranosaur).toBeDefined();
+            expect(player.tyranosaur instanceof Tyranosaur).toBeTruthy();
+        });
+
+        it('update from server', function() {
+
             var sPlayer = {
                 _id: 1,
-                name: "bob"
+                name: "bob",
+                tyranosaur: {
+                    position: [1,2,3],
+                    rotation: [1,2,3, 'zyx']
+                }
             };
+
             var player = new Player(game);
-            player.initFromServer(sPlayer);
+            player.init();
+            player.updateFromServer(sPlayer);
 
             expect(player._id).toBe(1);
             expect(player.name).toBe("bob");
-            expect(player.tyranosaur).toBeDefined();
-            expect(player.tyranosaur instanceof Tyranosaur).toBeTruthy();
+
+            var position = player.tyranosaur.getObject().position;
+            var rotation = player.tyranosaur.getObject().rotation;
+            expect(position.x).toBe(1);
+            expect(position.y).toBe(2);
+            expect(position.z).toBe(3);
+            expect(rotation.x).toBe(1);
+            expect(rotation.y).toBe(2);
+            expect(rotation.z).toBe(3);
+            expect(rotation.order).toBe('zyx');
         });
     });
 
     describe('Players', function() {
 
         var players;
+
         beforeEach(function() {
             players = new Players(game);
         });

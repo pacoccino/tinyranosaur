@@ -5,6 +5,8 @@ function Tyranosaur(game) {
 
     var _object, _hasMoved;
 
+    var rayCaster;
+
     function constructor() {
 
         var model = _.find(models, {name: 'dino'});
@@ -19,10 +21,22 @@ function Tyranosaur(game) {
         modelObject.rotation.y = -Math.PI/2;
         modelObject.scale.set(0.5, 0.5, 0.5);
         modelObject.updateMatrix();
+
+        var globGeom = new THREE.BoxGeometry(20, 50, 70);
+        var globMaterial = new THREE.MeshBasicMaterial({ // TODO Switch to lambert
+            color: '0xFF0000'
+        });
+        var globMesh = new THREE.Mesh(globGeom, globMaterial);
+        globMesh.position.z = 5;
+
         _object = new THREE.Object3D();
         _object.add(modelObject);
+        _object.add(globMesh);
 
         _hasMoved = true;
+
+        rayCaster = new THREE.Raycaster();
+        //rayCaster.far = 100;
 
         addEvents();
     }
@@ -124,7 +138,38 @@ function Tyranosaur(game) {
         _game.inputDispatcher.addEventListener('poo', poo);
     }
 
+    function isTyra(object) {
+        return true;
+    }
+
+    function getDirection() {
+
+        var direction = new THREE.Vector3(0,0,1);
+        direction.applyEuler(_object.rotation);
+
+        return direction;
+    }
+
+    var arrowHelper;
+
     self.collideWith = function(ennemyTyra) {
+        var direction = getDirection();
+
+        rayCaster.set(_object.position, direction);
+        var collisions = rayCaster.intersectObject(ennemyTyra.getObject());
+
+        if(arrowHelper) {
+            _game.getScene().scene.remove(arrowHelper);
+        }
+        arrowHelper = new THREE.ArrowHelper( direction, _object.position, 100, 0x00FF00 );
+        _game.getScene().scene.add( arrowHelper );
+
+        for (var i = 0; i < collisions.length; i++) {
+            var collider = collisions[i];
+            if(isTyra(collider)) {
+                return true;
+            }
+        }
         return false;
     };
 

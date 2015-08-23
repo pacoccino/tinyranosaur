@@ -7,8 +7,6 @@ function MainScene(game) {
 
     var _sceneReady = false;
 
-    var _players = {};
-
     // Construction initiale de la scene
     var constructor = function() {
 
@@ -67,8 +65,13 @@ function MainScene(game) {
 
         self.camera.position.copy(object.position);
         self.camera.rotation.copy(object.rotation);
-        self.camera.translateZ(-80);
-        self.camera.translateY(60);
+
+        //self.camera.translateZ(-80);
+        //self.camera.translateY(60);
+
+        self.camera.translateZ(-1);
+        self.camera.translateY(150);
+
         self.camera.lookAt(object.position);
     }
 
@@ -130,53 +133,43 @@ function MainScene(game) {
     };
 
     function checkIfICollide() {
-        /*
-        for (var i = 0; i < _players.length; i++) {
-            var player = _players[i];
+        var players = game.players.getAll();
+
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i];
             if(_myTyranosaur.collideWith(player.tyranosaur)) {
                 eatPlayer(player);
             }
-        }*/
+        }
     }
 
     function eatPlayer(player) {
-        console.log("I ate someone, but who ?");
+        console.log("I ate" + player._id);
     }
 
     function addPlayer(event) {
-        var userId = event.player._id;
-        var player = {};
-        _players[userId] = player;
-        player.position = event.player.tyranosaur.position || [0,0,0];
-        player.rotation = event.player.tyranosaur.rotation || [0,0,0, "XYZ"];
 
-        var tyrano = new Tyranosaur(_game);
-        player.tyrano = tyrano;
+        var player = _game.players.new();
+        player.init();
+        player.updateFromServer(event.player);
 
-        var object = tyrano.getObject();
-        object.position.fromArray(player.position);
-        object.rotation.fromArray(player.rotation);
-        self.scene.add(tyrano.getObject());
+        self.scene.add(player.tyranosaur.getObject());
     }
 
     function updatePlayer(event) {
         var userId = event.player._id;
-        var player = _players[userId];
-        if(!player) return; // TODO check pk on en arrive la
-        player.position = event.player.tyranosaur.position || [0,0,0];
-        player.rotation = event.player.tyranosaur.rotation || [0,0,0, "XYZ"];
-
-        var tyrano = player.tyrano;
-        var object = tyrano.getObject();
-        object.position.fromArray(player.position);
-        object.rotation.fromArray(player.rotation);
+        var player = _game.players.getById(userId);
+        player.updateFromServer(event.player);
     }
 
     function removePlayer(event) {
         var userId = event._id;
-        var player = _players[userId];
-        self.scene.remove(player.tyrano.getObject());
-        delete _players[userId];
+        var player = _game.players.getById(userId);
+
+        self.scene.remove(player.tyranosaur.getObject());
+
+        _game.players.delete(player);
+
     }
 
     function updateMultiplayerState(tyranosaur) {
