@@ -3,7 +3,7 @@ var Users = require('../models/users');
 
 var Game = {};
 
-var users = new Users();
+Game.users = new Users();
 
 var listenUpdatePosition = function(io, user) {
 
@@ -11,7 +11,7 @@ var listenUpdatePosition = function(io, user) {
         user.tyranosaur.move(position);
 
         var options = user.toPublic();
-        users.getAll(function(userList) {
+        Game.users.getAll(function(userList) {
             for (var i = 0; i < userList.length; i++) {
                 var user = userList[i];
                 user.socket.volatile.emit('player update', options);
@@ -21,9 +21,9 @@ var listenUpdatePosition = function(io, user) {
 };
 
 var diffuseGameState = function(user) {
-    users.getAllPublic(function(users) {
+    Game.users.getAllPublic(function(users) {
         var state = {
-            users: users
+            users: Game.users
         };
         user.socket.emit('game state', state);
     });
@@ -45,7 +45,7 @@ Game.listen = function(io) {
     var gameIo = io.of('/game');
 
     gameIo.on('connect', function(socket) {
-        users.create(function(user) {
+        Game.users.create(function(user) {
             user.socket = socket;
 
             welcomePlayer(user, function() {
@@ -57,12 +57,16 @@ Game.listen = function(io) {
 
             socket.on('disconnect', function(socket) {
 
-                users.delete(user._id);
+                Game.users.delete(user._id);
                 gameIo.emit('player leave', user._id);
             });
         });
     });
 
+    gameIo.on('atest', function(socket) {
+        console.log('test' + socket)
+        Game.test = true
+    });
 };
 
 module.exports = Game;
