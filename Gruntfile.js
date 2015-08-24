@@ -145,7 +145,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('tddClient', ['karma:tddClient']);
     grunt.registerTask('unitClient', ['karma:unitClient']);
-    grunt.registerTask('test', ['karma:unitServer', 'karma:unitClient']);
+
+    grunt.registerTask('test', ['simplemocha:server', 'karma:unitClient']);
 
     grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'bowercopy', 'serve']);
 };

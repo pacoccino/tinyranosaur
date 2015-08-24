@@ -7,10 +7,13 @@ Your are a tyranosaur. But you are so small. Run for your life !
 
 ### Libraries used
 * ThreeJS
-* NodeJs
-* Firebase
+* NodeJs w/ Express
+* Firebase (old)
+* SocketIO
 * Lodash
 * jQuery
+* Karma
+* Mocha w/ Chai
 
 ### Installation
 
