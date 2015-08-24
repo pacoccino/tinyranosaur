@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var socketio = require('socket.io');
 
-var gameApiRouter = require('./routers/api');
 var Game = require('./modules/game');
 var authRouter = require('./routers/auth');
 
@@ -28,8 +27,6 @@ app.get('/route', function(req, res) {
 });
 
 app.use('/auth', authRouter);
-app.use('/gameapi', gameApiRouter);
-
 console.log('Listening on '+ PORT);
 
 var server = app.listen(PORT);

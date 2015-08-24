@@ -32,4 +32,26 @@ describe('Tyranosaur', function() {
         expect(tyranosaur.rotation[2]).to.equal(0);
 
     });
+
+    it('get state', function() {
+        var tyranosaur = new Tyranosaur();
+
+        var newState = {
+            position: [0,1,0],
+            rotation: [0,1,0,'xyz']
+        };
+
+        tyranosaur.move(newState);
+
+        var state = tyranosaur.getState();
+
+        expect(state.position[0]).to.equal(0);
+        expect(state.position[1]).to.equal(1);
+        expect(state.position[2]).to.equal(0);
+        expect(state.rotation[0]).to.equal(0);
+        expect(state.rotation[1]).to.equal(1);
+        expect(state.rotation[2]).to.equal(0);
+        expect(state.rotation[3]).to.equal('xyz');
+
+    });
 });
