@@ -23,7 +23,7 @@ var listenUpdatePosition = function(io, user) {
 var diffuseGameState = function(user) {
     Game.users.getAllPublic(function(users) {
         var state = {
-            users: Game.users
+            users: users
         };
         user.socket.emit('game state', state);
     });

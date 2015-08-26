@@ -5,7 +5,7 @@ var _ = require('lodash');
 function Users() {
     this.list = [];
     this.User = User;
-};
+}
 
 Users.prototype.create = function(cb) {
     var user = new User();
