@@ -66,11 +66,12 @@ function MainScene(game) {
         self.camera.position.copy(object.position);
         self.camera.rotation.copy(object.rotation);
 
-        //self.camera.translateZ(-80);
-        //self.camera.translateY(60);
+        self.camera.translateZ(-80);
+        self.camera.translateY(60);
 
-        self.camera.translateZ(-1);
-        self.camera.translateY(150);
+        //self.camera.translateZ(-1);
+        //self.camera.translateY(70);
+        //self.camera.translateX(50);
 
         self.camera.lookAt(object.position);
     }

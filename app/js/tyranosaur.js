@@ -3,7 +3,7 @@ function Tyranosaur(game) {
     var self = this;
     var _game = game;
 
-    var _object, _hasMoved;
+    var _object, _hasMoved, _boundingBlock, _maxCollideDistance;
 
     var rayCaster;
 
@@ -26,12 +26,14 @@ function Tyranosaur(game) {
         var globMaterial = new THREE.MeshBasicMaterial({ // TODO Switch to lambert
             color: '0xFF0000'
         });
-        var globMesh = new THREE.Mesh(globGeom, globMaterial);
-        globMesh.position.z = 5;
+        _boundingBlock = new THREE.Mesh(globGeom, globMaterial);
+        _boundingBlock.position.z = 5;
+        _maxCollideDistance = 40;
 
         _object = new THREE.Object3D();
         _object.add(modelObject);
-        _object.add(globMesh);
+        //_object.add(_boundingBlock);
+        _boundingBlock = modelObject;
 
         _hasMoved = true;
 
@@ -43,6 +45,9 @@ function Tyranosaur(game) {
 
     self.getObject = function() {
         return _object;
+    };
+    self.getBoundingBlock = function() {
+        return _boundingBlock;
     };
 
     self.idleAnimation = function() {
@@ -156,7 +161,7 @@ function Tyranosaur(game) {
         var direction = getDirection();
 
         rayCaster.set(_object.position, direction);
-        var collisions = rayCaster.intersectObject(ennemyTyra.getObject());
+        var collisions = rayCaster.intersectObject(ennemyTyra.getBoundingBlock());
 
         if(arrowHelper) {
             _game.getScene().scene.remove(arrowHelper);
@@ -166,7 +171,7 @@ function Tyranosaur(game) {
 
         for (var i = 0; i < collisions.length; i++) {
             var collider = collisions[i];
-            if(isTyra(collider)) {
+            if(isTyra(collider) && collider.distance < _maxCollideDistance) {
                 return true;
             }
         }
