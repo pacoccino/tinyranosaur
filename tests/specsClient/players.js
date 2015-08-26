@@ -6,13 +6,7 @@ describe('Players class', function() {
             expect(player._id).toBeDefined();
             expect(player._id.length).toBe(10);
             expect(player.name).toBe("");
-            expect(player.tyranosaur).toBeNull();
-        });
-
-        it('init', function() {
-            var player = new Player(game);
-
-            player.init();
+            expect(player.size).toBe(10);
             expect(player.tyranosaur).toBeDefined();
             expect(player.tyranosaur instanceof Tyranosaur).toBeTruthy();
         });
@@ -29,7 +23,6 @@ describe('Players class', function() {
             };
 
             var player = new Player(game);
-            player.init();
             player.updateFromServer(sPlayer);
 
             expect(player._id).toBe(1);

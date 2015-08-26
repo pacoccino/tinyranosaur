@@ -143,10 +143,6 @@ function Tyranosaur(game) {
         _game.inputDispatcher.addEventListener('poo', poo);
     }
 
-    function isTyra(object) {
-        return true;
-    }
-
     function getDirection() {
 
         var direction = new THREE.Vector3(0,0,1);
@@ -171,7 +167,7 @@ function Tyranosaur(game) {
 
         for (var i = 0; i < collisions.length; i++) {
             var collider = collisions[i];
-            if(isTyra(collider) && collider.distance < _maxCollideDistance) {
+            if(collider.distance < _maxCollideDistance) {
                 return true;
             }
         }

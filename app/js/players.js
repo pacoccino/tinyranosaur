@@ -2,12 +2,9 @@ function Player(game) {
     this.game = game;
     this._id = Helpers.idGenerator();
     this.name = "";
-    this.tyranosaur = null;
-}
-
-Player.prototype.init = function(serverPlayer) {
     this.tyranosaur = new Tyranosaur(this.game);
-};
+    this.size = 10;
+}
 
 Player.prototype.updateFromServer = function(serverPlayer) {
     this._id = serverPlayer._id;

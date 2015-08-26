@@ -32,10 +32,16 @@ require({
         //game.multiplayer = new Multiplayer(_authentication);
         game.multiplayer = new Multiplayer_Socket(_authentication);
 
-        gameContainer = $("#game-container");
-        gameContainer.append( game.getRendererElement());
+
 
         game.init(function() {
+            game.myPlayer = new Player(this);
+            game.myPlayer._id = _authentication.info._id;
+            game.myPlayer.name = _authentication.info.name;
+
+            gameContainer = $("#game-container");
+            gameContainer.append( game.getRendererElement());
+
             game.multiplayer.listen();
             animate();
         });
