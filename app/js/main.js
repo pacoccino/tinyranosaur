@@ -11,7 +11,7 @@ require({
 
 
     authenticate(function() {
-      init();
+        initGame();
     });
 
     function authenticate(callback) {
@@ -25,21 +25,20 @@ require({
       });
     }
 
-    function init() {
+    function initGame() {
 
         game = new Game(THREE);
 
         //game.multiplayer = new Multiplayer(_authentication);
         game.multiplayer = new Multiplayer_Socket(_authentication);
 
-        game.init(function() {
-            animate();
-            game.multiplayer.listen();
-        });
-
         gameContainer = $("#game-container");
         gameContainer.append( game.getRendererElement());
 
+        game.init(function() {
+            game.multiplayer.listen();
+            animate();
+        });
     }
 
     function animate() {
