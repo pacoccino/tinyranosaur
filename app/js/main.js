@@ -29,20 +29,16 @@ require({
 
         game = new Game(THREE);
 
+        game.authentication = _authentication;
         //game.multiplayer = new Multiplayer(_authentication);
-        game.multiplayer = new Multiplayer_Socket(_authentication);
-
-
 
         game.init(function() {
-            game.myPlayer = new Player(this);
-            game.myPlayer._id = _authentication.info._id;
-            game.myPlayer.name = _authentication.info.name;
+
+            game.multiplayer.listen();
 
             gameContainer = $("#game-container");
             gameContainer.append( game.getRendererElement());
 
-            game.multiplayer.listen();
             animate();
         });
     }

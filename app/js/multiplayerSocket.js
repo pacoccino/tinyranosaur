@@ -1,9 +1,10 @@
 // Interface to firebase
 
-function Multiplayer_Socket(authentification) {
+function Multiplayer_Socket(game) {
 
+    var _game = game;
     var _ed = new THREE.EventDispatcher();
-    var _auth = authentification;
+    var _auth = _game.authentication;
     var _socket = _auth.socket;
 
     this.emit = function(event) {

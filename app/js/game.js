@@ -16,10 +16,19 @@ function Game(THREE) {
 
         self.players = new Players(this);
 
+        self.multiplayer = new Multiplayer_Socket(this);
+
         _scene = new MainScene(this);
 
         loadModels(function() {
+
+            self.myPlayer = new Player(self);
+            self.myPlayer._id = self.authentication.info._id;
+            self.myPlayer.name = self.authentication.info.name;
+
+
             _scene.populate();
+
             readyCallback && readyCallback();
         });
 
