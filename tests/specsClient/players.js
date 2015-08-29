@@ -28,8 +28,8 @@ describe('Players class', function() {
             expect(player._id).toBe(1);
             expect(player.name).toBe("bob");
 
-            var position = player.tyranosaur.getObject().position;
-            var rotation = player.tyranosaur.getObject().rotation;
+            var position = player.tyranosaur.object.position;
+            var rotation = player.tyranosaur.object.rotation;
             expect(position.x).toBe(1);
             expect(position.y).toBe(2);
             expect(position.z).toBe(3);

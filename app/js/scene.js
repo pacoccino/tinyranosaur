@@ -105,8 +105,8 @@ function MainScene(game) {
     // Remplissage de la scene avec les modèles
     self.populate = function() {
 
-        game.myPlayer.tyranosaur.getObject().position.y = 30;
-        self.scene.add(game.myPlayer.tyranosaur.getObject());
+        game.myPlayer.tyranosaur.object.position.y = 30;
+        self.scene.add(game.myPlayer.tyranosaur.object);
         updateMultiplayerState(game.myPlayer.tyranosaur);
 
         _game.multiplayer.on('player new', addPlayer);
@@ -124,7 +124,7 @@ function MainScene(game) {
         if(!_sceneReady) return;
 
         game.myPlayer.tyranosaur.moveFrame();
-        cameraFollow(game.myPlayer.tyranosaur.getObject());
+        cameraFollow(game.myPlayer.tyranosaur.object);
         checkIfICollide();
 
         updateThrottler(game.myPlayer.tyranosaur);
@@ -159,7 +159,7 @@ function MainScene(game) {
         var player = _game.players.new();
         player.updateFromServer(event.player);
 
-        self.scene.add(player.tyranosaur.getObject());
+        self.scene.add(player.tyranosaur.object);
     }
 
     function updatePlayer(event) {
@@ -172,7 +172,7 @@ function MainScene(game) {
         var userId = event._id;
         var player = _game.players.getById(userId);
 
-        self.scene.remove(player.tyranosaur.getObject());
+        self.scene.remove(player.tyranosaur.object);
 
         _game.players.delete(player);
 
@@ -181,7 +181,7 @@ function MainScene(game) {
     function updateMultiplayerState(tyranosaur) {
         if(tyranosaur.hasMoved()) {
 
-            var object = tyranosaur.getObject();
+            var object = tyranosaur.object;
 
             _game.multiplayer.emit( {
                 type:'player update',

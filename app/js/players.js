@@ -10,7 +10,7 @@ Player.prototype.updateFromServer = function(serverPlayer) {
     this._id = serverPlayer._id;
     this.name = serverPlayer.name;
 
-    var object = this.tyranosaur.getObject();
+    var object = this.tyranosaur.object;
     var serverTyra = serverPlayer.tyranosaur;
 
     if(serverTyra.position.length !== 3 || serverTyra.rotation.length !== 4) {
