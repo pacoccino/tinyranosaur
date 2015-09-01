@@ -165,12 +165,20 @@ function MainScene(game) {
     function updatePlayer(event) {
         var userId = event.player._id;
         var player = _game.players.getById(userId);
+        if(!player) {
+            console.error("Update without knowing player");
+            return;
+        }
         player.updateFromServer(event.player);
     }
 
     function removePlayer(event) {
         var userId = event._id;
         var player = _game.players.getById(userId);
+        if(!player) {
+            console.error("Remove without knowing player");
+            return;
+        }
 
         self.scene.remove(player.tyranosaur.object);
 
