@@ -1,17 +1,18 @@
 var _ = require('lodash');
 var Users = require('../models/users');
 
-var Game = {};
+function Game() {
+    this.users = new Users();
+}
 
-Game.users = new Users();
+Game.prototype.listenUpdatePosition = function(io, user) {
 
-var listenUpdatePosition = function(io, user) {
-
+    var self = this;
     return function(position) {
         user.tyranosaur.move(position);
 
         var options = user.toPublic();
-        Game.users.getAll(function(userList) {
+        self.users.getAll(function(userList) {
             for (var i = 0; i < userList.length; i++) {
                 var user = userList[i];
                 user.socket.volatile.emit('player update', options);
@@ -20,8 +21,8 @@ var listenUpdatePosition = function(io, user) {
     };
 };
 
-var diffuseGameState = function(user) {
-    Game.users.getAllPublic(function(users) {
+Game.prototype.diffuseGameState = function(user) {
+    this.users.getAllPublic(function(users) {
         var state = {
             users: users
         };
@@ -29,7 +30,7 @@ var diffuseGameState = function(user) {
     });
 };
 
-var welcomePlayer = function(user, welcomed) {
+Game.prototype.welcomePlayer = function(user, welcomed) {
     var welcomeMessage = {};
     welcomeMessage._id = user._id;
     welcomeMessage.name = user.name;
@@ -37,35 +38,31 @@ var welcomePlayer = function(user, welcomed) {
 };
 
 
-var announcePlayer = function(io, user) {
+Game.prototype.announcePlayer = function(io, user) {
     user.socket.broadcast.emit('player new', user.toPublic());
 };
 
-Game.listen = function(io) {
+Game.prototype.listen = function(io) {
     var gameIo = io.of('/game');
+    var self = this;
 
     gameIo.on('connect', function(socket) {
-        Game.users.create(function(user) {
+        self.users.create(function(user) {
             user.socket = socket;
 
-            welcomePlayer(user, function() {
-                diffuseGameState(user);
-                announcePlayer(gameIo, user);
+            self.welcomePlayer(user, function() {
+                self.diffuseGameState(user);
+                self.announcePlayer(gameIo, user);
 
-                socket.on('player update', listenUpdatePosition(gameIo, user));
+                socket.on('player update', self.listenUpdatePosition(gameIo, user));
             });
 
-            socket.on('disconnect', function(socket) {
+            socket.on('disconnect', function() {
 
-                Game.users.delete(user._id);
+                self.users.delete(user._id);
                 gameIo.emit('player leave', user._id);
             });
         });
-    });
-
-    gameIo.on('atest', function(socket) {
-        console.log('test' + socket)
-        Game.test = true
     });
 };
 

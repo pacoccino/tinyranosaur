@@ -31,5 +31,5 @@ console.log('Listening on '+ PORT);
 
 var server = app.listen(PORT);
 var io = socketio(server);
-
-Game.listen(io);
+var game = new Game();
+game.listen(io);

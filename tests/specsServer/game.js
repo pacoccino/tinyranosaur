@@ -5,31 +5,60 @@ var should = require('chai').should();
 
 var SocketMock = require('socket-io-mock');
 
-var socket = new SocketMock();
+var socket, game;
 
 describe('Game', function() {
-    /*it('should listen', function(done) {
-        var sock = new SocketMock();
-        Game.listen(sock);
-        sock.emit('connect');
-        expect(Game.users.length).to.be.equal(1);
-
-    });*/
-    it('should test', function() {
-
-        Game.listen(socket);
-        socket.socketClient.emit('atest');
-        Game.test.should.be.true;
+    beforeEach(function() {
+        socket = new SocketMock();
+        game = new Game();
+        game.listen(socket);
     });
 
-    it('Sockets should be able to talk to each other without a server', function(done) {
-        var socket = new SocketMock()
+    it('welcomes player', function(done) {
 
-        socket.on('message', function (message) {
-            message.should.be.equal('Hello World!')
-            done()
-        })
-        socket.socketClient.emit('message', 'Hello World!')
-    })
+        socket.on('welcome', function(data) {
+            expect(data._id).to.be.defined;
+            expect(data._id.length).to.equal(10);
+            expect(data.name).to.be.defined;
+            expect(data.name.length).to.gt(0);
+            done();
+        });
+        socket.socketClient.emit('connect', socket.socketClient);
+
+    });
+
+    it('send game state', function(done) {
+
+        var myId;
+        socket.on('welcome', function(data) {
+            myId = data._id;
+        });
+
+        socket.on('game state', function(state) {
+            expect(state.users).to.be.defined;
+            expect(state.users.length).to.equal(1);
+            expect(state.users[0]._id).to.equal(myId);
+            done();
+        });
+        socket.socketClient.emit('connect', socket.socketClient);
+    });
+
+    it('disconnect', function(done) {
+
+        var myId;
+        socket.on('welcome', function(data) {
+            myId = data._id;
+        });
+
+        socket.socketClient.on('player leave', function(data) {
+            expect(data).to.equal(myId);
+            done();
+        });
+
+        // TODO detect broadcast and user deletion
+
+        socket.socketClient.emit('connect', socket.socketClient);
+        socket.emit('disconnect');
+    });
 
 });
