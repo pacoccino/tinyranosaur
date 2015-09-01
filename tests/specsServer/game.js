@@ -2,7 +2,6 @@ var Game = require("../../server/modules/game");
 var Users = require("../../server/models/users");
 
 var expect = require("chai").expect;
-var should = require('chai').should();
 
 var SocketMock = require('socket-io-mock');
 
@@ -25,7 +24,6 @@ describe('Game', function() {
 
         socket.on('welcome', function(data) {
             expect(data._id).to.be.defined;
-            expect(data._id.length).to.equal(10);
             expect(data.name).to.be.defined;
             expect(data.name.length).to.gt(0);
             done();
@@ -66,6 +64,67 @@ describe('Game', function() {
 
         socket.socketClient.emit('connect', socket.socketClient);
         socket.emit('disconnect');
+    });
+
+    it('starts game', function() {
+        expect(game.gameUpdater).to.be.null;
+        game.launchGame();
+        expect(game.gameUpdater).not.to.be.null;
+    });
+
+    it('stops game', function() {
+        game.launchGame();
+        game.stopGame();
+        expect(game.gameUpdater).to.be.null;
+    });
+
+    it('no bots when no players', function(done) {
+
+        game.launchGame();
+        setTimeout(function() {
+            expect(game.bots.length).to.equal(0);
+            done();
+        }, 1000);
+    });
+
+    it('one bot when player', function(done) {
+
+        socket.socketClient.emit('connect', socket.socketClient);
+
+        game.launchGame();
+
+        setTimeout(function() {
+            expect(game.bots.length).to.gt(0);
+            done();
+        }, 1000);
+    });
+
+    it('bot sent to player', function(done) {
+
+        socket.socketClient.emit('connect', socket.socketClient);
+
+        game.launchGame();
+
+        socket.socketClient.on('player new', function(player) {
+            expect(player._id).to.equal(game.bots[0]._id);
+            expect(player.bot).to.be.true;
+            done();
+        });
+
+    });
+
+    it('bot updated to player', function(done) {
+
+        socket.socketClient.emit('connect', socket.socketClient);
+
+        game.launchGame();
+
+        socket.socketClient.on('player update', function(player) {
+
+            expect(player._id).to.equal(game.bots[0]._id);
+            done();
+        });
+
     });
 
 });

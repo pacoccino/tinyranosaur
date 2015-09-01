@@ -1,9 +1,12 @@
 var _ = require('lodash');
 var Users = require('../models/users');
+var Bot = require('../models/bot');
 
 function Game() {
     this.users = new Users();
     this.io = null;
+    this.gameUpdater = null;
+    this.bots = [];
 }
 
 Game.prototype.listenUpdatePosition = function(io, user) {
@@ -23,10 +26,15 @@ Game.prototype.listenUpdatePosition = function(io, user) {
 };
 
 Game.prototype.diffuseGameState = function(user) {
-    this.users.getAllPublic(function(users) {
+    var self = this;
+    self.users.getAllPublic(function(users) {
         var state = {
             users: users
         };
+        for (var i = 0; i < self.bots.length; i++) {
+            var bot = self.bots[i];
+            state.users.push(bot.toPublic());
+        }
         user.socket.emit('game state', state);
     });
 };
@@ -39,7 +47,7 @@ Game.prototype.welcomePlayer = function(user, welcomed) {
 };
 
 
-Game.prototype.announcePlayer = function(io, user) {
+Game.prototype.announcePlayer = function(user) {
     user.socket.broadcast.emit('player new', user.toPublic());
 };
 
@@ -53,7 +61,7 @@ Game.prototype.listen = function(io) {
 
             self.welcomePlayer(user, function() {
                 self.diffuseGameState(user);
-                self.announcePlayer(self.io, user);
+                self.announcePlayer(user);
 
                 socket.on('player update', self.listenUpdatePosition(self.io, user));
             });
@@ -65,6 +73,51 @@ Game.prototype.listen = function(io) {
             });
         });
     });
+};
+
+Game.prototype.launchGame = function() {
+    var updateInterval = 50;
+    var self = this;
+    var updater = function() {
+        self.updateGame.call(self);
+    };
+
+    this.gameUpdater = setInterval(updater, updateInterval);
+};
+
+Game.prototype.stopGame = function() {
+    clearInterval(this.gameUpdater);
+    this.gameUpdater = null;
+};
+
+Game.prototype.updateGame = function() {
+    this.disconnectInactivePlayers();
+    this.liveBots();
+};
+
+Game.prototype.disconnectInactivePlayers = function() {
+
+};
+
+Game.prototype.liveBots = function() {
+
+    if (this.users.getAllSync().length === 0 && this.bots.length > 0) {
+        this.io.emit('player leave', this.bots[0]._id);
+        this.bots.splice(0, this.bots.length);
+    }
+    else if (this.users.getAllSync().length !== 0 && this.bots.length === 0) {
+        this.bots.push(new Bot());
+        this.io.emit('player new', this.bots[0].toPublic());
+    }
+
+    for (var i = 0; i < this.bots.length; i++) {
+        var bot = this.bots[i];
+        bot.stepIa();
+
+        var botPublic = bot.toPublic();
+        this.io.emit('player update', botPublic);
+    }
+
 };
 
 module.exports = Game;

@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var Helpers = {};
 
 var deltaTimestamp = null;
@@ -48,9 +50,7 @@ Helpers.generateInteger = function(max) {
 
     var rand = Math.random();
 
-    var integer = Math.floor(rand * max);
-
-    return integer;
+    return Math.floor(rand * max);
 };
 
 Helpers.generateSign = function() {
@@ -71,11 +71,36 @@ Helpers.normalize = function(vector) {
 
     sum = Math.sqrt(sum);
 
-    for(var i=0; i<vector.length; i++) {
-        normalized.push(vector[i] / sum);
+    for(var j=0; j<vector.length; j++) {
+        normalized.push(vector[j] / sum);
     }
 
     return normalized;
+};
+
+Helpers.idGenerator = function() {
+    /*var length = 10;
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;*/
+
+    return _.uniqueId();
+};
+
+Helpers.randomName = function() {
+    var length = 6;
+    var text = '';
+    var possible = 'abcdefghijklmnopqrstuvwxyz';
+
+    text += possible.charAt(Math.floor(Math.random() * possible.length)).toUpperCase();
+    for (var i = 1; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 };
 
 module.exports = Helpers;

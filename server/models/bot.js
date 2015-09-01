@@ -4,28 +4,19 @@ var Map =  require('../modules/map');
 
 function Bot() {
 
-    this.position = [0, 0, 0];
-    this.rotation = [0, 0, 0, 'xyz'];
-    this.direction = [0, 0, 1];
+    this._speed = 10;
 
-    this._speed = 0.1;
+    this._id = Helpers.idGenerator();
+    this.name = Helpers.randomName();
+    this.bot = true;
+
+    this.tyranosaur = new Tyranosaur();
+    this.tyranosaur.position.y = 30;
+
+    this.direction = [0,0,1];
 }
 
-// Inheritance
-
-Bot.prototype.move = Tyranosaur.prototype.move;
-Bot.prototype.getState = Tyranosaur.prototype.getState;
-
 // Class functions
-
-Bot.prototype.decideDirection = function() {
-
-    var chanceToChange = 0.05;
-    if(Math.random() < chanceToChange) {
-        generateWayPoint();
-        setDirectionTo();
-    }
-};
 
 Bot.prototype.stepIa = function() {
     this.decideDirection();
@@ -34,18 +25,39 @@ Bot.prototype.stepIa = function() {
     var step = Helpers.clockDelta() / 1000;
 
     move = Helpers.scaleVect(this._speed * step, this.direction);
-    this.position = Helpers.addVect(this.position, move);
+    this.tyranosaur.position = Helpers.addVect(this.tyranosaur.position, move);
+};
+
+Bot.prototype.decideDirection = function() {
+
+    var chanceToChange = 0.05;
+    if(Math.random() < chanceToChange) {
+        var destination = Bot.generateWaypoint();
+        this.setDirectionTo(destination);
+    }
 };
 
 Bot.prototype.setDirectionTo = function(destination) {
-    var position = this.position;
+    var position = this.tyranosaur.position;
 
     var direction = [];
     direction.push(destination[0] - position[0]);
-    direction.push(destination[1] - position[1]);
+    direction.push(0);
     direction.push(destination[2] - position[2]);
 
     this.direction = Helpers.normalize(direction);
+
+    this.tyranosaur.rotation[1] = Math.atan2(direction[2], direction[0]);
+};
+
+Bot.prototype.toPublic = function() {
+    var publicUser = {};
+    publicUser._id = this._id;
+    publicUser.name = this.name;
+    publicUser.bot = this.bot;
+    publicUser.tyranosaur = this.tyranosaur.getState();
+
+    return publicUser;
 };
 
 // Static functions
@@ -63,5 +75,6 @@ Bot.generateWaypoint = function() {
 
     return waypoint;
 };
+
 
 module.exports = Bot;

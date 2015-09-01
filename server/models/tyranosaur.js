@@ -6,6 +6,7 @@ function Tyranosaur() {
 Tyranosaur.prototype.move = function(newState) {
     this.position = newState.position;
     this.rotation = newState.rotation;
+
 };
 
 Tyranosaur.prototype.getState = function() {

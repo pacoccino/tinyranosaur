@@ -4,7 +4,6 @@ var _ = require('lodash');
 
 function Users() {
     this.list = [];
-    this.User = User;
 }
 
 Users.prototype.create = function(cb) {
@@ -34,6 +33,10 @@ Users.prototype.getAllPublic = function(cb) {
     }
 
     cb(publicList);
+};
+
+Users.prototype.getAllSync = function() {
+    return this.list;
 };
 
 

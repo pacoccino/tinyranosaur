@@ -11,8 +11,8 @@ describe('User management', function() {
 
             expect(user).to.exist;
             expect(user._id).to.exist;
-            expect(user._id.length).to.be.equal(10);
             expect(user.name).to.exist;
+            expect(user.bot).to.be.false;
             expect(user.tyranosaur).to.exist;
             expect(user.tyranosaur instanceof Tyranosaur).to.be.true;
         });
@@ -56,6 +56,15 @@ describe('User management', function() {
                     expect(users[0]).to.be.equal(user);
                     done();
                 });
+            });
+        });
+
+        it('should getAll synchronously', function (done) {
+            users.create(function (user) {
+                var list = users.getAllSync();
+                expect(list.length).to.equal(1);
+                expect(list[0]).to.equal(user);
+                done();
             });
         });
 

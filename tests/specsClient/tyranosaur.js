@@ -64,7 +64,7 @@ describe('Tyranosaur class', function() {
         var scene = new THREE.Scene();
 
         var globGeom = new THREE.BoxGeometry(10, 10, 10);
-        var globMaterial = new THREE.MeshBasicMaterial({ // TODO Switch to lambert
+        var globMaterial = new THREE.MeshBasicMaterial({
             color: '0xFF0000'
         });
         var block = new THREE.Mesh(globGeom, globMaterial);

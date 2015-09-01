@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 
 var Bot = require("../../server/models/bot.js");
+var Tyranosaur = require("../../server/models/tyranosaur.js");
 var Helpers = require("../../server/modules/helpers.js");
 var Map = require("../../server/modules/map.js");
 
@@ -20,22 +21,20 @@ describe('Bot', function() {
         var bot = new Bot();
 
         expect(bot).to.exist;
-        expect(bot.position).to.exist;
-        expect(bot.rotation).to.exist;
-        expect(bot._speed).to.exist;
-        expect(bot.position[0]).to.equal(0);
-        expect(bot.rotation[0]).to.equal(0);
-        expect(bot._speed).to.equal(0.1);
+        expect(bot._id).to.exist;
+        expect(bot.name).to.exist;
+        expect(bot.bot).to.be.true;
+        expect(bot.tyranosaur instanceof Tyranosaur).to.be.true;
+        expect(bot._speed).to.equal(10);
+        expect(bot.direction[0]).to.equal(0);
+        expect(bot.direction[1]).to.equal(0);
+        expect(bot.direction[2]).to.equal(1);
     });
 
-    xit('decide direction', function() {
+    it('decide direction', function() {
         var bot = new Bot();
 
-        var direction = bot.direction;
-
         bot.decideDirection();
-
-        expect(bot.direction).to.equal(direction);
     });
 
     it('stepIa direction', function() {
@@ -43,7 +42,7 @@ describe('Bot', function() {
         bot.decideDirection = function() {};
 
         var direction = bot.direction;
-        var position = bot.position;
+        var position = bot.tyranosaur.position;
         var speed = bot._speed;
 
         Helpers.clockDelta = function() {
@@ -58,7 +57,7 @@ describe('Bot', function() {
             position[2] + speed * direction[2]
         ];
 
-        position = bot.position;
+        position = bot.tyranosaur.position;
 
         expect(position[0]).to.equal(expPosition[0]);
         expect(position[1]).to.equal(expPosition[1]);
@@ -78,7 +77,7 @@ describe('Bot', function() {
 
     it('sets direction z', function() {
         var bot = new Bot();
-        bot.position = [0,0,0];
+        bot.tyranosaur.position = [0,0,0];
         var waypoint = [0,0,5];
 
         bot.setDirectionTo(waypoint);
@@ -93,7 +92,7 @@ describe('Bot', function() {
 
     it('sets direction x', function() {
         var bot = new Bot();
-        bot.position = [0,0,0];
+        bot.tyranosaur.position = [0,0,0];
         var waypoint = [5,0,0];
 
         bot.setDirectionTo(waypoint);
@@ -109,7 +108,7 @@ describe('Bot', function() {
 
     it('sets direction -x', function() {
         var bot = new Bot();
-        bot.position = [0,0,0];
+        bot.tyranosaur.position = [0,0,0];
         var waypoint = [-5,0,0];
 
         bot.setDirectionTo(waypoint);
@@ -124,7 +123,7 @@ describe('Bot', function() {
 
     it('sets direction x-z', function() {
         var bot = new Bot();
-        bot.position = [0,0,0];
+        bot.tyranosaur.position = [0,0,0];
         var waypoint = [5,0,-5];
 
         bot.setDirectionTo(waypoint);
@@ -139,7 +138,7 @@ describe('Bot', function() {
 
     it('sets direction x-z offset', function() {
         var bot = new Bot();
-        bot.position = [10,0,-10];
+        bot.tyranosaur.position = [10,0,-10];
         var waypoint = [5,0,-5];
 
         bot.setDirectionTo(waypoint);
