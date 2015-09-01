@@ -3,6 +3,7 @@ var Users = require('../models/users');
 
 function Game() {
     this.users = new Users();
+    this.io = null;
 }
 
 Game.prototype.listenUpdatePosition = function(io, user) {
@@ -43,24 +44,24 @@ Game.prototype.announcePlayer = function(io, user) {
 };
 
 Game.prototype.listen = function(io) {
-    var gameIo = io.of('/game');
+    this.io = io.of('/game');
     var self = this;
 
-    gameIo.on('connect', function(socket) {
+    this.io.on('connect', function(socket) {
         self.users.create(function(user) {
             user.socket = socket;
 
             self.welcomePlayer(user, function() {
                 self.diffuseGameState(user);
-                self.announcePlayer(gameIo, user);
+                self.announcePlayer(self.io, user);
 
-                socket.on('player update', self.listenUpdatePosition(gameIo, user));
+                socket.on('player update', self.listenUpdatePosition(self.io, user));
             });
 
             socket.on('disconnect', function() {
 
                 self.users.delete(user._id);
-                gameIo.emit('player leave', user._id);
+                self.io.emit('player leave', user._id);
             });
         });
     });

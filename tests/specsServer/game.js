@@ -1,4 +1,5 @@
 var Game = require("../../server/modules/game");
+var Users = require("../../server/models/users");
 
 var expect = require("chai").expect;
 var should = require('chai').should();
@@ -12,6 +13,12 @@ describe('Game', function() {
         socket = new SocketMock();
         game = new Game();
         game.listen(socket);
+    });
+
+    it('construct and listen', function() {
+
+        expect(game.io).to.equal(socket);
+        expect(game.users instanceof Users).to.be.true;
     });
 
     it('welcomes player', function(done) {
