@@ -61,12 +61,12 @@ function Game(THREE) {
         };
 
         var loadModel = function(index) {
-            if(index >= models.length) {
+            if(index >= GameModels.length) {
                 callback && callback();
                 return;
             }
 
-            var model = models[index];
+            var model = GameModels[index];
             loaderObj.load( model.url, function ( object ) {
                 model.object = object;
 

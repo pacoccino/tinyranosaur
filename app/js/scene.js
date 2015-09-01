@@ -179,7 +179,7 @@ function MainScene(game) {
     }
 
     function updateMultiplayerState(tyranosaur) {
-        if(tyranosaur.hasMoved()) {
+        if(tyranosaur.hasMoved) {
 
             var object = tyranosaur.object;
 
@@ -190,7 +190,7 @@ function MainScene(game) {
                     "rotation": object.rotation.toArray()
                 }
             });
-            tyranosaur.resetMoved();
+            tyranosaur.hasMoved = false;
         }
     }
 
