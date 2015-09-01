@@ -43,4 +43,39 @@ Helpers.clockDelta = function() {
     return delta;
 };
 
+
+Helpers.generateInteger = function(max) {
+
+    var rand = Math.random();
+
+    var integer = Math.floor(rand * max);
+
+    return integer;
+};
+
+Helpers.generateSign = function() {
+
+    return (Math.random() < 0.5) ? -1 : 1;
+};
+
+Helpers.normalize = function(vector) {
+
+    if (!vector || !vector.length) return;
+
+    var normalized = [];
+    var sum = 0;
+
+    for(var i=0; i<vector.length; i++) {
+        sum += Math.pow(vector[i], 2);
+    }
+
+    sum = Math.sqrt(sum);
+
+    for(var i=0; i<vector.length; i++) {
+        normalized.push(vector[i] / sum);
+    }
+
+    return normalized;
+};
+
 module.exports = Helpers;

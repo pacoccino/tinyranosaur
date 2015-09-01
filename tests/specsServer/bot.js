@@ -2,6 +2,7 @@ var expect = require("chai").expect;
 
 var Bot = require("../../server/models/bot.js");
 var Helpers = require("../../server/modules/helpers.js");
+var Map = require("../../server/modules/map.js");
 
 describe('Bot', function() {
 
@@ -27,7 +28,7 @@ describe('Bot', function() {
         expect(bot._speed).to.equal(0.1);
     });
 
-    it('decide direction', function() {
+    xit('decide direction', function() {
         var bot = new Bot();
 
         var direction = bot.direction;
@@ -62,6 +63,93 @@ describe('Bot', function() {
         expect(position[0]).to.equal(expPosition[0]);
         expect(position[1]).to.equal(expPosition[1]);
         expect(position[2]).to.equal(expPosition[2]);
+    });
+
+    it('generates Waypoint', function() {
+        var waypoint = Bot.generateWaypoint();
+
+        expect(waypoint).to.be.defined;
+        expect(waypoint.length).to.be.defined;
+        expect(waypoint.length).to.be.equal(3);
+        expect(Math.abs(waypoint[0])).to.be.lte(Map.sizeX);
+        expect(Math.abs(waypoint[2])).to.be.lte(Map.sizeZ);
+        expect(Math.abs(waypoint[1])).to.be.equal(0);
+    });
+
+    it('sets direction z', function() {
+        var bot = new Bot();
+        bot.position = [0,0,0];
+        var waypoint = [0,0,5];
+
+        bot.setDirectionTo(waypoint);
+
+        var direction = bot.direction;
+        var expDirection = [0,0,1];
+
+        expect(direction[0]).to.equal(expDirection[0]);
+        expect(direction[1]).to.equal(expDirection[1]);
+        expect(direction[2]).to.equal(expDirection[2]);
+    });
+
+    it('sets direction x', function() {
+        var bot = new Bot();
+        bot.position = [0,0,0];
+        var waypoint = [5,0,0];
+
+        bot.setDirectionTo(waypoint);
+
+        var direction = bot.direction;
+        var expDirection = [1,0,0];
+
+        expect(direction[0]).to.equal(expDirection[0]);
+        expect(direction[1]).to.equal(expDirection[1]);
+        expect(direction[2]).to.equal(expDirection[2]);
+    });
+
+
+    it('sets direction -x', function() {
+        var bot = new Bot();
+        bot.position = [0,0,0];
+        var waypoint = [-5,0,0];
+
+        bot.setDirectionTo(waypoint);
+
+        var direction = bot.direction;
+        var expDirection = [-1,0,0];
+
+        expect(direction[0]).to.equal(expDirection[0]);
+        expect(direction[1]).to.equal(expDirection[1]);
+        expect(direction[2]).to.equal(expDirection[2]);
+    });
+
+    it('sets direction x-z', function() {
+        var bot = new Bot();
+        bot.position = [0,0,0];
+        var waypoint = [5,0,-5];
+
+        bot.setDirectionTo(waypoint);
+
+        var direction = bot.direction;
+        var expDirection = [Math.sqrt(1/2),0,-Math.sqrt(1/2)];
+
+        expect(direction[0]).to.closeTo(expDirection[0], 0.01);
+        expect(direction[1]).to.closeTo(expDirection[1], 0.01);
+        expect(direction[2]).to.closeTo(expDirection[2], 0.01);
+    });
+
+    it('sets direction x-z offset', function() {
+        var bot = new Bot();
+        bot.position = [10,0,-10];
+        var waypoint = [5,0,-5];
+
+        bot.setDirectionTo(waypoint);
+
+        var direction = bot.direction;
+        var expDirection = [-Math.sqrt(1/2),0,Math.sqrt(1/2)];
+
+        expect(direction[0]).to.closeTo(expDirection[0], 0.01);
+        expect(direction[1]).to.closeTo(expDirection[1], 0.01);
+        expect(direction[2]).to.closeTo(expDirection[2], 0.01);
     });
 
 });
