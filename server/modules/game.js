@@ -102,12 +102,16 @@ Game.prototype.disconnectInactivePlayers = function() {
 Game.prototype.liveBots = function() {
 
     if (this.users.getAllSync().length === 0 && this.bots.length > 0) {
-        this.io.emit('player leave', this.bots[0]._id);
+        for (var i = 0; i < this.bots.length; i++) {
+            var bot = this.bots[i];
+            this.io.emit('player leave', bot[0]._id);
+        }
         this.bots.splice(0, this.bots.length);
     }
     else if (this.users.getAllSync().length !== 0 && this.bots.length === 0) {
-        this.bots.push(new Bot());
-        this.io.emit('player new', this.bots[0].toPublic());
+        var bot = new Bot()
+        this.bots.push(bot);
+        this.io.emit('player new', bot.toPublic());
     }
 
     for (var i = 0; i < this.bots.length; i++) {

@@ -28,7 +28,8 @@ describe('Game', function() {
             expect(data.name.length).to.gt(0);
             done();
         });
-        socket.socketClient.emit('connect', socket.socketClient);
+
+        socket.connectClient();
 
     });
 
@@ -45,7 +46,8 @@ describe('Game', function() {
             expect(state.users[0]._id).to.equal(myId);
             done();
         });
-        socket.socketClient.emit('connect', socket.socketClient);
+
+        socket.connectClient();
     });
 
     it('disconnect', function(done) {
@@ -62,7 +64,7 @@ describe('Game', function() {
 
         // TODO detect broadcast and user deletion
 
-        socket.socketClient.emit('connect', socket.socketClient);
+        socket.connectClient();
         socket.emit('disconnect');
     });
 
@@ -78,32 +80,25 @@ describe('Game', function() {
         expect(game.gameUpdater).to.be.null;
     });
 
-    it('no bots when no players', function(done) {
+    it('no bots when no players', function() {
 
-        game.launchGame();
-        setTimeout(function() {
-            expect(game.bots.length).to.equal(0);
-            done();
-        }, 1000);
+        game.liveBots();
+
+        expect(game.bots.length).to.equal(0);
     });
 
-    it('one bot when player', function(done) {
+    it('bots when player', function() {
 
-        socket.socketClient.emit('connect', socket.socketClient);
+        socket.connectClient();
 
-        game.launchGame();
+        game.liveBots();
 
-        setTimeout(function() {
-            expect(game.bots.length).to.gt(0);
-            done();
-        }, 1000);
+        expect(game.bots.length).to.gt(0);
     });
 
     it('bot sent to player', function(done) {
 
-        socket.socketClient.emit('connect', socket.socketClient);
-
-        game.launchGame();
+        socket.connectClient();
 
         socket.socketClient.on('player new', function(player) {
             expect(player._id).to.equal(game.bots[0]._id);
@@ -111,13 +106,13 @@ describe('Game', function() {
             done();
         });
 
+        game.liveBots();
     });
 
     it('bot updated to player', function(done) {
 
-        socket.socketClient.emit('connect', socket.socketClient);
+        socket.connectClient();
 
-        game.launchGame();
 
         socket.socketClient.on('player update', function(player) {
 
@@ -125,6 +120,7 @@ describe('Game', function() {
             done();
         });
 
+        game.liveBots();
     });
 
 });
