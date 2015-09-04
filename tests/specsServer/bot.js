@@ -46,7 +46,7 @@ describe('Bot', function() {
         var position = bot.position;
         var speed = bot.speed;
 
-        bot.moveBot();
+        bot.moveBot(1000);
 
         var expPosition = [
             position[0] + speed * direction[0],
@@ -78,8 +78,8 @@ describe('Bot', function() {
         var position2 = bot2.position;
         var speed2 = bot2.speed;
 
-        bot.moveBot();
-        bot2.moveBot();
+        bot.moveBot(1000);
+        bot2.moveBot(1000);
 
         var expPosition = [
             position[0] + speed * direction[0],

@@ -149,14 +149,26 @@ Game.prototype.killBots = function() {
     }
     this.bots.splice(0, this.bots.length);
 
-    Helpers.stopClock();
+    tmpTime = null;
 };
 
+var tmpTime = null;
 Game.prototype.liveBots = function() {
+
+    var now = new Date(), delta;
+
+    if(tmpTime) {
+        delta = now - tmpTime;
+    }
+    else {
+        delta = 0;
+    }
+
+    tmpTime = now;
 
     for (var i = 0; i < this.bots.length; i++) {
         var bot = this.bots[i];
-        bot.stepIa();
+        bot.stepIa(delta);
 
         var botPublic = bot.toPublic();
         this.io.emit('player update', botPublic);

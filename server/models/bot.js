@@ -20,16 +20,18 @@ Bot.prototype.constructor = Bot;
 
 // Class functions
 
-Bot.prototype.stepIa = function() {
+Bot.prototype.stepIa = function(deltaTime) {
+    deltaTime = deltaTime || 0;
+
     this.decideDirection();
 
-    this.moveBot();
+    this.moveBot(deltaTime);
 };
 
-Bot.prototype.moveBot = function() {
+Bot.prototype.moveBot = function(deltaTime) {
 
     var move;
-    var step = Helpers.clockDelta() / 1000;
+    var step = deltaTime / 1000;
 
     move = Helpers.scaleVect(this.speed * step, this.direction);
     this.position = Helpers.addVect(this.position, move);
