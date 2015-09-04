@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Users = require('../models/users');
 var Bot = require('../models/bot');
+var Debug = require('../modules/debug');
 
 function Game() {
     this.users = new Users();
@@ -92,11 +93,14 @@ Game.prototype.launchGame = function() {
 
     this.gameUpdater = setInterval(updater, updateInterval);
     this.createBots();
+    Debug.log("Game started with " + this.bots.length + " bots");
 };
 
 Game.prototype.stopGame = function() {
     clearInterval(this.gameUpdater);
     this.gameUpdater = null;
+
+    Debug.log("Game stopped");
 };
 
 Game.prototype.updateGame = function() {
