@@ -10,8 +10,11 @@ function User( name ) {
     this.socket = null;
 
     this.tyranosaur = new Tyranosaur();
+    this.tyranosaur.position[1] = 30;
 
     this.bot = false;
+
+    this.speed = 10;
 }
 
 User.prototype.toPublic = function() {

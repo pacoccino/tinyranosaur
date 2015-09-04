@@ -4,7 +4,7 @@ var Users = require("../../server/models/users");
 var User = require("../../server/models/user");
 var Tyranosaur = require("../../server/models/tyranosaur");
 
-describe('User management', function() {
+describe('Users', function() {
     describe('User', function () {
         it('should create', function () {
             var user = new User();
@@ -13,8 +13,10 @@ describe('User management', function() {
             expect(user._id).to.exist;
             expect(user.name).to.exist;
             expect(user.bot).to.be.false;
+            expect(user.speed).to.equal(10);
             expect(user.tyranosaur).to.exist;
             expect(user.tyranosaur instanceof Tyranosaur).to.be.true;
+            expect(user.tyranosaur.position[1]).to.equal(30);
         });
 
         it('should transform to public', function () {

@@ -1,20 +1,19 @@
 var Tyranosaur =  require('./tyranosaur');
 var Helpers =  require('../modules/helpers');
+var User =  require('./user');
 var Map =  require('../modules/map');
 
 function Bot() {
 
-    this._speed = 10;
+    User.call(this);
 
-    this._id = Helpers.idGenerator();
-    this.name = Helpers.randomName();
     this.bot = true;
-
-    this.tyranosaur = new Tyranosaur();
-    this.tyranosaur.position.y = 30;
 
     this.direction = [0,0,1];
 }
+
+Bot.prototype = Object.create(User.prototype);
+Bot.prototype.constructor = Bot;
 
 // Class functions
 
@@ -24,7 +23,7 @@ Bot.prototype.stepIa = function() {
     var move;
     var step = Helpers.clockDelta() / 1000;
 
-    move = Helpers.scaleVect(this._speed * step, this.direction);
+    move = Helpers.scaleVect(this.speed * step, this.direction);
     this.tyranosaur.position = Helpers.addVect(this.tyranosaur.position, move);
 };
 

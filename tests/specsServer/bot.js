@@ -25,7 +25,7 @@ describe('Bot', function() {
         expect(bot.name).to.exist;
         expect(bot.bot).to.be.true;
         expect(bot.tyranosaur instanceof Tyranosaur).to.be.true;
-        expect(bot._speed).to.equal(10);
+        expect(bot.speed).to.equal(10);
         expect(bot.direction[0]).to.equal(0);
         expect(bot.direction[1]).to.equal(0);
         expect(bot.direction[2]).to.equal(1);
@@ -43,7 +43,7 @@ describe('Bot', function() {
 
         var direction = bot.direction;
         var position = bot.tyranosaur.position;
-        var speed = bot._speed;
+        var speed = bot.speed;
 
         Helpers.clockDelta = function() {
             return 1000;
