@@ -1,4 +1,3 @@
-var Tyranosaur = require('./tyranosaur');
 var User = require('./user');
 var _ = require('lodash');
 

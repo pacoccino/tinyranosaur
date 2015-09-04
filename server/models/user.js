@@ -1,4 +1,3 @@
-var Tyranosaur = require('./tyranosaur');
 var Helpers = require('../modules/helpers');
 var _ = require('lodash');
 
@@ -11,8 +10,8 @@ function User( name ) {
 
     this.socket = null;
 
-    this.tyranosaur = new Tyranosaur();
-    this.tyranosaur.position[1] = 30;
+    this.position = [0,30,0];
+    this.rotation = [0,0,0,"XYZ"];
 
     this.heartTime = null;
 
@@ -26,7 +25,8 @@ User.prototype.toPublic = function() {
     publicUser._id = this._id;
     publicUser.name = this.name;
     publicUser.bot = this.bot;
-    publicUser.tyranosaur = this.tyranosaur.getState();
+    publicUser.position = this.position;
+    publicUser.rotation = this.rotation;
 
     return publicUser;
 };
@@ -46,11 +46,12 @@ User.prototype.move = function(newState) {
 
     if(!this.isCorrectMove(newState.position)) return;
 
-    this.tyranosaur.move(newState);
+    this.position = newState.position;
+    this.rotation = newState.rotation;
 };
 
 User.prototype.isCorrectMove = function(newPos) {
-    var distance = Helpers.distanceBetween(this.tyranosaur.position, newPos);
+    var distance = Helpers.distanceBetween(this.position, newPos);
 
     return (distance < this.speed);
 };

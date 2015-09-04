@@ -1,4 +1,3 @@
-var Tyranosaur =  require('./tyranosaur');
 var Helpers =  require('../modules/helpers');
 var User =  require('./user');
 var Map =  require('../modules/map');
@@ -24,7 +23,7 @@ Bot.prototype.stepIa = function() {
     var step = Helpers.clockDelta() / 1000;
 
     move = Helpers.scaleVect(this.speed * step, this.direction);
-    this.tyranosaur.position = Helpers.addVect(this.tyranosaur.position, move);
+    this.position = Helpers.addVect(this.position, move);
 };
 
 Bot.prototype.decideDirection = function() {
@@ -37,7 +36,7 @@ Bot.prototype.decideDirection = function() {
 };
 
 Bot.prototype.setDirectionTo = function(destination) {
-    var position = this.tyranosaur.position;
+    var position = this.position;
 
     var direction = [];
     direction.push(destination[0] - position[0]);
@@ -46,17 +45,7 @@ Bot.prototype.setDirectionTo = function(destination) {
 
     this.direction = Helpers.normalize(direction);
 
-    this.tyranosaur.rotation[1] = Math.atan2(direction[2], direction[0]);
-};
-
-Bot.prototype.toPublic = function() {
-    var publicUser = {};
-    publicUser._id = this._id;
-    publicUser.name = this.name;
-    publicUser.bot = this.bot;
-    publicUser.tyranosaur = this.tyranosaur.getState();
-
-    return publicUser;
+    this.rotation[1] = Math.atan2(direction[2], direction[0]);
 };
 
 // Static functions

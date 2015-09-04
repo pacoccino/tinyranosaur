@@ -1,7 +1,6 @@
 var expect = require("chai").expect;
 
 var Bot = require("../../server/models/bot.js");
-var Tyranosaur = require("../../server/models/tyranosaur.js");
 var Helpers = require("../../server/modules/helpers.js");
 var Map = require("../../server/modules/map.js");
 
@@ -24,7 +23,6 @@ describe('Bot', function() {
         expect(bot._id).to.exist;
         expect(bot.name).to.exist;
         expect(bot.bot).to.be.true;
-        expect(bot.tyranosaur instanceof Tyranosaur).to.be.true;
         expect(bot.speed).to.equal(10);
         expect(bot.direction[0]).to.equal(0);
         expect(bot.direction[1]).to.equal(0);
@@ -42,7 +40,7 @@ describe('Bot', function() {
         bot.decideDirection = function() {};
 
         var direction = bot.direction;
-        var position = bot.tyranosaur.position;
+        var position = bot.position;
         var speed = bot.speed;
 
         Helpers.clockDelta = function() {
@@ -57,7 +55,7 @@ describe('Bot', function() {
             position[2] + speed * direction[2]
         ];
 
-        position = bot.tyranosaur.position;
+        position = bot.position;
 
         expect(position[0]).to.equal(expPosition[0]);
         expect(position[1]).to.equal(expPosition[1]);
@@ -77,7 +75,7 @@ describe('Bot', function() {
 
     it('sets direction z', function() {
         var bot = new Bot();
-        bot.tyranosaur.position = [0,0,0];
+        bot.position = [0,0,0];
         var waypoint = [0,0,5];
 
         bot.setDirectionTo(waypoint);
@@ -92,7 +90,7 @@ describe('Bot', function() {
 
     it('sets direction x', function() {
         var bot = new Bot();
-        bot.tyranosaur.position = [0,0,0];
+        bot.position = [0,0,0];
         var waypoint = [5,0,0];
 
         bot.setDirectionTo(waypoint);
@@ -108,7 +106,7 @@ describe('Bot', function() {
 
     it('sets direction -x', function() {
         var bot = new Bot();
-        bot.tyranosaur.position = [0,0,0];
+        bot.position = [0,0,0];
         var waypoint = [-5,0,0];
 
         bot.setDirectionTo(waypoint);
@@ -123,7 +121,7 @@ describe('Bot', function() {
 
     it('sets direction x-z', function() {
         var bot = new Bot();
-        bot.tyranosaur.position = [0,0,0];
+        bot.position = [0,0,0];
         var waypoint = [5,0,-5];
 
         bot.setDirectionTo(waypoint);
@@ -138,7 +136,7 @@ describe('Bot', function() {
 
     it('sets direction x-z offset', function() {
         var bot = new Bot();
-        bot.tyranosaur.position = [10,0,-10];
+        bot.position = [10,0,-10];
         var waypoint = [5,0,-5];
 
         bot.setDirectionTo(waypoint);
