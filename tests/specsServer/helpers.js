@@ -12,7 +12,7 @@ describe('Helpers', function() {
         expect(b).to.be.null;
     });
 
-    it('scaleVect', function() {
+    it('scale vect', function() {
         var a = [0,1,2], b;
         b = Helpers.scaleVect(2, a);
 
@@ -23,7 +23,27 @@ describe('Helpers', function() {
         expect(b[2]).to.equal(4);
     });
 
-    it('scaleVect errs', function() {
+    it('scale vect negative', function() {
+        var a = [0,2], b;
+        b = Helpers.scaleVect(-3, a);
+
+        expect(b).not.to.be.null;
+        expect(b.length).to.equal(2);
+        expect(b[0]).to.equal(0);
+        expect(b[1]).to.equal(-6);
+    });
+    it('scale vect float', function() {
+        var a = [0,1,2], b;
+        b = Helpers.scaleVect(0.5, a);
+
+        expect(b).not.to.be.null;
+        expect(b.length).to.equal(3);
+        expect(b[0]).to.equal(0);
+        expect(b[1]).to.equal(0.5);
+        expect(b[2]).to.equal(1);
+    });
+
+    it('scale vect errs', function() {
         var a, b;
 
         a = [];
@@ -45,7 +65,7 @@ describe('Helpers', function() {
         expect(c[2]).to.equal(5);
     });
 
-    it('addVect errs', function() {
+    it('addVect errors', function() {
         var a, b, c;
 
         a = [];
