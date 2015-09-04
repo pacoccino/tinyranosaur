@@ -23,6 +23,11 @@ Bot.prototype.constructor = Bot;
 Bot.prototype.stepIa = function() {
     this.decideDirection();
 
+    this.moveBot();
+};
+
+Bot.prototype.moveBot = function() {
+
     var move;
     var step = Helpers.clockDelta() / 1000;
 

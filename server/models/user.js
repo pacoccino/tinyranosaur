@@ -1,4 +1,5 @@
 var Helpers = require('../modules/helpers');
+var Debug = require('../modules/debug');
 var _ = require('lodash');
 
 var inactiveDelay = 1000; // ms

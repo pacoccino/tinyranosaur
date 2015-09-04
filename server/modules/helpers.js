@@ -45,6 +45,11 @@ Helpers.clockDelta = function() {
     return delta;
 };
 
+Helpers.stopClock = function() {
+
+    deltaTimestamp = null;
+};
+
 
 Helpers.generateInteger = function(max) {
 

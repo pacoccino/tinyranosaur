@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Users = require('../models/users');
 var Bot = require('../models/bot');
 var Debug = require('../modules/debug');
+var Helpers = require('../modules/helpers');
 
 function Game() {
     this.users = new Users();
@@ -132,7 +133,7 @@ Game.prototype.disconnectInactivePlayers = function() {
 };
 
 Game.prototype.createBots = function() {
-    var nbBots = 1;
+    var nbBots = 4;
 
     for (var i = 0; i < nbBots; i++) {
         var bot = new Bot();
@@ -147,6 +148,8 @@ Game.prototype.killBots = function() {
         this.io.emit('player leave', bot._id);
     }
     this.bots.splice(0, this.bots.length);
+
+    Helpers.stopClock();
 };
 
 Game.prototype.liveBots = function() {
