@@ -104,7 +104,6 @@ describe('Bot', function() {
         expect(position2[0]).to.equal(expPosition2[0]);
         expect(position2[1]).to.equal(expPosition2[1]);
         expect(position2[2]).to.equal(expPosition2[2]);
-        console.log(bot2.position)
     });
 
     it('generates Waypoint', function() {

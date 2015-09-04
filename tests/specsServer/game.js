@@ -162,14 +162,30 @@ describe('Game', function() {
 
     it('bot updated to player', function(done) {
 
-        socket.connectClient();
+        var assBots = [];
+        var assCount = 0;
 
+        socket.connectClient();
 
         socket.socketClient.on('player update', function(player) {
 
-            expect(player._id).to.equal(game.bots[0]._id);
-            done();
+            expect(player.bot).to.be.true;
+            assBots[player._id] = true;
+            assCount++;
+            if(assCount === game.bots.length)  {
+                var ass = true;
+                for (var i = 0; i < game.bots.length; i++) {
+                    var bot = game.bots[i];
+                    ass = ass && assBots[bot._id];
+                }
+                expect(ass).to.be.true;
+                done();
+
+                // deregistration ghetto
+                socket.socketClient.on('player update', function() {});
+            }
         });
+
 
     });
 
