@@ -2,6 +2,8 @@ var Helpers =  require('../modules/helpers');
 var User =  require('./user');
 var Map =  require('../modules/map');
 
+var chanceToChange = 0.02;
+
 function Bot() {
 
     User.call(this);
@@ -9,6 +11,8 @@ function Bot() {
     this.bot = true;
 
     this.direction = [0,0,1];
+
+    this.speed = 50;
 }
 
 Bot.prototype = Object.create(User.prototype);
@@ -28,7 +32,6 @@ Bot.prototype.stepIa = function() {
 
 Bot.prototype.decideDirection = function() {
 
-    var chanceToChange = 0.05;
     if(Math.random() < chanceToChange) {
         var destination = Bot.generateWaypoint();
         this.setDirectionTo(destination);
@@ -45,7 +48,7 @@ Bot.prototype.setDirectionTo = function(destination) {
 
     this.direction = Helpers.normalize(direction);
 
-    this.rotation[1] = Math.atan2(direction[2], direction[0]);
+    this.rotation[1] = -Math.atan2(direction[2], direction[0]) + Math.PI/2;
 };
 
 // Static functions

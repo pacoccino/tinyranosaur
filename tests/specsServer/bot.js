@@ -86,6 +86,9 @@ describe('Bot', function() {
         expect(direction[0]).to.equal(expDirection[0]);
         expect(direction[1]).to.equal(expDirection[1]);
         expect(direction[2]).to.equal(expDirection[2]);
+
+        var rotationY = bot.rotation[1];
+        expect(rotationY).to.equal(0);
     });
 
     it('sets direction x', function() {
@@ -101,6 +104,9 @@ describe('Bot', function() {
         expect(direction[0]).to.equal(expDirection[0]);
         expect(direction[1]).to.equal(expDirection[1]);
         expect(direction[2]).to.equal(expDirection[2]);
+
+        var rotationY = bot.rotation[1];
+        expect(rotationY).to.equal(Math.PI/2);
     });
 
 
@@ -117,6 +123,9 @@ describe('Bot', function() {
         expect(direction[0]).to.equal(expDirection[0]);
         expect(direction[1]).to.equal(expDirection[1]);
         expect(direction[2]).to.equal(expDirection[2]);
+
+        var rotationY = bot.rotation[1];
+        expect(rotationY).to.equal(-Math.PI/2);
     });
 
     it('sets direction x-z', function() {
@@ -132,6 +141,9 @@ describe('Bot', function() {
         expect(direction[0]).to.closeTo(expDirection[0], 0.01);
         expect(direction[1]).to.closeTo(expDirection[1], 0.01);
         expect(direction[2]).to.closeTo(expDirection[2], 0.01);
+
+        var rotationY = bot.rotation[1];
+        expect(rotationY).to.equal(3*Math.PI/4);
     });
 
     it('sets direction x-z offset', function() {
@@ -147,6 +159,9 @@ describe('Bot', function() {
         expect(direction[0]).to.closeTo(expDirection[0], 0.01);
         expect(direction[1]).to.closeTo(expDirection[1], 0.01);
         expect(direction[2]).to.closeTo(expDirection[2], 0.01);
+
+        var rotationY = bot.rotation[1];
+        expect(rotationY).to.equal(-Math.PI/4);
     });
 
 });
