@@ -4,6 +4,7 @@ function Authentication_Socket() {
     this.info = null;
 
     var _ack = null;
+    var heartbeatDelay = 200;
 
     this.auth = function(callback) {
         this.socket.on('welcome', function(authInfo, ack) {
@@ -14,6 +15,11 @@ function Authentication_Socket() {
             _ack = ack;
             callback(true);
         });
+
+        setInterval(function() {
+            self.socket.emit('heartbeat');
+
+        }, heartbeatDelay);
     };
 
     this.unAuth = function() {
