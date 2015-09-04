@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 
+var Helpers = require("../../server/modules/helpers");
 var Users = require("../../server/models/users");
 var User = require("../../server/models/user");
 var Tyranosaur = require("../../server/models/tyranosaur");
@@ -31,6 +32,66 @@ describe('Users', function() {
             expect(user.tyranosaur.position.length).to.be.equal(3);
             expect(user.tyranosaur.rotation).to.exist;
             expect(user.tyranosaur.rotation.length).to.be.equal(4);
+        });
+
+        it('tells inactivity', function() {
+            var user = new User();
+            var now = new Date().getMilliseconds();
+
+            expect(user.isInactive()).to.be.false;
+            user.heartTime = now - 50;
+            expect(user.isInactive()).to.be.false;
+            user.heartTime = now - 2000;
+            expect(user.isInactive()).to.be.true;
+        });
+
+        it('receives heartBeat', function() {
+
+            var user = new User();
+            var t1 = new Date().getMilliseconds();
+            user.heartBeat();
+            var t2 = new Date().getMilliseconds();
+
+            expect(user.heartTime).to.be.gte(t1);
+            expect(user.heartTime).to.be.lte(t2);
+        });
+
+        it('moves tyranosaur', function() {
+            var user = new User();
+            var fntmp = User.prototype.isCorrectMove;
+            User.prototype.isCorrectMove = function() { return true; };
+
+            var newState = {
+                position: [1,0,10],
+                rotation: [2,0,20,'xyz']
+            };
+            user.move(newState);
+
+            expect(user.tyranosaur.position[2]).to.equal(10);
+            expect(user.tyranosaur.rotation[2]).to.equal(20);
+
+            User.prototype.isCorrectMove = fntmp;
+
+        });
+
+        it('accepts correct move', function() {
+
+            var user = new User();
+            user.tyranosaur.position = [ 0,0,0 ];
+            var newPos = [1,0,0];
+            user.speed = 2;
+
+            expect(user.isCorrectMove(newPos)).to.be.true;
+        });
+
+        it('rejects incorrect move', function() {
+
+            var user = new User();
+            user.tyranosaur.position = [ 0,0,0 ];
+            var newPos = [5,0,0];
+            user.speed = 2;
+
+            expect(user.isCorrectMove(newPos)).to.be.false;
         });
     });
 
@@ -91,5 +152,6 @@ describe('Users', function() {
                 });
             });
         });
+
     });
 });

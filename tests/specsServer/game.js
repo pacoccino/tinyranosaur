@@ -20,14 +20,25 @@ describe('Game', function() {
         expect(game.users instanceof Users).to.be.true;
     });
 
+    it('creates new player', function() {
+
+        socket.connectClient();
+
+        expect(game.users.getAllSync().length).to.be.equal(1);
+
+    });
+
     it('welcomes player', function(done) {
 
         socket.on('welcome', function(data) {
             expect(data._id).to.be.defined;
             expect(data.name).to.be.defined;
             expect(data.name.length).to.gt(0);
+
+            expect(game.users.getAllSync()[0]._id).to.be.equal(data._id);
             done();
         });
+
 
         socket.connectClient();
 
@@ -58,11 +69,13 @@ describe('Game', function() {
         });
 
         socket.socketClient.on('player leave', function(data) {
-            expect(data).to.equal(myId);
-            done();
+            if(data === myId)  {
+                expect(game.users.getAllSync().length).to.be.equal(0);
+                done();
+            }
         });
 
-        // TODO detect broadcast and user deletion
+        // TODO detect broadcast
 
         socket.connectClient();
         socket.emit('disconnect');
@@ -74,31 +87,53 @@ describe('Game', function() {
         expect(game.gameUpdater).not.to.be.null;
     });
 
+    it('starts game when player connects', function() {
+        socket.connectClient();
+
+        expect(game.gameUpdater).not.to.be.null;
+    });
+
     it('stops game', function() {
         game.launchGame();
         game.stopGame();
         expect(game.gameUpdater).to.be.null;
     });
 
-    it('no bots when no players', function() {
+    it('stops game when no players', function(done) {
+        socket.connectClient();
 
-        game.liveBots();
+        socket.emit('disconnect');
 
-        expect(game.bots.length).to.equal(0);
+        setTimeout(function() {
+            expect(game.gameUpdater).to.be.null;
+
+            done();
+        }, 100);
     });
 
-    it('bots when player', function() {
+    it('no bots when no players', function(done) {
 
         socket.connectClient();
 
-        game.liveBots();
+        socket.emit('disconnect');
 
-        expect(game.bots.length).to.gt(0);
+        setTimeout(function() {
+            expect(game.bots.length).to.be.equal(0);
+            done();
+        }, 200);
+    });
+
+    it('bots when player', function(done) {
+
+        socket.connectClient();
+
+        setTimeout(function() {
+            expect(game.bots.length).to.be.gt(0);
+            done();
+        }, 200);
     });
 
     it('bot sent to player', function(done) {
-
-        socket.connectClient();
 
         socket.socketClient.on('player new', function(player) {
             expect(player._id).to.equal(game.bots[0]._id);
@@ -106,7 +141,7 @@ describe('Game', function() {
             done();
         });
 
-        game.liveBots();
+        socket.connectClient();
     });
 
     it('bot updated to player', function(done) {
@@ -120,7 +155,42 @@ describe('Game', function() {
             done();
         });
 
-        game.liveBots();
+    });
+
+    it('receives heartbeat', function() {
+
+        socket.connectClient();
+
+        var t1 = new Date().getMilliseconds();
+        socket.emit('heartbeat');
+        var t2 = new Date().getMilliseconds();
+
+        var user = game.users.getAllSync()[0];
+
+        expect(user.heartTime).to.be.gte(t1);
+        expect(user.heartTime).to.be.lte(t2);
+        expect(user.isInactive()).to.be.false;
+    });
+
+    it('does not disconnect active players', function() {
+
+        socket.connectClient();
+
+        socket.emit('heartbeat');
+
+        expect(game.users.getAllSync().length).to.be.equal(1);
+    });
+
+    it('disconnect inactive players', function() {
+
+        socket.connectClient();
+        socket.emit('heartbeat');
+
+        setTimeout(function() {
+            expect(game.users.getAllSync().length).to.be.equal(0);
+            done();
+        }, 1500);
+
     });
 
 });

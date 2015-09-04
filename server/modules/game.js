@@ -13,7 +13,7 @@ Game.prototype.listenUpdatePosition = function(io, user) {
 
     var self = this;
     return function(position) {
-        user.tyranosaur.move(position);
+        user.move(position);
 
         var options = user.toPublic();
         self.users.getAll(function(userList) {
@@ -64,18 +64,26 @@ Game.prototype.listen = function(io) {
                 self.announcePlayer(user);
 
                 socket.on('player update', self.listenUpdatePosition(self.io, user));
+                socket.on('heartbeat', function() {
+                    user.heartBeat.call(user);
+                });
             });
 
             socket.on('disconnect', function() {
 
                 self.users.delete(user._id);
                 self.io.emit('player leave', user._id);
+                delete user;
             });
+
+            self.launchGame();
         });
     });
 };
 
 Game.prototype.launchGame = function() {
+    if(this.gameUpdater) return;
+
     var updateInterval = 50;
     var self = this;
     var updater = function() {
@@ -83,6 +91,7 @@ Game.prototype.launchGame = function() {
     };
 
     this.gameUpdater = setInterval(updater, updateInterval);
+    this.createBots();
 };
 
 Game.prototype.stopGame = function() {
@@ -97,22 +106,42 @@ Game.prototype.updateGame = function() {
 
 Game.prototype.disconnectInactivePlayers = function() {
 
+    var users = this.users.getAllSync();
+    var disconnect = [];
+    for (var i = 0; i < users.length; i++) {
+        var user = users[i];
+
+        if(user.isInactive()) {
+            disconnect.push(i);
+        }
+    }
+
+    for (var j = 0; j < disconnect.length; j++) {
+        var userIndex = disconnect[j];
+        users.splice(userIndex, 1);
+    }
+
+    if(users.length === 0) {
+        this.killBots();
+        this.stopGame();
+    }
+};
+
+Game.prototype.createBots = function() {
+    var bot = new Bot();
+    this.bots.push(bot);
+    this.io.emit('player new', bot.toPublic());
+};
+
+Game.prototype.killBots = function() {
+    for (var i = 0; i < this.bots.length; i++) {
+        var bot = this.bots[i];
+        this.io.emit('player leave', bot._id);
+    }
+    this.bots.splice(0, this.bots.length);
 };
 
 Game.prototype.liveBots = function() {
-
-    if (this.users.getAllSync().length === 0 && this.bots.length > 0) {
-        for (var i = 0; i < this.bots.length; i++) {
-            var bot = this.bots[i];
-            this.io.emit('player leave', bot[0]._id);
-        }
-        this.bots.splice(0, this.bots.length);
-    }
-    else if (this.users.getAllSync().length !== 0 && this.bots.length === 0) {
-        var bot = new Bot()
-        this.bots.push(bot);
-        this.io.emit('player new', bot.toPublic());
-    }
 
     for (var i = 0; i < this.bots.length; i++) {
         var bot = this.bots[i];
