@@ -44,7 +44,10 @@ User.prototype.heartBeat = function() {
 
 User.prototype.move = function(newState) {
 
-    if(!this.isCorrectMove(newState.position)) return;
+    if(!this.isCorrectMove(newState.position)) {
+        Debug.log("Incorrect move detected for player " + this._id);
+        return;
+    }
 
     this.position = newState.position;
     this.rotation = newState.rotation;
