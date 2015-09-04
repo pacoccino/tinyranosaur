@@ -132,9 +132,13 @@ Game.prototype.disconnectInactivePlayers = function() {
 };
 
 Game.prototype.createBots = function() {
-    var bot = new Bot();
-    this.bots.push(bot);
-    this.io.emit('player new', bot.toPublic());
+    var nbBots = 1;
+
+    for (var i = 0; i < nbBots; i++) {
+        var bot = new Bot();
+        this.bots.push(bot);
+        this.io.emit('player new', bot.toPublic());
+    }
 };
 
 Game.prototype.killBots = function() {

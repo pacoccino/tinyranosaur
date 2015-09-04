@@ -33,4 +33,3 @@ var server = app.listen(PORT);
 var io = socketio(server);
 var game = new Game();
 game.listen(io);
-game.launchGame();

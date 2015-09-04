@@ -1,6 +1,6 @@
 function Tyranosaur() {
     this.position = [0,0,0];
-    this.rotation = [0,0,0,'xyz'];
+    this.rotation = [0,0,0,"XYZ"];
 }
 
 Tyranosaur.prototype.move = function(newState) {
