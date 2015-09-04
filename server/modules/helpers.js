@@ -107,4 +107,13 @@ Helpers.randomName = function() {
     return text;
 };
 
+Helpers.distanceBetween = function(point1, point2) {
+
+    var minus2 = Helpers.scaleVect(-1, point2);
+
+    var vector = Helpers.addVect(point1, minus2);
+
+    return Helpers.vectorNorm(vector);
+};
+
 module.exports = Helpers;

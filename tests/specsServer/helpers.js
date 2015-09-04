@@ -158,5 +158,29 @@ describe('Helpers', function() {
         expect(normalized[2]).to.closeTo(-Math.sqrt(1/2), 0.01);
     });
 
+    it('compute distance between two point', function() {
+        var point1 = [10,0,10];
+        var point2 = [20,0,20];
+
+        expect(Helpers.distanceBetween(point1, point2)).to.be.closeTo(Math.sqrt(200), 0.001);
+        expect(Helpers.distanceBetween(point2, point1)).to.be.closeTo(Math.sqrt(200), 0.001);
+    });
+    it('compute distance between two point b', function() {
+        var point1 = [0,0,0];
+        var point2 = [10,0,10];
+
+        expect(Helpers.distanceBetween(point1, point2)).to.be.closeTo(Math.sqrt(200), 0.001);
+        expect(Helpers.distanceBetween(point2, point1)).to.be.closeTo(Math.sqrt(200), 0.001);
+    });
+
+
+    it('compute distance between two point c', function() {
+        var point1 = [0,0,0];
+        var point2 = [10,0,0];
+
+        expect(Helpers.distanceBetween(point1, point2)).to.be.closeTo(10, 0.001);
+        expect(Helpers.distanceBetween(point2, point1)).to.be.closeTo(10, 0.001);
+    });
+
 
 });
