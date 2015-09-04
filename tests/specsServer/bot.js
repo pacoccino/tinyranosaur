@@ -10,6 +10,9 @@ describe('Bot', function() {
 
     beforeEach(function() {
         savedClockDelta = Helpers.clockDelta;
+        Helpers.clockDelta = function(delta) {
+            return 1000;
+        }
     });
 
     afterEach(function() {
@@ -23,7 +26,7 @@ describe('Bot', function() {
         expect(bot._id).to.exist;
         expect(bot.name).to.exist;
         expect(bot.bot).to.be.true;
-        expect(bot.speed).to.equal(10);
+        expect(bot.speed).to.equal(50);
         expect(bot.direction[0]).to.equal(0);
         expect(bot.direction[1]).to.equal(0);
         expect(bot.direction[2]).to.equal(1);
@@ -33,21 +36,17 @@ describe('Bot', function() {
         var bot = new Bot();
 
         bot.decideDirection();
+        // TODO
     });
 
-    it('stepIa direction', function() {
+    it('moves bot', function() {
         var bot = new Bot();
-        bot.decideDirection = function() {};
 
         var direction = bot.direction;
         var position = bot.position;
         var speed = bot.speed;
 
-        Helpers.clockDelta = function() {
-            return 1000;
-        };
-
-        bot.stepIa();
+        bot.moveBot();
 
         var expPosition = [
             position[0] + speed * direction[0],
@@ -60,6 +59,52 @@ describe('Bot', function() {
         expect(position[0]).to.equal(expPosition[0]);
         expect(position[1]).to.equal(expPosition[1]);
         expect(position[2]).to.equal(expPosition[2]);
+    });
+
+    it('stepIa direction w/ 2 instances', function() {
+        var bot = new Bot();
+        var bot2 = new Bot();
+
+        bot.position = [15,30,15];
+        bot2.position = [35,30,35];
+        bot.direction = [1,0,0];
+        bot2.direction = [0,0,1];
+
+        var direction = bot.direction;
+        var position = bot.position;
+        var speed = bot.speed;
+
+        var direction2 = bot2.direction;
+        var position2 = bot2.position;
+        var speed2 = bot2.speed;
+
+        bot.moveBot();
+        bot2.moveBot();
+
+        var expPosition = [
+            position[0] + speed * direction[0],
+            position[1] + speed * direction[1],
+            position[2] + speed * direction[2]
+        ];
+
+        position = bot.position;
+
+        expect(position[0]).to.equal(expPosition[0]);
+        expect(position[1]).to.equal(expPosition[1]);
+        expect(position[2]).to.equal(expPosition[2]);
+
+        var expPosition2 = [
+            position2[0] + speed * direction2[0],
+            position2[1] + speed * direction2[1],
+            position2[2] + speed * direction2[2]
+        ];
+
+        position2 = bot2.position;
+
+        expect(position2[0]).to.equal(expPosition2[0]);
+        expect(position2[1]).to.equal(expPosition2[1]);
+        expect(position2[2]).to.equal(expPosition2[2]);
+        console.log(bot2.position)
     });
 
     it('generates Waypoint', function() {
