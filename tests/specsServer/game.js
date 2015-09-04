@@ -135,10 +135,26 @@ describe('Game', function() {
 
     it('bot sent to player', function(done) {
 
+        var assBots = [];
+        var assCount = 0;
+
         socket.socketClient.on('player new', function(player) {
-            expect(player._id).to.equal(game.bots[0]._id);
+
             expect(player.bot).to.be.true;
-            done();
+            assBots[player._id] = true;
+            assCount++;
+            if(assCount === game.bots.length)  {
+                var ass = true;
+                for (var i = 0; i < game.bots.length; i++) {
+                    var bot = game.bots[i];
+                    ass = ass && assBots[bot._id];
+                }
+                expect(ass).to.be.true;
+                done();
+
+                // deregistration ghetto
+                socket.socketClient.on('player new', function() {});
+            }
         });
 
         socket.connectClient();
