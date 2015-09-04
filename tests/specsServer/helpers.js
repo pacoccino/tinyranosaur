@@ -102,6 +102,12 @@ describe('Helpers', function() {
         expect(roger).to.be.true;
     });
 
+    it('computes norm', function() {
+        var vector = [3,4,5];
+        var exp = Math.sqrt(3*3 + 4*4 + 5*5);
+
+        expect(Helpers.vectorNorm(vector)).to.be.closeTo(exp, 0.001);
+    });
     it('normalizes 1', function() {
         var vector = [0,0,10];
         var normalized = Helpers.normalize(vector);

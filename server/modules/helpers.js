@@ -58,21 +58,25 @@ Helpers.generateSign = function() {
     return (Math.random() < 0.5) ? -1 : 1;
 };
 
-Helpers.normalize = function(vector) {
-
+Helpers.vectorNorm = function(vector) {
     if (!vector || !vector.length) return;
 
-    var normalized = [];
     var sum = 0;
 
     for(var i=0; i<vector.length; i++) {
         sum += Math.pow(vector[i], 2);
     }
 
-    sum = Math.sqrt(sum);
+    return Math.sqrt(sum);
+};
+Helpers.normalize = function(vector) {
 
+    if (!vector || !vector.length) return;
+
+    var normalized = [];
+    var norm = Helpers.vectorNorm(vector);
     for(var j=0; j<vector.length; j++) {
-        normalized.push(vector[j] / sum);
+        normalized.push(vector[j] / norm);
     }
 
     return normalized;
