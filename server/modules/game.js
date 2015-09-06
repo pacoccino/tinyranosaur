@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var Users = require('../models/users');
-var Bot = require('../models/bot');
+var Bots = require('../modules/bots');
 var Debug = require('../modules/debug');
 var Helpers = require('../modules/helpers');
 
@@ -8,7 +8,7 @@ function Game() {
     this.users = new Users();
     this.io = null;
     this.gameUpdater = null;
-    this.bots = [];
+    this.bots = new Bots(this);
 }
 
 Game.prototype.listenUpdatePosition = function(io, user) {
@@ -33,8 +33,8 @@ Game.prototype.diffuseGameState = function(user) {
         var state = {
             users: users
         };
-        for (var i = 0; i < self.bots.length; i++) {
-            var bot = self.bots[i];
+        for (var i = 0; i < self.bots.bots.length; i++) {
+            var bot = self.bots.bots[i];
             state.users.push(bot.toPublic());
         }
         user.socket.emit('game state', state);
@@ -93,8 +93,8 @@ Game.prototype.launchGame = function() {
     };
 
     this.gameUpdater = setInterval(updater, updateInterval);
-    this.createBots();
-    Debug.log("Game started with " + this.bots.length + " bots");
+    this.bots.createBots();
+    Debug.log("Game started with " + this.bots.bots.length + " bots");
 };
 
 Game.prototype.stopGame = function() {
@@ -106,7 +106,7 @@ Game.prototype.stopGame = function() {
 
 Game.prototype.updateGame = function() {
     this.disconnectInactivePlayers();
-    this.liveBots();
+    this.bots.liveBots();
 };
 
 Game.prototype.disconnectInactivePlayers = function() {
@@ -127,53 +127,9 @@ Game.prototype.disconnectInactivePlayers = function() {
     }
 
     if(users.length === 0) {
-        this.killBots();
+        this.bots.killBots();
         this.stopGame();
     }
-};
-
-Game.prototype.createBots = function() {
-    var nbBots = 4;
-
-    for (var i = 0; i < nbBots; i++) {
-        var bot = new Bot();
-        this.bots.push(bot);
-        this.io.emit('player new', bot.toPublic());
-    }
-};
-
-Game.prototype.killBots = function() {
-    for (var i = 0; i < this.bots.length; i++) {
-        var bot = this.bots[i];
-        this.io.emit('player leave', bot._id);
-    }
-    this.bots.splice(0, this.bots.length);
-
-    tmpTime = null;
-};
-
-var tmpTime = null;
-Game.prototype.liveBots = function() {
-
-    var now = new Date(), delta;
-
-    if(tmpTime) {
-        delta = now - tmpTime;
-    }
-    else {
-        delta = 0;
-    }
-
-    tmpTime = now;
-
-    for (var i = 0; i < this.bots.length; i++) {
-        var bot = this.bots[i];
-        bot.stepIa(delta);
-
-        var botPublic = bot.toPublic();
-        this.io.emit('player update', botPublic);
-    }
-
 };
 
 module.exports = Game;
