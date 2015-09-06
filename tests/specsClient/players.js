@@ -4,7 +4,6 @@ describe('Players class', function() {
         it('create', function() {
             var player = new Player(game);
             expect(player._id).toBeDefined();
-            expect(player._id.length).toBe(10);
             expect(player.name).toBe("");
             expect(player.size).toBe(10);
             expect(player.tyranosaur).toBeDefined();
@@ -16,10 +15,9 @@ describe('Players class', function() {
             var sPlayer = {
                 _id: 1,
                 name: "bob",
-                tyranosaur: {
-                    position: [1,2,3],
-                    rotation: [1,2,3, 'zyx']
-                }
+                position: [1,2,3],
+                rotation: [1,2,3, 'zyx']
+
             };
 
             var player = new Player(game);
