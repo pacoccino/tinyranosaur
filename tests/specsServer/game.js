@@ -1,5 +1,7 @@
 var Game = require("../../server/modules/game");
 var Users = require("../../server/models/users");
+var GameListener = require("../../server/modules/gamelistener");
+var Bots = require("../../server/modules/bots");
 
 var expect = require("chai").expect;
 
@@ -18,6 +20,8 @@ describe('Game', function() {
 
         expect(game.io).to.equal(socket);
         expect(game.users instanceof Users).to.be.true;
+        expect(game.bots instanceof Bots).to.be.true;
+        expect(game.gameListener instanceof GameListener).to.be.true;
     });
 
     it('creates new player', function() {
@@ -26,39 +30,6 @@ describe('Game', function() {
 
         expect(game.users.getAllSync().length).to.be.equal(1);
 
-    });
-
-    it('welcomes player', function(done) {
-
-        socket.on('welcome', function(data) {
-            expect(data._id).to.be.defined;
-            expect(data.name).to.be.defined;
-            expect(data.name.length).to.gt(0);
-
-            expect(game.users.getAllSync()[0]._id).to.be.equal(data._id);
-            done();
-        });
-
-
-        socket.connectClient();
-
-    });
-
-    it('send game state', function(done) {
-
-        var myId;
-        socket.on('welcome', function(data) {
-            myId = data._id;
-        });
-
-        socket.on('game state', function(state) {
-            expect(state.users).to.be.defined;
-            expect(state.users.length).to.equal(1);
-            expect(state.users[0]._id).to.equal(myId);
-            done();
-        });
-
-        socket.connectClient();
     });
 
     it('disconnect', function(done) {
@@ -132,7 +103,6 @@ describe('Game', function() {
             done();
         }, 200);
     });
-
 
     it('receives heartbeat', function() {
 

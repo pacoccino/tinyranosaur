@@ -15,6 +15,8 @@ describe('Users', function () {
         users.create(function (user) {
             expect(user).to.exist;
             expect(user instanceof User).to.be.true;
+            expect(users.users.length).to.equal(1);
+            expect(users.users[0]._id).to.equal(user._id);
             done();
         });
     });

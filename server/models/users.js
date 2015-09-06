@@ -2,30 +2,30 @@ var User = require('./user');
 var _ = require('lodash');
 
 function Users() {
-    this.list = [];
+    this.users = [];
 }
 
 Users.prototype.create = function(cb) {
     var user = new User();
-    this.list.push(user);
+    this.users.push(user);
     cb(user);
 };
 
 Users.prototype.delete = function(id, cb) {
-    var userIndex = _.findIndex(this.list, {_id: id});
-    this.list.splice(userIndex, 1);
+    var userIndex = _.findIndex(this.users, {_id: id});
+    this.users.splice(userIndex, 1);
     cb && cb();
 };
 
 Users.prototype.getAll = function(cb) {
-    cb(this.list);
+    cb(this.users);
 };
 
 Users.prototype.getAllPublic = function(cb) {
     var publicList = [];
 
-    for(var i=0; i<this.list.length; i++) {
-        var user = this.list[i];
+    for(var i=0; i<this.users.length; i++) {
+        var user = this.users[i];
         var publicUser = user.toPublic();
 
         publicList.push(publicUser);
@@ -35,7 +35,7 @@ Users.prototype.getAllPublic = function(cb) {
 };
 
 Users.prototype.getAllSync = function() {
-    return this.list;
+    return this.users;
 };
 
 
