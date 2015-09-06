@@ -16,7 +16,7 @@ describe('Players class', function() {
                 _id: 1,
                 name: "bob",
                 position: [1,2,3],
-                rotation: [1,2,3, 'zyx']
+                rotation: [1,2,3, 'ZYX']
 
             };
 
@@ -34,7 +34,7 @@ describe('Players class', function() {
             expect(rotation.x).toBe(1);
             expect(rotation.y).toBe(2);
             expect(rotation.z).toBe(3);
-            expect(rotation.order).toBe('zyx');
+            expect(rotation.order).toBe('ZYX');
         });
     });
 

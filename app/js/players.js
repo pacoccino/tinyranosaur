@@ -10,11 +10,11 @@ Player.prototype.updateFromServer = function(serverPlayer) {
     this._id = serverPlayer._id;
     this.name = serverPlayer.name;
 
-    var object = this.tyranosaur.object;
-
     if(serverPlayer.position.length !== 3 || serverPlayer.rotation.length !== 4) {
         console.error("Invalid server data for player");
     }
+
+    var object = this.tyranosaur.object;
     object.position.fromArray(serverPlayer.position);
     object.rotation.fromArray(serverPlayer.rotation);
 };

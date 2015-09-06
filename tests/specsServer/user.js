@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 
 var Helpers = require("../../server/modules/helpers");
+var Constants = require("../../server/modules/constants");
 var Users = require("../../server/models/users");
 var User = require("../../server/models/user");
 
@@ -93,5 +94,27 @@ describe('User', function () {
         user.speed = 2;
 
         expect(user.isCorrectMove(newPos)).to.be.false;
+    });
+
+    it('accepts correct eat', function() {
+
+        var user1 = new User();
+        var user2 = new User();
+        var distance = Constants.eatPerimeter - 1;
+        user1.position = [ 0,0,0 ];
+        user2.position = [ 0,0,distance ];
+
+        expect(user1.canEat(user2)).to.be.true;
+    });
+
+    it('rejects incorrect eat', function() {
+
+        var user1 = new User();
+        var user2 = new User();
+        var distance = Constants.eatPerimeter + 1;
+        user1.position = [ 0,0,0 ];
+        user2.position = [ 0,0,distance ];
+
+        expect(user1.canEat(user2)).to.be.false;
     });
 });

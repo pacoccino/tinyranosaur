@@ -1,5 +1,6 @@
 var Helpers = require('../modules/helpers');
 var Debug = require('../modules/debug');
+var Constants = require("../../server/modules/constants");
 var _ = require('lodash');
 
 var inactiveDelay = 1000; // ms
@@ -58,6 +59,12 @@ User.prototype.isCorrectMove = function(newPos) {
     var distance = Helpers.distanceBetween(this.position, newPos);
 
     return (distance < this.speed);
+};
+
+User.prototype.canEat = function(userToEat) {
+    var distance = Helpers.distanceBetween(userToEat.position, this.position);
+
+    return (distance < Constants.eatPerimeter);
 };
 
 module.exports = User;
