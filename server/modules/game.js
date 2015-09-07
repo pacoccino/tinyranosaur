@@ -62,7 +62,7 @@ Game.prototype.updateGame = function() {
 
 Game.prototype.disconnectInactivePlayers = function() {
 
-    var users = this.users.getAllSync();
+    var users = this.users.users;
     var disconnect = [];
     for (var i = 0; i < users.length; i++) {
         var user = users[i];
