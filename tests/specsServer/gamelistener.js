@@ -71,7 +71,7 @@ describe('GameListener', function() {
         gameListener.diffuseGameState(user);
     });
 
-    xit('broadcasts player new', function(done) {
+    /*xit('broadcasts player new', function(done) {
 
         // TODO create new socket for other players
         socket.socketOthers.on('player new', function(aUser) {
@@ -81,6 +81,33 @@ describe('GameListener', function() {
 
         gameListener.announcePlayer(user);
 
+    });*/
+
+    xit('listens player eat', function(done) {
+        game.users.create(function(user1) {
+            user1.socket = socket.socketClient;
+            socket.connectClient();
+
+            socket.socketClient.on('player die', function(playerId) {
+                expect(playerId).to.equal(user1._id);
+                done();
+            });
+            socket.socketClient.emit('player eat', user1._id);
+
+        });
+    });
+
+    xit('listens player eat wrong', function(done) {
+        game.users.create(function(user1) {
+            user1.socket = socket.socketClient;
+            socket.connectClient();
+
+            socket.socketClient.on('wrong eat', function() {
+                done();
+            });
+            socket.socketClient.emit('player eat', user1._id);
+
+        });
     });
 
 });

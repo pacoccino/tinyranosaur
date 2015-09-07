@@ -21,6 +21,17 @@ describe('Users', function () {
         });
     });
 
+    it('getById', function (done) {
+        users.create(function (user) {
+            expect(users.getById(user._id)).to.equal(user);
+
+            users.create(function (user) {
+                expect(users.getById(user._id)).to.equal(user);
+                done();
+            });
+        });
+    });
+
     it('should getAll', function (done) {
         users.create(function (user) {
             expect(user).to.exist;

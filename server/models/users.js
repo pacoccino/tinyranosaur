@@ -21,6 +21,12 @@ Users.prototype.getAll = function(cb) {
     cb(this.users);
 };
 
+Users.prototype.getById = function(id) {
+    var user = _.find(this.users, {_id: id});
+
+    return user;
+};
+
 Users.prototype.getAllPublic = function(cb) {
     var publicList = [];
 

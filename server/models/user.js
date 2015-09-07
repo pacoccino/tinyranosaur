@@ -36,12 +36,12 @@ User.prototype.toPublic = function() {
 User.prototype.isInactive = function() {
     if(!this.heartTime) return false;
 
-    var now = new Date().getMilliseconds();
+    var now = new Date().getTime();
     return (now - this.heartTime) > inactiveDelay;
 };
 
 User.prototype.heartBeat = function() {
-    this.heartTime = new Date().getMilliseconds();
+    this.heartTime = new Date().getTime();
 };
 
 User.prototype.move = function(newState) {

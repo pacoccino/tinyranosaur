@@ -108,9 +108,9 @@ describe('Game', function() {
 
         socket.connectClient();
 
-        var t1 = new Date().getMilliseconds();
+        var t1 = new Date().getTime();
         socket.emit('heartbeat');
-        var t2 = new Date().getMilliseconds();
+        var t2 = new Date().getTime();
 
         var user = game.users.getAllSync()[0];
 
@@ -128,7 +128,18 @@ describe('Game', function() {
         expect(game.users.getAllSync().length).to.be.equal(1);
     });
 
-    it('disconnect inactive players', function() {
+    it('disconnect inactive players', function(done) {
+
+        game.users.create(function(user) {
+            user.heartTime = 10;
+            game.disconnectInactivePlayers();
+            expect(game.users.users.length).to.be.equal(0);
+            done();
+        });
+
+    });
+
+    it('disconnect inactive players event', function(done) {
 
         socket.connectClient();
         socket.emit('heartbeat');

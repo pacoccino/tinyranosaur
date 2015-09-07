@@ -38,7 +38,7 @@ describe('User', function () {
 
     it('tells inactivity', function() {
         var user = new User();
-        var now = new Date().getMilliseconds();
+        var now = new Date().getTime();
 
         expect(user.isInactive()).to.be.false;
         user.heartTime = now - 50;
@@ -50,9 +50,9 @@ describe('User', function () {
     it('receives heartBeat', function() {
 
         var user = new User();
-        var t1 = new Date().getMilliseconds();
+        var t1 = new Date().getTime();
         user.heartBeat();
-        var t2 = new Date().getMilliseconds();
+        var t2 = new Date().getTime();
 
         expect(user.heartTime).to.be.gte(t1);
         expect(user.heartTime).to.be.lte(t2);
