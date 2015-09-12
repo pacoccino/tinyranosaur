@@ -41,4 +41,5 @@ $ npm start
 
 **SERVER**
 * Store users and session in mongo
-* Re-implement firebase api w/o storage w/ socket.io
+* Re-implement firebase api w/o storage w/ socket.io (ok)
+* Game controls : moving in every direction with camera following smoothly or controlled by mouse/2nd finger on mobile
