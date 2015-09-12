@@ -2,7 +2,7 @@ var expect = require("chai").expect;
 
 var Helpers = require("../../server/modules/helpers");
 var Constants = require("../../server/modules/constants");
-var Users = require("../../server/models/users");
+var Users = require("../../server/modules/users");
 var User = require("../../server/models/user");
 
 describe('User', function () {

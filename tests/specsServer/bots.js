@@ -11,7 +11,7 @@ describe('Bots', function() {
     beforeEach(function() {
         socket = new SocketMock();
         game = new Game();
-        bots = new Bots(game);
+        bots = game.bots;
         game.listen(socket);
     });
 

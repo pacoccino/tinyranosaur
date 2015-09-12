@@ -1,8 +1,9 @@
 var Bot = require('../models/bot');
 var Constants = require('../modules/constants');
 
-var Bots = function(game) {
+var Bots = function(game, users) {
     this.game = game;
+    this.users = users;
     this.bots = [];
 };
 
@@ -13,6 +14,7 @@ Bots.prototype.createBots = function() {
     for (var i = 0; i < nbBots; i++) {
         var bot = new Bot();
         this.bots.push(bot);
+        this.users.addBot(bot);
         this.game.io.emit('player new', bot.toPublic());
     }
 };

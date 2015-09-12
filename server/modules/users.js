@@ -1,14 +1,19 @@
-var User = require('./user');
+var User = require('./../models/user');
 var _ = require('lodash');
 
 function Users() {
     this.users = [];
+    this.bots = [];
 }
 
 Users.prototype.create = function(cb) {
     var user = new User();
     this.users.push(user);
     cb(user);
+};
+
+Users.prototype.addBot = function(bot) {
+    this.bots.push(bot);
 };
 
 Users.prototype.delete = function(id, cb) {
@@ -23,8 +28,9 @@ Users.prototype.getAll = function(cb) {
 
 Users.prototype.getById = function(id) {
     var user = _.find(this.users, {_id: id});
+    var bot = _.find(this.bots, {_id: id});
 
-    return user;
+    return user || bot;
 };
 
 Users.prototype.getAllPublic = function(cb) {

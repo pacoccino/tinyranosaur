@@ -3,7 +3,7 @@ var express = require('express');
 var authenticatorRouter = express.Router({ params: 'inherit' });
 var _ = require('lodash');
 
-var Users = require('../models/users');
+var Users = require('../modules/users');
 
 
 authenticatorRouter.get('/', function(req, res, next) {

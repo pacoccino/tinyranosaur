@@ -1,16 +1,18 @@
 var _ = require('lodash');
-var Users = require('../models/users');
+var Users = require('./users');
 var Bots = require('../modules/bots');
 var Debug = require('../modules/debug');
 var Helpers = require('../modules/helpers');
 var GameListener = require('../modules/gamelistener');
 
 function Game() {
-    this.users = new Users();
     this.io = null;
+
     this.gameUpdater = null;
-    this.bots = new Bots(this);
     this.gameListener = new GameListener(this);
+
+    this.users = new Users();
+    this.bots = new Bots(this, this.users);
 }
 
 Game.prototype.listen = function(io) {

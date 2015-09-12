@@ -1,5 +1,5 @@
 var Game = require("../../server/modules/game");
-var Users = require("../../server/models/users");
+var Users = require("../../server/modules/users");
 var GameListener = require("../../server/modules/gamelistener");
 var Bots = require("../../server/modules/bots");
 

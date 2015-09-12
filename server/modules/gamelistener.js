@@ -30,7 +30,7 @@ GameListener.prototype.listenEat = function(user) {
     var self = this;
 
     return function(userToEat) {
-        if(user.canEat(self.game.users.getById(userToEat))) {
+        if(user.canEat.apply(user, [self.game.users.getById(userToEat._id)])) {
             self.io.emit('player die', userToEat._id);
         }
         else {
