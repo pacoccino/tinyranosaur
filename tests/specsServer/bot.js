@@ -3,6 +3,7 @@ var expect = require("chai").expect;
 var Bot = require("../../server/models/bot.js");
 var Helpers = require("../../server/modules/helpers.js");
 var Map = require("../../server/modules/map.js");
+var Constants = require("../../server/modules/constants.js");
 
 describe('Bot', function() {
 
@@ -30,6 +31,10 @@ describe('Bot', function() {
         expect(bot.direction[0]).to.equal(0);
         expect(bot.direction[1]).to.equal(0);
         expect(bot.direction[2]).to.equal(1);
+
+        expect(Math.abs(bot.position[0])).to.be.lte(Constants.mapSize.x);
+        expect(bot.position[1]).to.be.equal(30);
+        expect(Math.abs(bot.position[2])).to.be.lte(Constants.mapSize.y);
     });
 
     it('decide direction', function() {
@@ -107,7 +112,7 @@ describe('Bot', function() {
     });
 
     it('generates Waypoint', function() {
-        var waypoint = Bot.generateWaypoint();
+        var waypoint = Bot.randomPosition();
 
         expect(waypoint).to.be.defined;
         expect(waypoint.length).to.be.defined;

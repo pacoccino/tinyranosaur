@@ -1,6 +1,7 @@
 var Helpers =  require('../modules/helpers');
 var User =  require('./user');
 var Map =  require('../modules/map');
+var Constants = require('../modules/constants');
 
 var chanceToChange = 0.02;
 
@@ -10,6 +11,8 @@ function Bot() {
 
     this.bot = true;
 
+    this.position = Bot.randomPosition();
+    this.position[1] = 30;
     this.direction = [0,0,1];
 
     this.speed = 50;
@@ -40,7 +43,7 @@ Bot.prototype.moveBot = function(deltaTime) {
 Bot.prototype.decideDirection = function() {
 
     if(Math.random() < chanceToChange) {
-        var destination = Bot.generateWaypoint();
+        var destination = Bot.randomPosition();
         this.setDirectionTo(destination);
     }
 };
@@ -59,17 +62,17 @@ Bot.prototype.setDirectionTo = function(destination) {
 };
 
 // Static functions
-Bot.generateWaypoint = function() {
+Bot.randomPosition = function() {
     var waypoint = [];
 
     var sign;
     sign = Helpers.generateSign();
-    waypoint[0] = sign * Helpers.generateInteger(Map.sizeX);
+    waypoint[0] = sign * Helpers.generateInteger(Constants.mapSize.x);
 
     waypoint[1] = 0;
 
     sign = Helpers.generateSign();
-    waypoint[2] = sign * Helpers.generateInteger(Map.sizeZ);
+    waypoint[2] = sign * Helpers.generateInteger(Constants.mapSize.y);
 
     return waypoint;
 };

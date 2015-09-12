@@ -1,5 +1,5 @@
 var Bot = require('../models/bot');
-var Constants = require('./constants');
+var Constants = require('../modules/constants');
 
 var Bots = function(game) {
     this.game = game;
