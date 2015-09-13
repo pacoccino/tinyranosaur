@@ -86,7 +86,7 @@ describe('User', function () {
         expect(user.isCorrectMove(newPos)).to.be.true;
     });
 
-    it('rejects incorrect move', function() {
+    xit('rejects incorrect move', function() {
 
         var user = new User();
         user.position = [ 0,0,0 ];

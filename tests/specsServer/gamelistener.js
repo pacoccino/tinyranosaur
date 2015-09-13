@@ -23,7 +23,6 @@ describe('GameListener', function() {
 
     it('constructs', function() {
 
-        expect(gameListener.io).to.equal(socket);
         expect(gameListener.game).to.equal(game);
     });
 

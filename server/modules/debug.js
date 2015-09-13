@@ -1,6 +1,6 @@
 var Debug = {};
 
-Debug.logConsole = process.env.DEBUG || true;;
+Debug.logConsole = process.env.DEBUG || false;
 
 Debug.log = function(message) {
     if(Debug.logConsole) {
