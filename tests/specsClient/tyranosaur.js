@@ -35,25 +35,25 @@ describe('Tyranosaur class', function() {
     it('getDirection', function() {
         var tyra = new Tyranosaur(game), direction;
 
-        direction = tyra.getDirection();
+        direction = tyra.fromRotationToDirection();
         expect(direction.x).toBeCloseTo(0);
         expect(direction.y).toBeCloseTo(0);
         expect(direction.z).toBeCloseTo(1);
 
         tyra.object.rotation.y = Math.PI/2;
-        direction = tyra.getDirection();
+        direction = tyra.fromRotationToDirection();
         expect(direction.x).toBeCloseTo(1);
         expect(direction.y).toBeCloseTo(0);
         expect(direction.z).toBeCloseTo(0);
 
         tyra.object.rotation.y = Math.PI;
-        direction = tyra.getDirection();
+        direction = tyra.fromRotationToDirection();
         expect(direction.x).toBeCloseTo(0);
         expect(direction.y).toBeCloseTo(0);
         expect(direction.z).toBeCloseTo(-1);
 
         tyra.object.rotation.y = 3*Math.PI/2;
-        direction = tyra.getDirection();
+        direction = tyra.fromRotationToDirection();
         expect(direction.x).toBeCloseTo(-1);
         expect(direction.y).toBeCloseTo(0);
         expect(direction.z).toBeCloseTo(0);

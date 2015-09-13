@@ -54,7 +54,7 @@ describe('UserInput', function() {
         expect(action.active).toBeFalsy();
         expect(otherAction.active).toBeFalsy();
 
-        userInput.parseEventCode(eventCode, 'UP');
+        userInput.parseEventCode(eventCode, 'DOWN');
 
         expect(action.active).toBeTruthy();
         expect(otherAction.active).toBeFalsy();
@@ -66,9 +66,9 @@ describe('UserInput', function() {
 
         expect(action.active).toBeFalsy();
 
-        userInput.parseEventCode(eventCode, 'UP');
-        expect(action.active).toBeTruthy();
         userInput.parseEventCode(eventCode, 'DOWN');
+        expect(action.active).toBeTruthy();
+        userInput.parseEventCode(eventCode, 'UP');
         expect(action.active).toBeFalsy();
     });
 
@@ -78,7 +78,7 @@ describe('UserInput', function() {
         var action = userInput.KEYS['UP'];
         var otherAction = userInput.KEYS['DOWN'];
 
-        userInput.parseEventCode(eventCode, 'UP');
+        userInput.parseEventCode(eventCode, 'DOWN');
         expect(action.active).toBeTruthy();
 
         userInput.dropKeys();
