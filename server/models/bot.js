@@ -37,7 +37,14 @@ Bot.prototype.moveBot = function(deltaTime) {
     var step = deltaTime / 1000;
 
     move = Helpers.scaleVect(this.speed * step, this.direction);
-    this.position = Helpers.addVect(this.position, move);
+    var newPosition = Helpers.addVect(this.position, move);
+
+    if(Math.abs(newPosition[0]) > Constants.mapSize.x || Math.abs(newPosition[2]) > Constants.mapSize.z) {
+        move = Helpers.scaleVect(-1, this.direction);
+        newPosition = Helpers.addVect(this.position, move);
+    }
+
+    this.position = newPosition;
 };
 
 Bot.prototype.decideDirection = function() {
