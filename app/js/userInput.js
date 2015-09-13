@@ -10,15 +10,23 @@ function UserInput (domElement) {
     self.KEYS = {
         UP: {
             active: false,
-            codes: ['Z', 113]
+            codes: ['Z', 38]
         },
         DOWN: {
             active: false,
-            codes: ['S', 114]
+            codes: ['S', 40]
+        },
+        LEFT: {
+            active: false,
+            codes: ['Q', 37]
+        },
+        RIGHT: {
+            active: false,
+            codes: ['D', 39]
         },
         POO: {
             active: false,
-            codes: ['P', 21]
+            codes: ['P', 32]
         },
         MOUSE: {
             active: false,
@@ -112,10 +120,10 @@ UserInput.prototype.parseEventCode = function(eventCode, action) {
 
                         switch (action) {
                             case 'UP':
-                                key.active = true;
+                                key.active = false;
                                 break;
                             case 'DOWN':
-                                key.active = false;
+                                key.active = true;
                                 break;
                         }
 

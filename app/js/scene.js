@@ -68,11 +68,11 @@ function MainScene(game) {
 
     function cameraFollow(object) {
 
-        self.camera.position.copy(object.position);
+        /*self.camera.position.copy(object.position);
         self.camera.rotation.copy(object.rotation);
 
         self.camera.translateZ(-80);
-        self.camera.translateY(60);
+        self.camera.translateY(60);*/
 
         //self.camera.translateZ(-1);
         //self.camera.translateY(70);

@@ -7,7 +7,7 @@ function UserAction (game) {
         'MOVE': {
             active: false,
             value: '',
-            keys: ['UP', 'DOWN']
+            keys: ['UP', 'DOWN', 'LEFT', 'RIGHT']
         },
         'POO': {
             active: false,
@@ -27,11 +27,19 @@ UserAction.prototype.updateActions = function() {
 
             var action = this.actions[actionName];
 
+            action.activeValues = [];
+
             var lastKey = null;
             for (var i = 0; i < action.keys.length; i++) {
                 var key = action.keys[i];
+
+                if(!keys[key]) continue;
+
                 if(keys[key].active && (!lastKey || (keys[key].eventTimestamp - keys[lastKey].eventTimestamp  > 0))) {
                     lastKey = key;
+                }
+                if(keys[key].active) {
+                    action.activeValues.push(key);
                 }
             }
             if(lastKey) {
@@ -78,7 +86,7 @@ UserAction.prototype.runListeners = function(actionName, pressed) {
 UserAction.prototype.doActions = function() {
 
     if(this.actions['MOVE'].active) {
-        this.game.myPlayer.tyranosaur.moveForward();
+        this.game.myPlayer.tyranosaur.moveAsKeyboard(this.actions['MOVE'].activeValues);
     }
 };
 

@@ -21,6 +21,8 @@ var Tyranosaur = (function() {
         this.object = null;
         this.boundingBlock = null;
 
+        this.direction = new THREE.Vector3(0,0,1);
+
         // Constructor
 
         var model = _.find(GameModels, {name: 'dino'});
@@ -55,56 +57,48 @@ var Tyranosaur = (function() {
 
     }
 
-    Tyranosaur.prototype.moveForward = function() {
-        this._game.clock.getDelta();
-        this._targetVelocity.position.z = maxVelocity;
-    };
-    Tyranosaur.prototype.stopForward = function() {
-        this._targetVelocity.position.z = 0;
-    };
-    Tyranosaur.prototype.moveLeft = function() {
-        this._game.clock.getDelta();
-        this._targetVelocity.rotation.y = rotateVelocity;
-    };
-    Tyranosaur.prototype.moveRight = function() {
-        this._game.clock.getDelta();
-        this._targetVelocity.rotation.y = -rotateVelocity;
-    };
-    Tyranosaur.prototype.stopRotate = function() {
-        this._targetVelocity.rotation.y = 0;
+    Tyranosaur.prototype.moveAsKeyboard = function(keys) {
+        var keyboardVector = new THREE.Vector3(0,0,0);
+
+        if(!keys.length) {
+            keys = [keys];
+        }
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+
+            switch (key) {
+                case 'UP':
+                    keyboardVector.z += 1;
+                    break;
+                case 'DOWN':
+                    keyboardVector.z += -1;
+                    break;
+                case 'LEFT':
+                    keyboardVector.x += 1;
+                    break;
+                case 'RIGHT':
+                    keyboardVector.x += -1;
+                    break;
+            }
+        }
+
+        var camera = this._game.getScene().camera;
+        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), camera.rotation.y + Math.PI);
+
+        this.direction = keyboardVector;
+
+        var delta = this._game.clock.getDelta();
+
+        var movement = new THREE.Vector3();
+        movement.copy(this.direction);
+        movement.multiplyScalar(delta * maxVelocity);
+
+        this.object.position.add(movement);
+        this.object.rotation.copy(this.fromDirectionToRotation());
     };
 
     Tyranosaur.prototype.moveFrame = function() {
 
-        var acceleration = 0.1;
-
-        var delta = this._game.clock.getDelta();
-
-        this._actualVelocity.position.z += acceleration * (this._targetVelocity.position.z - this._actualVelocity.position.z);
-        this._actualVelocity.rotation.y += acceleration * (this._targetVelocity.rotation.y - this._actualVelocity.rotation.y);
-
-        if(this._actualVelocity.position.z < this._targetVelocity.z) {
-            this._actualVelocity.position.z = Math.min(this._actualVelocity.position.z, this._targetVelocity.position.z);
-        }
-        else if(this._actualVelocity.rotation.y > this._targetVelocity.rotation.y) {
-            this._actualVelocity.rotation.y = Math.max(this._actualVelocity.rotation.y, this._targetVelocity.rotation.y);
-        }
-
-        if(Math.abs(this._actualVelocity.position.z) < 0.5) {
-            this._actualVelocity.position.z = 0;
-        }
-        else if(Math.abs(this._actualVelocity.rotation.y) < 0.1) {
-            this._actualVelocity.rotation.y = 0;
-        }
-
-        var zTrans = this._actualVelocity.position.z * delta;
-        var yRot = this._actualVelocity.rotation.y * delta;
-
-        if(zTrans > 0 || yRot > 0) {
-            this.hasMoved = true;
-            this.object.translateZ(zTrans);
-            this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this._actualVelocity.rotation.y * delta);
-        }
     };
 
     Tyranosaur.prototype.poo = function () {
@@ -126,16 +120,24 @@ var Tyranosaur = (function() {
         this._poos.push(poo);
     };
 
-    Tyranosaur.prototype.getDirection = function() {
+    Tyranosaur.prototype.fromRotationToDirection = function() {
 
         var direction = new THREE.Vector3(0,0,1);
         direction.applyEuler(this.object.rotation);
 
         return direction;
     };
+    Tyranosaur.prototype.fromDirectionToRotation = function() {
+
+        var rotation = new THREE.Euler();
+
+        rotation.y = -Math.atan2(this.direction.z, this.direction.x) + Math.PI/2;
+
+        return rotation;
+    };
 
     Tyranosaur.prototype.collideWith = function(ennemyTyra) {
-        var direction = this.getDirection();
+        var direction = this.fromRotationToDirection();
 
         this._rayCaster.set(this.object.position, direction);
         var collisions = this._rayCaster.intersectObject(ennemyTyra.boundingBlock);
