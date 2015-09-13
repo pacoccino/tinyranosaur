@@ -1,93 +1,149 @@
-function UserInput (game, domElement) {
-    var _game = game;
-    var _domElement = domElement;
+function UserInput (domElement) {
+    if (!domElement) return;
 
-    var _ed = new THREE.EventDispatcher();
+    var self = this;
 
-    var KEYS = {
-        UP: 'Z',
-        DOWN: 'S',
-        LEFT: 'Q',
-        RIGHT: 'D',
-        P: 'P'
+    self.domElement = domElement;
+
+    self.ed = new THREE.EventDispatcher();
+
+    self.KEYS = {
+        UP: {
+            active: false,
+            codes: ['Z', 113]
+        },
+        DOWN: {
+            active: false,
+            codes: ['S', 114]
+        },
+        POO: {
+            active: false,
+            codes: ['P', 21]
+        },
+        MOUSE: {
+            active: false,
+            deltaX: 0,
+            deltaY: 0
+        }
     };
 
-    function convertKeysToCharCode(keys) {
-        var properties = Object.getOwnPropertyNames(keys);
-        for (var i = 0; i < properties.length; i++) {
-            var property = properties[i];
-            keys[property] = keys[property].charCodeAt(0);
-        }
+    function onMouseDown(event) {
+        self.KEYS.MOUSE.active = true;
     }
 
-    convertKeysToCharCode(KEYS);
+    function onMouseMove(event) {
 
-    function onMouseDown( event ) {
-
+        self.KEYS.MOUSE.deltaX += 1;
+        self.KEYS.MOUSE.deltaY += 1;
     }
 
-    function onMouseMove( event ) {
+    function onMouseUp(event) {
 
+        self.KEYS.MOUSE.active = false;
     }
 
-    function onMouseUp( event ) {
+    function onMouseWheel(event) {
 
     }
 
-    function onMouseWheel( event ) {
+    function onKeyDown(event) {
 
+        self.parseEventCode(event.keyCode, 'DOWN');
     }
 
-    function onKeyDown( event ) {
-        switch(event.keyCode) {
-            case KEYS.UP:
-                _ed.dispatchEvent( {type:'advance_start'} );
-                break;
-            case KEYS.DOWN:
-                break;
-            case KEYS.LEFT:
-                _ed.dispatchEvent( {type:'left_start'} );
-                break;
-            case KEYS.RIGHT:
-                _ed.dispatchEvent( {type:'right_start'} );
-                break;
-            case KEYS.P:
-                _ed.dispatchEvent( {type:'poo'} );
-                break;
-        }
-    }
+    function onKeyUp(event) {
 
-    function onKeyUp( event ) {
-
-        switch(event.keyCode) {
-            case KEYS.UP:
-                _ed.dispatchEvent( {type:'advance_stop'} );
-                break;
-            case KEYS.DOWN:
-                break;
-            case KEYS.LEFT:
-                _ed.dispatchEvent( {type:'left_stop'} );
-                break;
-            case KEYS.RIGHT:
-                _ed.dispatchEvent( {type:'right_stop'} );
-                break;
-        }
+        self.parseEventCode(event.keyCode, 'UP');
     }
 
     function dropKeys() {
 
-        _ed.dispatchEvent( {type:'advance_stop'} );
-        _ed.dispatchEvent( {type:'left_stop'} );
-        _ed.dispatchEvent( {type:'right_stop'} );
+        self.dropKeys.call(self);
     }
 
-    _domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-    _domElement.addEventListener( 'mousedown', onMouseDown, false );
-    _domElement.addEventListener( 'mousewheel', onMouseWheel, false );
-    _domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
-    window.addEventListener( 'keydown', onKeyDown, false );
-    window.addEventListener( 'keyup', onKeyUp, false );;
-    window.addEventListener( 'blur', dropKeys, false );
+    function ignore(event) {
+        if(event)
+            event.preventDefault();
+    }
 
-    this.ed = _ed;
+    self.domElement.addEventListener('contextmenu', ignore, false);
+
+    self.domElement.addEventListener('mousedown', onMouseDown, false);
+    self.domElement.addEventListener('mouseup', onMouseUp, false);
+    self.domElement.addEventListener('mousemove', onMouseMove, false);
+    self.domElement.addEventListener('mousewheel', onMouseWheel, false);
+    self.domElement.addEventListener('DOMMouseScroll', onMouseWheel, false); // firefox
+
+    window.addEventListener('keydown', onKeyDown, false);
+    window.addEventListener('keyup', onKeyUp, false);
+    window.addEventListener('blur', dropKeys, false);
+
 }
+
+
+UserInput.prototype.dropKeys = function() {
+
+    for (var keyName in this.KEYS) {
+        if (this.KEYS.hasOwnProperty(keyName))
+            var key = this.KEYS[keyName];
+        key.active = false;
+    }
+};
+
+UserInput.prototype.parseEventCode = function(eventCode, action) {
+
+    keys:
+        for(var keyName in this.KEYS) {
+
+            if(this.KEYS.hasOwnProperty(keyName)) {
+
+                var key = this.KEYS[keyName];
+
+                if(!key.codes) {
+                    continue;
+                }
+
+                for(var i=0; i<key.codes.length; i++) {
+                    var code = key.codes[i];
+
+                    if(UserInput.isSameCode(eventCode, code)) {
+
+                        key.eventTimestamp = Date.now();
+
+                        switch (action) {
+                            case 'UP':
+                                key.active = true;
+                                break;
+                            case 'DOWN':
+                                key.active = false;
+                                break;
+                        }
+
+                        break keys;
+                    }
+                }
+            }
+        }
+};
+
+Number.isInteger = Number.isInteger || function(value) {
+        return typeof value === "number" &&
+            isFinite(value) &&
+            Math.floor(value) === value;
+    };
+
+UserInput.isSameCode = function(eventCode, keyCode) {
+    var keyCharCode = 0;
+    if(Number.isInteger(keyCode)) {
+        keyCharCode = keyCode;
+    }
+    else if (typeof keyCode === 'string'){
+        keyCharCode = UserInput.convertKeyToCharCode(keyCode);
+    }
+
+    return eventCode === keyCharCode;
+};
+
+UserInput.convertKeyToCharCode = function(key) {
+    return key.charCodeAt(0);
+};

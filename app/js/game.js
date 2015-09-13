@@ -10,7 +10,7 @@ function Game(THREE) {
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
 
-        var userInput = new UserInput(this, self.getRendererElement());
+        var userInput = new UserInput(self.getRendererElement());
 
         self.inputDispatcher = userInput.ed;
 
