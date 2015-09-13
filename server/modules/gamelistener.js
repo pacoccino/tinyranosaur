@@ -13,7 +13,9 @@ GameListener.prototype.register = function(user) {
         self.announcePlayer(user);
 
         user.socket.on('player update', self.listenUpdatePosition(user));
-        user.socket.on('player eat', self.listenEat(user));
+        user.socket.on('player eat', function(data) {
+            user.listenEat.apply(self, [user, data]);
+        });
         user.socket.on('heartbeat', function() {
             user.heartBeat.call(user);
         });
@@ -25,18 +27,14 @@ GameListener.prototype.deregister = function(user) {
 
 };
 
-GameListener.prototype.listenEat = function(user) {
+GameListener.prototype.listenEat = function(user, userToEat) {
 
-    var self = this;
-
-    return function(userToEat) {
-        if(user.canEat.apply(user, [self.game.users.getById(userToEat._id)])) {
-            self.io.emit('player die', userToEat._id);
-        }
-        else {
-            user.socket.emit('wrong eat');
-        }
-    };
+    if(user.canEat.apply(user, [this.game.users.getById(userToEat._id)])) {
+        this.io.emit('player die', userToEat._id);
+    }
+    else {
+        user.socket.emit('wrong eat');
+    }
 };
 
 GameListener.prototype.listenUpdatePosition = function(user) {

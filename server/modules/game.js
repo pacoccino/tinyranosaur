@@ -33,6 +33,10 @@ Game.prototype.listen = function(io) {
 
             self.launchGame();
         });
+
+        socket.on('error', function(e) {
+           console.log("Socket error: ", e)
+        });
     });
 };
 
