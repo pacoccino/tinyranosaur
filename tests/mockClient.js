@@ -3,5 +3,4 @@ for(var i=0; i<GameModels.length; i++) {
 }
 
 var game = {};
-game.inputDispatcher = new THREE.EventDispatcher();
 game.clock = new THREE.Clock();

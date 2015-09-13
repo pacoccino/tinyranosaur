@@ -1,6 +1,7 @@
-function UserAction (userInput) {
+function UserAction (game) {
 
-    this.userInput = userInput;
+    this.game = game;
+    this.userInput = game.userInput;
 
     this.actions = {
         'MOVE': {
@@ -72,4 +73,21 @@ UserAction.prototype.runListeners = function(actionName, pressed) {
             listener(action.value, pressed);
         }
     }
+};
+
+UserAction.prototype.doActions = function() {
+
+    if(this.actions['MOVE'].active) {
+        this.game.myPlayer.tyranosaur.moveForward();
+    }
+};
+
+
+UserAction.prototype.addListeners = function() {
+    var self = this;
+    self.registerListener("POO", function(value, pressed) {
+        if(pressed) {
+            self.game.myPlayer.tyranosaur.poo();
+        }
+    })
 };

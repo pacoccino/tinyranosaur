@@ -10,9 +10,8 @@ function Game(THREE) {
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
 
-        var userInput = new UserInput(self.getRendererElement());
-
-        self.inputDispatcher = userInput.ed;
+        self.userInput = new UserInput(self.getRendererElement());
+        self.userAction = new UserAction(this);
 
         self.players = new Players(this);
 
@@ -21,11 +20,11 @@ function Game(THREE) {
         _scene = new MainScene(this);
 
         loadModels(function() {
+            var myPlayer = self.players.new();
 
-            self.myPlayer = new Player(self);
+            self.myPlayer = myPlayer;
             self.myPlayer._id = self.authentication.info._id;
             self.myPlayer.name = self.authentication.info.name;
-
 
             _scene.populate();
 

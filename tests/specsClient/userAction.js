@@ -13,7 +13,8 @@ describe('UserAction', function() {
     beforeEach(function() {
         fakeDom = new FakeDom();
         userInput = new UserInput(fakeDom);
-        userAction = new UserAction(userInput);
+        var game = {userInput: userInput};
+        userAction = new UserAction(game);
     });
 
     it('create', function() {

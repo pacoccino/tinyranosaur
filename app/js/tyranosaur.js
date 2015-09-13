@@ -53,7 +53,6 @@ var Tyranosaur = (function() {
         this._rayCaster = new THREE.Raycaster();
         this._rayCaster.far = 200;
 
-        this._game.inputDispatcher.addEventListener('poo', this._poo);
     }
 
     Tyranosaur.prototype.moveForward = function() {
@@ -108,7 +107,7 @@ var Tyranosaur = (function() {
         }
     };
 
-    Tyranosaur.prototype._poo = function () {
+    Tyranosaur.prototype.poo = function () {
         if(this._poos.length > 0) return;
 
         var pooGeometry = new THREE.SphereGeometry(8, 8, 8);

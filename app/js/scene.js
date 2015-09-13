@@ -5,6 +5,8 @@ function MainScene(game) {
 
     var _sceneReady = false;
 
+    var _userAction = _game.userAction;
+
     // Construction initiale de la scene
     var constructor = function() {
 
@@ -47,17 +49,22 @@ function MainScene(game) {
         var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
         self.scene.add(skyBox);
 
-        addEvents();
     };
 
-    function addEvents() {
-        _game.inputDispatcher.addEventListener('advance_start', playerAdvance);
-        _game.inputDispatcher.addEventListener('advance_stop', playerStop);
-        _game.inputDispatcher.addEventListener('left_start', playerLeft);
-        _game.inputDispatcher.addEventListener('left_stop', playerStopRotate);
-        _game.inputDispatcher.addEventListener('right_start', playerRight);
-        _game.inputDispatcher.addEventListener('right_stop', playerStopRotate);
-    }
+    // Callback a chaque render
+    self.step = function() {
+
+        if(!_sceneReady) return;
+
+        _userAction.updateActions();
+        _userAction.doActions();
+
+        game.myPlayer.tyranosaur.moveFrame();
+        cameraFollow(game.myPlayer.tyranosaur.object);
+        checkIfICollide();
+
+        updateMultiplayerState_Throttler(game.myPlayer.tyranosaur);
+    };
 
     function cameraFollow(object) {
 
@@ -74,34 +81,6 @@ function MainScene(game) {
         self.camera.lookAt(object.position);
     }
 
-    var playerAdvance = function() {
-        if(_sceneReady) {
-            game.myPlayer.tyranosaur.moveForward();
-        }
-    };
-
-    var playerStop = function() {
-        if(_sceneReady) {
-            game.myPlayer.tyranosaur.stopForward();
-        }
-    };
-
-    var playerLeft = function() {
-        if(_sceneReady) {
-            game.myPlayer.tyranosaur.moveLeft();
-        }
-    };
-    var playerRight = function() {
-        if(_sceneReady) {
-            game.myPlayer.tyranosaur.moveRight();
-        }
-    };
-    var playerStopRotate = function() {
-        if(_sceneReady) {
-            game.myPlayer.tyranosaur.stopRotate();
-        }
-    };
-
     // Remplissage de la scene avec les modèles
     self.populate = function() {
 
@@ -114,21 +93,10 @@ function MainScene(game) {
         _game.multiplayer.on('player leave', removePlayer);
 
         _sceneReady = true;
+        _userAction.addListeners();
     };
 
 
-    var updateThrottler = _.throttle(updateMultiplayerState, GameConfig.updateInterval);
-    // Callback a chaque render
-    self.step = function() {
-
-        if(!_sceneReady) return;
-
-        game.myPlayer.tyranosaur.moveFrame();
-        cameraFollow(game.myPlayer.tyranosaur.object);
-        checkIfICollide();
-
-        updateThrottler(game.myPlayer.tyranosaur);
-    };
 
     function checkIfICollide() {
         var players = game.players.getAll();
@@ -150,8 +118,6 @@ function MainScene(game) {
                 "_id": player._id
             }
         });
-
-
     }
 
     function addPlayer(event) {
@@ -186,6 +152,7 @@ function MainScene(game) {
 
     }
 
+    var updateMultiplayerState_Throttler = _.throttle(updateMultiplayerState, GameConfig.updateInterval);
     function updateMultiplayerState(tyranosaur) {
         if(tyranosaur.hasMoved) {
 
