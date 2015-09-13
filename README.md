@@ -42,6 +42,9 @@ $ npm start
 **SERVER**
 * Store users and session in mongo
 * Re-implement firebase api w/o storage w/ socket.io (ok)
+
+**Next**
 * Mouth/2nd finger on mobile controlling camera
 * Camera smoothly following player
 * Fix socket errors, disconnection, multiple connections
+* Forget time without keypress

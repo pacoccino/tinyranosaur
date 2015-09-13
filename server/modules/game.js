@@ -28,7 +28,7 @@ Game.prototype.listen = function(io) {
             socket.on('disconnect', function() {
                 self.users.delete(user._id);
 
-                self.gameListener.deregister.apply(self, [user]);
+                self.gameListener.deregister.apply(self.gameListener, [user]);
             });
 
             self.launchGame();

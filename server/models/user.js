@@ -56,12 +56,16 @@ User.prototype.move = function(newState) {
 };
 
 User.prototype.isCorrectMove = function(newPos) {
+    return true; // TEMP
+
     var distance = Helpers.distanceBetween(this.position, newPos);
 
     return (distance < this.speed);
 };
 
 User.prototype.canEat = function(userToEat) {
+    if(!userToEat) return false;
+
     var distance = Helpers.distanceBetween(userToEat.position, this.position);
 
     return (distance < Constants.eatPerimeter);

@@ -63,6 +63,9 @@ var Tyranosaur = (function() {
         if(!keys.length) {
             keys = [keys];
         }
+        if(keys.length !== 0)
+            this.hasMoved = true;
+
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i];
 
