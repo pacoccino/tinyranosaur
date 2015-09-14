@@ -21,7 +21,7 @@ var Tyranosaur = (function() {
         this.object = null;
         this.boundingBlock = null;
 
-        this.direction = new THREE.Vector3(0,0,1);
+        this.direction = new THREE.Vector3(1,0,0);
 
         // Constructor
 
@@ -34,7 +34,7 @@ var Tyranosaur = (function() {
 
         var modelObject = model.object.clone();
 
-        modelObject.rotation.y = -Math.PI / 2;
+        modelObject.rotation.y = 0;
         modelObject.scale.set(0.5, 0.5, 0.5);
         modelObject.updateMatrix();
 
@@ -58,6 +58,7 @@ var Tyranosaur = (function() {
     }
 
     Tyranosaur.prototype.moveAsKeyboard = function(keys) {
+
         var keyboardVector = new THREE.Vector3(0,0,0);
 
         if(!keys.length) {
@@ -86,7 +87,7 @@ var Tyranosaur = (function() {
         }
 
         var camera = this._game.getScene().camera;
-        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), camera.rotation.y + Math.PI);
+        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), -camera.rotation.y);
 
         this.direction = keyboardVector;
 
@@ -134,7 +135,7 @@ var Tyranosaur = (function() {
 
         var rotation = new THREE.Euler();
 
-        rotation.y = -Math.atan2(this.direction.z, this.direction.x) + Math.PI/2;
+        rotation.y = -Math.atan2(this.direction.z, this.direction.x);
 
         return rotation;
     };

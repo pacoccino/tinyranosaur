@@ -6,6 +6,7 @@ function MainScene(game) {
     var _sceneReady = false;
 
     var _userAction = _game.userAction;
+    var _cameraController;
 
     // Construction initiale de la scene
     var constructor = function() {
@@ -15,8 +16,6 @@ function MainScene(game) {
         // Camera
 
         self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        self.camera.position.y = 100;
-        self.camera.position.z = 500;
 
         // Lumières
 
@@ -60,26 +59,14 @@ function MainScene(game) {
         _userAction.doActions();
 
         game.myPlayer.tyranosaur.moveFrame();
-        cameraFollow(game.myPlayer.tyranosaur.object);
+
+        //cameraFollow(game.myPlayer.tyranosaur.object);
+        _cameraController.placeCamera();
+
         checkIfICollide();
 
         updateMultiplayerState_Throttler(game.myPlayer.tyranosaur);
     };
-
-    function cameraFollow(object) {
-
-        /*self.camera.position.copy(object.position);
-        self.camera.rotation.copy(object.rotation);
-
-        self.camera.translateZ(-80);
-        self.camera.translateY(60);*/
-
-        //self.camera.translateZ(-1);
-        //self.camera.translateY(70);
-        //self.camera.translateX(50);
-
-        self.camera.lookAt(object.position);
-    }
 
     // Remplissage de la scene avec les modèles
     self.populate = function() {
@@ -94,6 +81,8 @@ function MainScene(game) {
 
         _sceneReady = true;
         _userAction.addListeners();
+
+        _cameraController = new CameraController(self.camera, game.myPlayer.tyranosaur);
     };
 
 

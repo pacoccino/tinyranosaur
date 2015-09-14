@@ -65,7 +65,7 @@ Bot.prototype.setDirectionTo = function(destination) {
 
     this.direction = Helpers.normalize(direction);
 
-    this.rotation[1] = -Math.atan2(direction[2], direction[0]) + Math.PI/2;
+    this.rotation[1] = -Math.atan2(direction[2], direction[0]);
 };
 
 // Static functions
