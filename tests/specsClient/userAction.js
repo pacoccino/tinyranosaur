@@ -26,7 +26,7 @@ describe('UserAction', function() {
 
     it('updateActions', function() {
         userInput.KEYS['UP'].active = true;
-        userInput.KEYS['UP'].eventTimestamp = new Date();
+        userInput.KEYS['UP'].eventTimestamp = Date.now();
 
         expect(userAction.actions['MOVE'].active).toBeFalsy();
 
@@ -38,7 +38,7 @@ describe('UserAction', function() {
 
     it('updateActions 2', function() {
         userInput.KEYS['DOWN'].active = true;
-        userInput.KEYS['DOWN'].eventTimestamp = new Date();
+        userInput.KEYS['DOWN'].eventTimestamp = Date.now();
 
         expect(userAction.actions['MOVE'].active).toBeFalsy();
 
@@ -50,7 +50,7 @@ describe('UserAction', function() {
 
     it('updateActions 3', function() {
         userInput.KEYS['POO'].active = true;
-        userInput.KEYS['POO'].eventTimestamp = new Date();
+        userInput.KEYS['POO'].eventTimestamp = Date.now();
 
         expect(userAction.actions['POO'].active).toBeFalsy();
 
@@ -62,10 +62,10 @@ describe('UserAction', function() {
 
     it('updateActions multi', function() {
         userInput.KEYS['DOWN'].active = true;
-        userInput.KEYS['DOWN'].eventTimestamp = new Date();
+        userInput.KEYS['DOWN'].eventTimestamp = Date.now();
 
         userInput.KEYS['UP'].active = true;
-        userInput.KEYS['UP'].eventTimestamp = new Date();
+        userInput.KEYS['UP'].eventTimestamp = Date.now();
 
         expect(userAction.actions['MOVE'].active).toBeFalsy();
 

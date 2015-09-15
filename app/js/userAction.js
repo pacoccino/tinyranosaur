@@ -97,5 +97,10 @@ UserAction.prototype.addListeners = function() {
         if(pressed) {
             self.game.myPlayer.tyranosaur.poo();
         }
+    });
+    self.registerListener("MOVE", function(value, pressed) {
+        if(pressed) {
+            self.game.myPlayer.tyranosaur.resetMoveTime();
+        }
     })
 };

@@ -2,11 +2,18 @@ var cameraController;
 
 var fakeCamera = new THREE.Object3D();
 var fakeTyra = {object:{}};
+var deltaT = 0.5;
 
 describe('CameraController', function() {
 
     beforeEach(function() {
         cameraController = new CameraController(fakeCamera, fakeTyra);
+        cameraController.moveTimer = {
+            getDelta:function()
+            {
+                return deltaT;
+            }
+        };
     });
 
     it('create', function() {
@@ -136,7 +143,7 @@ describe('CameraController', function() {
     it('computeNewTheta', function() {
         fakeTyra.direction = new THREE.Vector3(1,0,0);
         cameraController.theta = 0;
-        cameraController.deltaT = 0.5;
+        deltaT = 0.5;
         expect(cameraController.computeNewTheta()).toBe(3*Math.PI/4);
     });
 
@@ -144,7 +151,7 @@ describe('CameraController', function() {
         fakeTyra.object.position = new THREE.Vector3(0,0,0);
         fakeTyra.direction = new THREE.Vector3(1,0,0);
         cameraController.theta = 0;
-        cameraController.deltaT = 0.5;
+        deltaT = 0.5;
         var newPosition = cameraController.findPositionFromTyra();
 
         expect(newPosition instanceof THREE.Vector3).toBeTruthy();
@@ -159,7 +166,7 @@ describe('CameraController', function() {
         fakeTyra.object.position = new THREE.Vector3(0,0,1);
         fakeTyra.direction = new THREE.Vector3(0,0,-1);
         cameraController.theta = Math.PI/2;
-        cameraController.deltaT = 0.5;
+        deltaT = 0.5;
         var newPosition = cameraController.findPositionFromTyra();
 
         expect(newPosition instanceof THREE.Vector3).toBeTruthy();

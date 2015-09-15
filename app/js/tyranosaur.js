@@ -23,6 +23,8 @@ var Tyranosaur = (function() {
 
         this.direction = new THREE.Vector3(1,0,0);
 
+        this.moveTimer = new Helpers.deltaTimer();
+
         // Constructor
 
         var model = _.find(GameModels, {name: 'dino'});
@@ -56,6 +58,11 @@ var Tyranosaur = (function() {
         this._rayCaster.far = 200;
 
     }
+
+
+    Tyranosaur.prototype.resetMoveTime = function() {
+        this.moveTimer = new Helpers.deltaTimer();
+    };
 
     Tyranosaur.prototype.moveAsKeyboard = function(keys) {
 
@@ -99,7 +106,7 @@ var Tyranosaur = (function() {
 
         this.direction = keyboardVector;
 
-        var delta = this._game.clock.getDelta();
+        var delta = this.moveTimer.getDelta();
 
         var movement = new THREE.Vector3();
         movement.copy(this.direction);

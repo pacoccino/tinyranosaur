@@ -4,7 +4,8 @@ function CameraController(camera, tyranosaur) {
 
     this.distance = CameraController._DMAX_;
     this.theta = 3*Math.PI/2;
-    this.deltaT = 0;
+
+    this.moveTimer = new Helpers.deltaTimer();
 }
 
 // Constants
@@ -21,7 +22,6 @@ CameraController.prototype.statsCamera = function() {
 };
 
 CameraController.prototype.placeCamera = function() {
-    this.computeDeltaT();
 
     this.camera.position.copy(this.findPositionFromTyra());
     this.camera.position.y = CameraController._HIGH_;
@@ -45,16 +45,6 @@ CameraController.prototype.findPositionFromTyra = function() {
     return newPosition;
 };
 
-CameraController.prototype.computeDeltaT = function() {
-    if(!this.timestamp) {
-        this.timestamp = Date.now();
-    }
-
-    var now = Date.now();
-    this.deltaT = (Date.now() - this.timestamp)/1000;
-    this.timestamp = now;
-};
-
 CameraController.prototype.computeNewDistance = function() {
     return CameraController._DMAX_;
 };
@@ -63,7 +53,7 @@ CameraController.prototype.computeNewTheta = function() {
 
     var deltaTheta = this.deltaTheta();
 
-    var newTheta = deltaTheta * this.deltaT + this.theta;
+    var newTheta = deltaTheta * this.moveTimer.getDelta() + this.theta;
 
     return newTheta;
 };
