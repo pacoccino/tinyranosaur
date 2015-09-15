@@ -17,6 +17,12 @@ function MainScene(game) {
 
         self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
 
+        /*
+        self.camera.position.x = -200;
+        self.camera.position.y = 100;
+        self.camera.rotation.y = -Math.PI/2;
+         */
+
         // Lumières
 
         var light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -61,6 +67,7 @@ function MainScene(game) {
         game.myPlayer.tyranosaur.moveFrame();
 
         //cameraFollow(game.myPlayer.tyranosaur.object);
+        _cameraController.statsCamera();
         _cameraController.placeCamera();
 
         checkIfICollide();
@@ -73,6 +80,9 @@ function MainScene(game) {
 
         game.myPlayer.tyranosaur.object.position.y = 30;
         self.scene.add(game.myPlayer.tyranosaur.object);
+
+        _cameraController = new CameraController(self.camera, game.myPlayer.tyranosaur);
+
         updateMultiplayerState(game.myPlayer.tyranosaur);
 
         _game.multiplayer.on('player new', addPlayer);
@@ -81,8 +91,6 @@ function MainScene(game) {
 
         _sceneReady = true;
         _userAction.addListeners();
-
-        _cameraController = new CameraController(self.camera, game.myPlayer.tyranosaur);
     };
 
 

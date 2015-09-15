@@ -3,7 +3,7 @@ function CameraController(camera, tyranosaur) {
     this.tyra = tyranosaur;
 
     this.distance = CameraController._DMAX_;
-    this.theta = 0;
+    this.theta = 3*Math.PI/2;
     this.deltaT = 0;
 }
 
@@ -15,21 +15,28 @@ CameraController._HIGH_ = 50;
 
 // Class Method
 
+CameraController.prototype.statsCamera = function() {
+    console.log(this.camera.position);
+    console.log(this.camera.rotation);
+};
+
 CameraController.prototype.placeCamera = function() {
     this.computeDeltaT();
 
     this.camera.position.copy(this.findPositionFromTyra());
     this.camera.position.y = CameraController._HIGH_;
+
     //this.camera.lookAt(this.tyra.object.position);
+
     this.camera.rotation.x = 0;
-    this.camera.rotation.y = this.theta;
+    this.camera.rotation.y = this.theta; //- Math.PI;
     this.camera.rotation.z = 0;
-    console.log(this.camera.rotation);
 };
 
 CameraController.prototype.findPositionFromTyra = function() {
     var distance = this.computeNewDistance();
     this.theta = this.computeNewTheta();
+    //this.theta = this.destinationTheta();
     var addVect = CameraController.getVectorFromPolar(distance, this.theta);
 
     var newPosition = new THREE.Vector3();
@@ -101,5 +108,12 @@ CameraController.getPolarFromVector = function(vector) {
     polar.theta = ZVect.angleTo(vector);
     polar.theta = Math.atan2(vector.x, vector.z);
 
+    //polar.theta = CameraController.getPositiveAngle(polar.theta);
+
     return polar;
+};
+
+CameraController.getPositiveAngle = function(angle) {
+    var positiveAngle = (angle + 2*Math.PI) % 2*Math.PI;
+    return positiveAngle;
 };

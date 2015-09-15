@@ -72,22 +72,30 @@ var Tyranosaur = (function() {
 
             switch (key) {
                 case 'UP':
-                    keyboardVector.z += 1;
-                    break;
-                case 'DOWN':
-                    keyboardVector.z += -1;
-                    break;
-                case 'LEFT':
                     keyboardVector.x += 1;
                     break;
-                case 'RIGHT':
+                case 'DOWN':
                     keyboardVector.x += -1;
+                    break;
+                case 'LEFT':
+                    keyboardVector.z += -1;
+                    break;
+                case 'RIGHT':
+                    keyboardVector.z += 1;
                     break;
             }
         }
 
+        if(keyboardVector.z !== 0) {
+            this.lastStrafe = keyboardVector.z;
+        }
+        else if(keyboardVector.x === -1) {
+            this.lastStrafe = this.lastStrafe || 1;
+            keyboardVector.z = this.lastStrafe * 0.1;
+        }
+
         var camera = this._game.getScene().camera;
-        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), -camera.rotation.y);
+        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), (camera.rotation.y - 3*Math.PI/2));
 
         this.direction = keyboardVector;
 
