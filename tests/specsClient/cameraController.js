@@ -13,7 +13,6 @@ describe('CameraController', function() {
         expect(cameraController.camera).toBe(fakeCamera);
         expect(cameraController.tyra).toBe(fakeTyra);
         expect(cameraController.distance).toBe(CameraController._DMAX_);
-        expect(cameraController.theta).toBe(0);
     });
 
     it('getVectorFromPolar 1', function() {
