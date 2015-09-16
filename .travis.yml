@@ -2,3 +2,11 @@ language: node_js
 node_js:
   - "0.12.2"
 install: npm install
+
+before_install:
+  - pip install codecov
+after_success:
+  - codecov
+addons:
+    code_climate:
+        repo_token: 727b408c7133f69f4df955494aa14ac5352a6810cc8d3eece3cd84fcf345e495
