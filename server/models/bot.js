@@ -16,6 +16,8 @@ function Bot() {
     this.direction = [0,0,1];
 
     this.speed = 50;
+
+    this.moveTimer = new Helpers.deltaTimer();
 }
 
 Bot.prototype = Object.create(User.prototype);
@@ -23,8 +25,8 @@ Bot.prototype.constructor = Bot;
 
 // Class functions
 
-Bot.prototype.stepIa = function(deltaTime) {
-    deltaTime = deltaTime || 0;
+Bot.prototype.stepIa = function() {
+    var deltaTime = this.moveTimer.getDelta();
 
     this.decideDirection();
 

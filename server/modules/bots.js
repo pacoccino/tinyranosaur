@@ -32,20 +32,9 @@ Bots.prototype.killBots = function() {
 var tmpTime = null;
 Bots.prototype.liveBots = function() {
 
-    var now = new Date(), delta;
-
-    if(tmpTime) {
-        delta = now - tmpTime;
-    }
-    else {
-        delta = 0;
-    }
-
-    tmpTime = now;
-
     for (var i = 0; i < this.bots.length; i++) {
         var bot = this.bots[i];
-        bot.stepIa(delta);
+        bot.stepIa();
 
         var botPublic = bot.toPublic();
         this.game.io.emit('player update', botPublic);
