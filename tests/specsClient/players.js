@@ -10,6 +10,24 @@ describe('Players class', function() {
             expect(player.tyranosaur instanceof Tyranosaur).toBeTruthy();
         });
 
+        it('create from server', function() {
+
+            var sPlayer = {
+                _id: 1,
+                name: "bob",
+                position: [1,2,3],
+                rotation: [1,2,3, 'ZYX']
+
+            };
+
+            var player = new Player(game);
+            player.createFromServer(sPlayer);
+
+            expect(player._id).toBe(1);
+            expect(player.name).toBe("bob");
+
+        });
+
         it('update from server', function() {
 
             var sPlayer = {
@@ -22,9 +40,6 @@ describe('Players class', function() {
 
             var player = new Player(game);
             player.updateFromServer(sPlayer);
-
-            expect(player._id).toBe(1);
-            expect(player.name).toBe("bob");
 
             var position = player.tyranosaur.object.position;
             var rotation = player.tyranosaur.object.rotation;

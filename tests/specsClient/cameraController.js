@@ -95,7 +95,7 @@ describe('CameraController', function() {
 
         var polar = CameraController.getPolarFromVector(vector);
         expect(polar.d).toBe(1);
-        expect(polar.theta).toBeCloseTo(-Math.PI/2);
+        expect(polar.theta).toBeCloseTo(3*Math.PI/2);
     });
 
     it('destinationTheta 1', function() {
@@ -133,7 +133,7 @@ describe('CameraController', function() {
         fakeTyra.direction = new THREE.Vector3(1,0,0);
         cameraController.theta = 0;
 
-        expect(cameraController.deltaTheta()).toBeCloseTo(3*Math.PI/2);
+        expect(cameraController.deltaTheta()).toBeCloseTo(-Math.PI/2);
     });
 
     it('computeNewDistance', function() {
@@ -144,7 +144,7 @@ describe('CameraController', function() {
         fakeTyra.direction = new THREE.Vector3(1,0,0);
         cameraController.theta = 0;
         deltaT = 0.5;
-        expect(cameraController.computeNewTheta()).toBe(3*Math.PI/4);
+        expect(cameraController.computeNewTheta()).toBe(-Math.PI/4);
     });
 
     it('findPositionFromTyra 1', function() {
@@ -156,8 +156,8 @@ describe('CameraController', function() {
 
         expect(newPosition instanceof THREE.Vector3).toBeTruthy();
 
-        expect(newPosition.z).toBeCloseTo(-Math.sqrt(2)/2 * CameraController._DMAX_);
-        expect(newPosition.x).toBeCloseTo(Math.sqrt(2)/2 * CameraController._DMAX_);
+        expect(newPosition.z).toBeCloseTo(Math.sqrt(2)/2 * CameraController._DMAX_);
+        expect(newPosition.x).toBeCloseTo(-Math.sqrt(2)/2 * CameraController._DMAX_);
 
         expect(newPosition.y).toBe(0);
     });

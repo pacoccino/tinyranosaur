@@ -7,14 +7,12 @@ describe('Tyranosaur class', function() {
         // Public
         expect(tyra.hasMoved).toBe(true);
         expect(tyra.object instanceof  THREE.Object3D).toBeTruthy();
-        expect(tyra.boundingBlock instanceof THREE.Object3D).toBeTruthy();
+        expect(tyra.modelObject instanceof THREE.Object3D).toBeTruthy();
 
         // Private
         expect(tyra._game).toBe(game);
         expect(tyra._maxCollideDistance).toBe(40);
         expect(tyra._rayCaster instanceof THREE.Raycaster).toBeTruthy();
-        expect(tyra._actualVelocity instanceof THREE.Object3D).toBeTruthy();
-        expect(tyra._targetVelocity instanceof THREE.Object3D).toBeTruthy();
         expect(tyra._poos instanceof Array).toBeTruthy();
         expect(tyra._poos.length).toBe(0);
 

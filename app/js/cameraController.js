@@ -35,7 +35,7 @@ CameraController.prototype.placeCamera = function() {
 
 CameraController.prototype.findPositionFromTyra = function() {
     var distance = this.computeNewDistance();
-    this.theta = this.computeNewTheta();
+    this.theta = CameraController.getPositiveAngle(this.computeNewTheta());
     //this.theta = this.destinationTheta();
     var addVect = CameraController.getVectorFromPolar(distance, this.theta);
 
@@ -53,23 +53,32 @@ CameraController.prototype.computeNewTheta = function() {
 
     var deltaTheta = this.deltaTheta();
 
-    var newTheta = deltaTheta * this.moveTimer.getDelta() + this.theta;
+    var deltaThetaTimed = deltaTheta * this.moveTimer.getDelta();
 
-    return newTheta;
+    return CameraController.angleAdd(deltaThetaTimed, this.theta);
 };
 
 CameraController.prototype.destinationTheta = function() {
 
     var polarTyraDest = CameraController.getPolarFromVector(this.tyra.direction);
+    var thetaTyra = polarTyraDest.theta;
 
-    return (polarTyraDest.theta + Math.PI) % (2*Math.PI);
+    return CameraController.angleAdd(thetaTyra, Math.PI);
 };
 
 CameraController.prototype.deltaTheta = function() {
 
     var distanceTheta = this.destinationTheta() - this.theta;
 
-    var deltaTheta = distanceTheta;
+    var raccourci = 0;
+    if(Math.abs(distanceTheta) > Math.PI) {
+        if(distanceTheta > 0)
+            raccourci = -2*Math.PI;
+        else
+            raccourci = 2*Math.PI;
+    }
+    var deltaTheta = CameraController.angleAdd(distanceTheta, raccourci);
+
     //var deltaTheta = CameraController._THETAMAX_  * Math.exp(-1/distanceTheta);
 
     return deltaTheta;
@@ -82,8 +91,8 @@ CameraController.getVectorFromPolar = function(distance, theta) {
     var rotVect = new THREE.Vector3(0,1,0);
 
     vector.applyAxisAngle(rotVect, theta);
-
     vector.setLength(distance);
+
     return vector;
 };
 
@@ -98,12 +107,16 @@ CameraController.getPolarFromVector = function(vector) {
     polar.theta = ZVect.angleTo(vector);
     polar.theta = Math.atan2(vector.x, vector.z);
 
-    //polar.theta = CameraController.getPositiveAngle(polar.theta);
+    polar.theta = CameraController.getPositiveAngle(polar.theta);
 
     return polar;
 };
 
 CameraController.getPositiveAngle = function(angle) {
-    var positiveAngle = (angle + 2*Math.PI) % 2*Math.PI;
-    return positiveAngle;
+    return CameraController.angleAdd(angle, 2*Math.PI);
 };
+
+CameraController.angleAdd = function(angle1, angle2) {
+    return (angle1 + angle2) % (2*Math.PI);
+};
+

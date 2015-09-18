@@ -6,9 +6,17 @@ function Player(game) {
     this.size = 10;
 }
 
-Player.prototype.updateFromServer = function(serverPlayer) {
+Player.prototype.createFromServer = function(serverPlayer) {
     this._id = serverPlayer._id;
     this.name = serverPlayer.name;
+
+    if(serverPlayer.bot)  {
+        this.tyranosaur.setType('bot');
+    }
+};
+
+
+Player.prototype.updateFromServer = function(serverPlayer) {
 
     if(serverPlayer.position.length !== 3 || serverPlayer.rotation.length !== 4) {
         console.error("Invalid server data for player");
