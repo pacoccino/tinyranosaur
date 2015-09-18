@@ -10,10 +10,7 @@ var Tyranosaur = (function() {
         this._game = game;
         this._maxCollideDistance = 40;
         this._rayCaster = null;
-        this._actualVelocity = new THREE.Object3D;
-        this._targetVelocity = new THREE.Object3D;
         this._poos = [];
-
 
         // Public members
 
@@ -34,23 +31,15 @@ var Tyranosaur = (function() {
             return;
         }
 
-        var modelObject = model.object.clone();
+        this.modelObject = model.object.clone();
+        this.setType();
 
-        modelObject.rotation.y = 0;
-        modelObject.scale.set(0.5, 0.5, 0.5);
-        modelObject.updateMatrix();
-
-        var globGeom = new THREE.BoxGeometry(20, 50, 70);
-        var globMaterial = new THREE.MeshLambertMaterial({ // TODO Switch to lambert
-            color: '0xFF0000'
-        });
-        this.boundingBlock = new THREE.Mesh(globGeom, globMaterial);
-        this.boundingBlock.position.z = 5;
+        this.modelObject.rotation.y = 0;
+        this.modelObject.scale.set(0.5, 0.5, 0.5);
+        this.modelObject.updateMatrix();
 
         this.object = new THREE.Object3D();
-        this.object.add(modelObject);
-        //_object.add(_boundingBlock);
-        this.boundingBlock = modelObject;
+        this.object.add(this.modelObject);
 
         this.hasMoved = true;
 
@@ -62,6 +51,21 @@ var Tyranosaur = (function() {
 
     Tyranosaur.prototype.resetMoveTime = function() {
         this.moveTimer = new Helpers.deltaTimer();
+    };
+
+    Tyranosaur.prototype.setType = function(type) {
+        var color;
+        switch(type) {
+            case 'bot':
+                color = 0xBB0033;
+                break;
+            case 'player':
+            default:
+                color = 0x11AA11;
+
+        }
+        var material = new THREE.MeshLambertMaterial({color: color});
+        this.modelObject.material = material;
     };
 
     Tyranosaur.prototype.moveAsKeyboard = function(keys) {
@@ -159,7 +163,7 @@ var Tyranosaur = (function() {
         var direction = this.fromRotationToDirection();
 
         this._rayCaster.set(this.object.position, direction);
-        var collisions = this._rayCaster.intersectObject(ennemyTyra.boundingBlock);
+        var collisions = this._rayCaster.intersectObject(ennemyTyra.modelObject);
 
         for (var i = 0; i < collisions.length; i++) {
             var collider = collisions[i];

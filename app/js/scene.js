@@ -39,7 +39,7 @@ function MainScene(game) {
 
         // Sol
 
-        var floorMaterial = new THREE.MeshBasicMaterial( { color: 0x125612, side: THREE.DoubleSide } );
+        var floorMaterial = new THREE.MeshBasicMaterial( { color: 0xEEEEEE, side: THREE.DoubleSide } );
         var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
         var floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.position.y = -0.5;
@@ -50,7 +50,7 @@ function MainScene(game) {
         // Skybox
 
         var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
-        var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+        var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x156215, side: THREE.BackSide } );
         var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
         self.scene.add(skyBox);
 
@@ -66,8 +66,6 @@ function MainScene(game) {
 
         game.myPlayer.tyranosaur.moveFrame();
 
-        //cameraFollow(game.myPlayer.tyranosaur.object);
-        _cameraController.statsCamera();
         _cameraController.placeCamera();
 
         checkIfICollide();
@@ -120,6 +118,7 @@ function MainScene(game) {
     function addPlayer(event) {
 
         var player = _game.players.new();
+        player.createFromServer(event.player);
         player.updateFromServer(event.player);
 
         self.scene.add(player.tyranosaur.object);
