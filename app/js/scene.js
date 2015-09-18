@@ -34,8 +34,8 @@ function MainScene(game) {
 
         // Axes
 
-        var axes = new THREE.AxisHelper(100);
-        self.scene.add( axes );
+        //var axes = new THREE.AxisHelper(100);
+        //self.scene.add( axes );
 
         // Sol
 
