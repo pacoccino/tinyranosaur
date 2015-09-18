@@ -51,5 +51,10 @@
     "postinstall": "grunt bowercopy",
     "start": "node server/server.js",
     "test": "grunt test"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "server"
+    }
   }
 }
