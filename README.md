@@ -1,6 +1,6 @@
 Tinyranosaur
 ===================
-![https://travis-ci.org/pakokrew/tinyranosaur](https://travis-ci.org/pakokrew/tinyranosaur.svg)
+![https://travis-ci.org/pakokrew/tinyranosaur](https://travis-ci.org/pakokrew/tinyranosaur.svg) (https://david-dm.org/pakokrew/tinyranosaur.svg/) 
 [https://tinyranosaur.herokuapp.com/](https://tinyranosaur.herokuapp.com/)
 
 Your are a tyranosaur. But you are so small. Run for your life !
