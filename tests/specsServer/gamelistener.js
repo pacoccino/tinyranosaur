@@ -80,7 +80,7 @@ describe('GameListener', function() {
 
     });*/
 
-    it('listens player eat', function(done) {
+    xit('listens player eat', function(done) {
         game.users.create(function(user1) {
             user1.socket = socket.socketClient;
             socket.connectClient();
@@ -91,7 +91,6 @@ describe('GameListener', function() {
             });
 
             socket.emit('player eat', user1._id);
-
         });
     });
 

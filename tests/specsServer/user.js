@@ -4,6 +4,7 @@ var Helpers = require("../../server/modules/helpers");
 var Constants = require("../../server/modules/constants");
 var Users = require("../../server/modules/users");
 var User = require("../../server/models/user");
+var Bot = require("../../server/models/bot");
 
 describe('User', function () {
     it('should create', function () {
@@ -97,10 +98,10 @@ describe('User', function () {
         expect(user.isCorrectMove(newPos)).to.be.false;
     });
 
-    it('accepts correct eat', function() {
+    it.only('accepts correct eat', function() {
 
         var user1 = new User();
-        var user2 = new User();
+        var user2 = new Bot();
         var distance = Constants.eatPerimeter - 1;
         user1.position = [ 0,0,0 ];
         user2.position = [ 0,0,distance ];
@@ -113,6 +114,17 @@ describe('User', function () {
         var user1 = new User();
         var user2 = new User();
         var distance = Constants.eatPerimeter + 1;
+        user1.position = [ 0,0,0 ];
+        user2.position = [ 0,0,distance ];
+
+        expect(user1.canEat(user2)).to.be.false;
+    });
+
+    it('rejects eat user', function() {
+
+        var user1 = new User();
+        var user2 = new User();
+        var distance = Constants.eatPerimeter - 1;
         user1.position = [ 0,0,0 ];
         user2.position = [ 0,0,distance ];
 
