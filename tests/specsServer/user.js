@@ -86,6 +86,7 @@ describe('User', function () {
         expect(user.isCorrectMove(newPos)).to.be.true;
     });
 
+    // TODO Quand les sizes et vitesse fonctionneront
     xit('rejects incorrect move', function() {
 
         var user = new User();

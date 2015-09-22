@@ -102,7 +102,7 @@ describe('GameListener', function() {
 
             user1.position[0] = 1000;
 
-            socket.socketClient.on('wrong eat', function() {
+            socket.on('wrong eat', function() {
                 done();
             });
             socket.emit('player eat', user1._id);

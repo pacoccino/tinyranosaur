@@ -55,8 +55,9 @@ User.prototype.move = function(newState) {
     this.rotation = newState.rotation;
 };
 
+// TODO Quand les sizes et vitesse fonctionneront
 User.prototype.isCorrectMove = function(newPos) {
-    return true; // TEMP
+    return true;
 
     var distance = Helpers.distanceBetween(this.position, newPos);
 
