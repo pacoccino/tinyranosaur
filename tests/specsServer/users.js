@@ -2,13 +2,15 @@ var expect = require("chai").expect;
 
 var Helpers = require("../../server/modules/helpers");
 var Users = require("../../server/modules/users");
+var Game = require("../../server/modules/game.js");
 var User = require("../../server/models/user");
 
+var users, game;
 describe('Users', function () {
 
-    var users;
     beforeEach(function() {
-        users = new Users();
+        game = new Game();
+        users = new Users(game);
     });
 
     it('should create', function (done) {
@@ -16,7 +18,9 @@ describe('Users', function () {
             expect(user).to.exist;
             expect(user instanceof User).to.be.true;
             expect(users.users.length).to.equal(1);
+            expect(game.room.length).to.equal(1);
             expect(users.users[0]._id).to.equal(user._id);
+            expect(game.room[0]._id).to.equal(user._id);
             done();
         });
     });
@@ -58,6 +62,7 @@ describe('Users', function () {
             users.delete(user._id, function() {
                 users.getAll(function(users) {
                     expect(users.length).to.be.equal(0);
+                    expect(game.room.length).to.equal(0);
                     done();
                 });
             });

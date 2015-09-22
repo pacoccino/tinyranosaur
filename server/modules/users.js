@@ -1,24 +1,31 @@
 var User = require('./../models/user');
 var _ = require('lodash');
 
-function Users() {
+function Users(game) {
+    this.game = game;
     this.users = [];
-    this.bots = [];
 }
 
 Users.prototype.create = function(cb) {
     var user = new User();
+
     this.users.push(user);
-    cb(user);
+    this.game.room.push(user);
+
+    cb && cb(user);
+
+
 };
 
-Users.prototype.addBot = function(bot) {
-    this.bots.push(bot);
-};
 
 Users.prototype.delete = function(id, cb) {
+
     var userIndex = _.findIndex(this.users, {_id: id});
     this.users.splice(userIndex, 1);
+
+    var roomIndex = _.findIndex(this.game.room, {_id: id});
+    this.game.room.splice(roomIndex, 1);
+
     cb && cb();
 };
 
@@ -28,9 +35,8 @@ Users.prototype.getAll = function(cb) {
 
 Users.prototype.getById = function(id) {
     var user = _.find(this.users, {_id: id});
-    var bot = _.find(this.bots, {_id: id});
 
-    return user || bot;
+    return user;
 };
 
 Users.prototype.getAllPublic = function(cb) {

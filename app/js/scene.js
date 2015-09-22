@@ -98,7 +98,7 @@ function MainScene(game) {
 
         for (var i = 0; i < players.length; i++) {
             var player = players[i];
-            if(game.myPlayer.tyranosaur.collideWith(player.tyranosaur)) {
+            if(player._id != game.myPlayer._id && game.myPlayer.tyranosaur.collideWith(player.tyranosaur)) {
                 eatPlayer(player);
             }
         }
@@ -109,9 +109,7 @@ function MainScene(game) {
 
         _game.multiplayer.emit( {
             type:'player eat',
-            params: {
-                "_id": player._id
-            }
+            params: player._id
         });
     }
 

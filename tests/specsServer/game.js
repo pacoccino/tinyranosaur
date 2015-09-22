@@ -21,6 +21,8 @@ describe('Game', function() {
         expect(game.io).to.equal(socket);
         expect(game.users instanceof Users).to.be.true;
         expect(game.bots instanceof Bots).to.be.true;
+        expect(game.room).to.exist;
+        expect(game.room.length).to.equal(0);
         expect(game.gameListener instanceof GameListener).to.be.true;
     });
 
@@ -29,6 +31,7 @@ describe('Game', function() {
         socket.connectClient();
 
         expect(game.users.getAllSync().length).to.be.equal(1);
+        expect(game.room[0]).to.be.equal(game.users.getAllSync()[0]);
 
     });
 
@@ -147,8 +150,25 @@ describe('Game', function() {
         setTimeout(function() {
             expect(game.users.getAllSync().length).to.be.equal(0);
             done();
-        }, 1500);
+        }, 1200);
 
     });
+
+    it('getPublicRoom', function(done) {
+
+        socket.connectClient();
+
+        setTimeout(function() {
+            game.getPublicRoom(function(room) {
+
+                expect(room.length).to.be.gt(0);
+                expect(room[0]).not.to.be.equal(game.room[0]);
+                expect(room[0]._id).to.be.equal(game.room[0]._id);
+            });
+
+            done();
+        }, 200);
+    });
+
 
 });

@@ -53,17 +53,15 @@ describe('GameListener', function() {
 
     it('send game state', function(done) {
 
-        var bot = new Bot();
-        gameListener.game.bots.bots.push(bot);
-        gameListener.game.users.users.push(user);
-
-
+        gameListener.game.bots.createBot();
+        gameListener.game.users.create();
 
         socket.on('game state', function(state) {
             expect(state.users).to.be.defined;
             expect(state.users.length).to.equal(2);
-            expect(state.users[0]._id).to.equal(user._id);
-            expect(state.users[1]._id).to.equal(bot._id);
+            expect(state.users[0]._id).to.equal(gameListener.game.bots.bots[0]._id);
+            expect(state.users[1]._id).to.equal(gameListener.game.users.users[0]._id);
+
             done();
         });
 
@@ -82,29 +80,32 @@ describe('GameListener', function() {
 
     });*/
 
-    xit('listens player eat', function(done) {
+    it('listens player eat', function(done) {
         game.users.create(function(user1) {
             user1.socket = socket.socketClient;
             socket.connectClient();
 
-            socket.socketClient.on('player die', function(playerId) {
+            socket.socketClient.on('player leave', function(playerId) {
                 expect(playerId).to.equal(user1._id);
                 done();
             });
-            socket.socketClient.emit('player eat', user1._id);
+
+            socket.emit('player eat', user1._id);
 
         });
     });
 
-    xit('listens player eat wrong', function(done) {
+    it('listens player eat wrong', function(done) {
         game.users.create(function(user1) {
             user1.socket = socket.socketClient;
             socket.connectClient();
 
+            user1.position[0] = 1000;
+
             socket.socketClient.on('wrong eat', function() {
                 done();
             });
-            socket.socketClient.emit('player eat', user1._id);
+            socket.emit('player eat', user1._id);
 
         });
     });

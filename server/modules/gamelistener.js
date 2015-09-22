@@ -26,9 +26,21 @@ GameListener.prototype.listenEat = function(user) {
 
     var self = this;
 
-    return function(userToEat) {
-        if (user.canEat.apply(user, [self.game.users.getById(userToEat._id)])) {
-            self.game.io.emit('player die', userToEat._id);
+    return function(userIdToEat) {
+        var userToEat;
+        userToEat = self.game.users.getById(userIdToEat);
+        userToEat = userToEat || self.game.bots.getById(userIdToEat);
+
+        if (userToEat && user.canEat.apply(user, [userToEat])) {
+
+            self.game.io.emit('player leave', userIdToEat);
+
+            if(userToEat.bot) {
+                self.game.bots.removeBot(userIdToEat);
+            }
+            else {
+                self.game.users.delete(userIdToEat);
+            }
         }
         else {
             user.socket.emit('wrong eat');
@@ -52,15 +64,12 @@ GameListener.prototype.listenUpdatePosition = function(user) {
 };
 
 GameListener.prototype.diffuseGameState = function(user) {
-    var self = this;
-    self.game.users.getAllPublic(function(users) {
+
+    this.game.getPublicRoom(function(room) {
         var state = {
-            users: users
+            users: room
         };
-        for (var i = 0; i < self.game.bots.bots.length; i++) {
-            var bot = self.game.bots.bots[i];
-            state.users.push(bot.toPublic());
-        }
+
         user.socket.emit('game state', state);
     });
 };

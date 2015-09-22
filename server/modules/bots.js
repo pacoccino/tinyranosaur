@@ -1,35 +1,61 @@
+var _ = require('lodash');
+
 var Bot = require('../models/bot');
 var Constants = require('../modules/constants');
 
-var Bots = function(game, users) {
+var Bots = function(game) {
     this.game = game;
-    this.users = users;
     this.bots = [];
 };
 
 
-Bots.prototype.createBots = function() {
+// creates bot and add it to main game room
+Bots.prototype.createBot = function() {
+
+    var bot = new Bot();
+    this.bots.push(bot);
+    this.game.room.push(bot);
+
+    return bot;
+};
+
+Bots.prototype.removeBot = function(botId) {
+    if(!botId) return;
+
+
+    var usersIndex = _.findIndex(this.bots, {_id: botId});
+    this.bots.splice(usersIndex, 1);
+    var roomIndex = _.findIndex(this.game.room, {_id: botId});
+    this.game.room.splice(roomIndex, 1);
+};
+
+Bots.prototype.getById = function(botId) {
+    if(!botId) return;
+
+
+    return _.find(this.bots, {_id: botId});
+};
+
+// Add all bots
+Bots.prototype.populateBots = function() {
     var nbBots = Constants.nbBots;
 
     for (var i = 0; i < nbBots; i++) {
-        var bot = new Bot();
-        this.bots.push(bot);
-        this.users.addBot(bot);
-        this.game.io.emit('player new', bot.toPublic());
+        var newBot = this.createBot();
+        this.game.io.emit('player new', newBot.toPublic());
     }
 };
 
 Bots.prototype.killBots = function() {
-    for (var i = 0; i < this.bots.length; i++) {
-        var bot = this.bots[i];
-        this.game.io.emit('player leave', bot._id);
-    }
-    this.bots.splice(0, this.bots.length);
+    var nbBots = this.bots.length;
 
-    tmpTime = null;
+    for (var p = 0; p < nbBots; p++) {
+        this.game.io.emit('player leave', this.bots[0]._id);
+        this.removeBot(this.bots[0]);
+    }
 };
 
-var tmpTime = null;
+// Make bot do actions
 Bots.prototype.liveBots = function() {
 
     for (var i = 0; i < this.bots.length; i++) {

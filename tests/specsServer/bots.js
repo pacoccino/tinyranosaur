@@ -18,7 +18,8 @@ describe('Bots', function() {
     it('should create', function() {
 
         expect(bots).to.exist;
-        expect(bots.game).to.exist;
+        expect(bots.game).to.equal(game);
+        expect(bots.users).not.to.exist;
         expect(bots.bots).to.exist;
         expect(bots.bots.length).to.equal(0);
     });
@@ -27,20 +28,67 @@ describe('Bots', function() {
 
         expect(bots.bots.length).to.equal(0);
 
-        bots.createBots();
+        var newBot = bots.createBot();
 
-        expect(bots.bots.length).to.equal(Constants.nbBots);;
+        expect(bots.bots.length).to.equal(1);
+        expect(game.room.length).to.equal(1);
+        expect(bots.bots[0]).to.equal(newBot);
+        expect(game.room[0]).to.equal(newBot);
+    });
+    it('getById', function() {
+
+        var newBot = bots.createBot();
+        expect(bots.bots.length).to.equal(1);
+        expect(bots.getById(bots.bots[0]._id)).to.equal(bots.bots[0]);
+    });
+
+    it('poputates Bots', function() {
+
+        bots.populateBots();
+
+        expect(bots.bots.length).to.equal(Constants.nbBots);
+    });
+
+    it('removes bot', function() {
+
+        expect(bots.bots.length).to.equal(0);
+        var newBot = bots.createBot();
+        expect(bots.bots.length).to.equal(1);
+        bots.removeBot(newBot);
+        expect(bots.bots.length).to.equal(0);
+        expect(game.room.length).to.equal(0);
+    });
+
+    it('removes bot not undef', function() {
+
+        expect(bots.bots.length).to.equal(0);
+        bots.createBot();
+        expect(bots.bots.length).to.equal(1);
+        bots.removeBot();
+        expect(bots.bots.length).to.equal(1);
+        expect(game.room.length).to.equal(1);
+    });
+
+    it('removes bot from idf', function() {
+
+        expect(bots.bots.length).to.equal(0);
+        var newBot = bots.createBot();
+        expect(bots.bots.length).to.equal(1);
+        bots.removeBot({_id: newBot._id});
+        expect(bots.bots.length).to.equal(0);
+        expect(game.room.length).to.equal(0);
     });
 
     it('kill bots', function() {
 
         expect(bots.bots.length).to.equal(0);
+        bots.populateBots();
+        expect(bots.bots.length).to.equal(Constants.nbBots);
+        expect(game.room.length).to.equal(Constants.nbBots);
 
-        bots.createBots();
         bots.killBots();
-
         expect(bots.bots.length).to.equal(0);
-
+        expect(game.room.length).to.equal(0);
     });
 
 
@@ -68,7 +116,7 @@ describe('Bots', function() {
             }
         });
 
-        bots.createBots();
+        bots.populateBots();
     });
 
     it('bot updated to player', function(done) {
@@ -95,7 +143,7 @@ describe('Bots', function() {
             }
         });
 
-        bots.createBots();
+        bots.populateBots();
         bots.liveBots();
 
     });

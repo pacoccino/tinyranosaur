@@ -11,8 +11,10 @@ function Game() {
     this.gameUpdater = null;
     this.gameListener = new GameListener(this);
 
-    this.users = new Users();
-    this.bots = new Bots(this, this.users);
+    this.users = new Users(this);
+    this.bots = new Bots(this);
+
+    this.room = [];
 }
 
 Game.prototype.listen = function(io) {
@@ -50,7 +52,7 @@ Game.prototype.launchGame = function() {
     };
 
     this.gameUpdater = setInterval(updater, updateInterval);
-    this.bots.createBots();
+    this.bots.populateBots();
     Debug.log("Game started with " + this.bots.bots.length + " bots");
 };
 
@@ -68,25 +70,38 @@ Game.prototype.updateGame = function() {
 
 Game.prototype.disconnectInactivePlayers = function() {
 
-    var users = this.users.users;
     var disconnect = [];
-    for (var i = 0; i < users.length; i++) {
-        var user = users[i];
+    var list = this.users.getAllSync();
+    for (var i = 0; i < list.length; i++) {
+        var user = list[i];
 
         if(user.isInactive()) {
-            disconnect.push(i);
+            disconnect.push(user);
         }
     }
 
     for (var j = 0; j < disconnect.length; j++) {
-        var userIndex = disconnect[j];
-        users.splice(userIndex, 1);
+        var userToDelete = disconnect[j];
+        this.users.delete(userToDelete._id);
     }
 
-    if(users.length === 0) {
+    if(list.length === 0) {
         this.bots.killBots();
         this.stopGame();
     }
+};
+
+Game.prototype.getPublicRoom = function(cb) {
+    var publicList = [];
+
+    for(var i=0; i<this.room.length; i++) {
+        var character = this.room[i];
+        var publicCharacter = character.toPublic();
+
+        publicList.push(publicCharacter);
+    }
+
+    cb(publicList);
 };
 
 module.exports = Game;

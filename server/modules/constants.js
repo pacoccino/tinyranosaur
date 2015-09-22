@@ -1,6 +1,6 @@
 var Constants = {};
 
-Constants.eatPerimeter = 10;
+Constants.eatPerimeter = 100;
 Constants.nbBots = 4;
 
 Constants.mapSize = {
