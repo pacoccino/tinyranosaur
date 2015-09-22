@@ -36,7 +36,7 @@ Bot.prototype.stepIa = function() {
 Bot.prototype.moveBot = function(deltaTime) {
 
     var move;
-    var step = deltaTime / 1000;
+    var step = deltaTime;
 
     move = Helpers.scaleVect(this.speed * step, this.direction);
     var newPosition = Helpers.addVect(this.position, move);
