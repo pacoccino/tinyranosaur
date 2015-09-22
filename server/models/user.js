@@ -69,7 +69,8 @@ User.prototype.canEat = function(userToEat) {
 
     var distance = Helpers.distanceBetween(userToEat.position, this.position);
 
-    return (distance < Constants.eatPerimeter);
+    // TODO Quand l'interface acceptera de se faire manger
+    return userToEat.bot && (distance < Constants.eatPerimeter);
 };
 
 module.exports = User;
