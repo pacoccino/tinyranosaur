@@ -37,6 +37,9 @@ GameListener.prototype.listenEat = function(user) {
 
             if(userToEat.bot) {
                 self.game.bots.removeBot(userIdToEat);
+                if(self.game.bots.bots.length === 0) {
+                    self.game.bots.populateBots();
+                }
             }
             else {
                 self.game.users.delete(userIdToEat);
