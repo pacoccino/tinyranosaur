@@ -116,6 +116,17 @@ module.exports = function(grunt) {
             },
 
             server: { src: ['tests/specsServer/**/*.js'] }
+        },
+        mocha_istanbul: {
+            coverage: {
+                src: 'tests/specsServer', // a folder works nicely 
+                options: {
+                    coverageFolder: 'coverage/server',
+                    reportFormats: ['lcov'],
+                    reporter: 'dot'
+                }
+
+            }
         }
     });
 
@@ -146,7 +157,8 @@ module.exports = function(grunt) {
     grunt.registerTask('tddClient', ['karma:tddClient']);
     grunt.registerTask('unitClient', ['karma:unitClient']);
 
-    grunt.registerTask('test', ['simplemocha:server', 'karma:unitClient']);
+    grunt.registerTask('test', ['mocha_istanbul:coverage', 'karma:unitClient']);
+    grunt.registerTask('cov', ['mocha_istanbul:coverage']);
 
     grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'bowercopy', 'serve']);
 };
