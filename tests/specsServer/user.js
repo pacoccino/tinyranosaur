@@ -98,7 +98,7 @@ describe('User', function () {
         expect(user.isCorrectMove(newPos)).to.be.false;
     });
 
-    it.only('accepts correct eat', function() {
+    it('accepts correct eat', function() {
 
         var user1 = new User();
         var user2 = new Bot();
