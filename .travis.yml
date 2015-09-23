@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-  - "0.12.2"
+- 0.12.2
+- 4.1.0
 install: npm install
-
 addons:
-    code_climate:
-        repo_token: 727b408c7133f69f4df955494aa14ac5352a6810cc8d3eece3cd84fcf345e495
+  code_climate:
+    repo_token:
+      secure: hFllQ475NNQ5kmta2LQLn9wGraybtCe6qHArlCIWpya74sH1rMgwBoD6bO7rPg6/NYnmDPISK/T2qyPgSS0XDDEV/b3rtvJkzC7OdgRe/Me28Acj3wn05q8H+RO+wuRu/A29ZM1FB7DB6qYkF2b7VBc/qNuHlenU/s82MBY12/k5us2sNLsuB2ZVVKZsPowljzGyEoQ6vuWUnszIDXJHJGGLG3QyvhTKj45l9IN2Uaq3b/Rbsj8zmhoIxLVnkZh1qnGjUPRujyWMxaAkp/eXqk+IdS+R3fqCSTpw8rUdo6IxNr11xWWkss1oGPOKzPg70VMYnXoLoa0Bib5nK0+coBum2MgKhg9FeyVfbR1emEhAsFbTLIAzVxEe/8tfe7YctvqWSJHhtPW5T/THxzJIREf7SL3MoimY9WVaVZyM6LPwCSrICPVvrLvW590Vjqb+MA0oAd+aF0vTqN9E/sPYR8aTzWxtyueUJJnVHst9pMYAgONRugldzPP93VLUe2kbd+vt91nrNQjVZg0ARMx07VyRtwAGO1Uht7guHAZLygfOIqlo1Aepavg6WfcTSH5SIy6ehAffV9Rl9G5F6W9MMBd8owqUzR3YXRqCKwqoBMwJAWhgZTtfcRKBs2RWQcHlJifCK2eyvCL6MnXMiJG+HClFYStj2fl4xD7MdLZM6hE=
 after_script:
-  - codeclimate-test-reporter < cat coverage/client/lcov.info coverage/server/lcov.info
+- cat coverage/client/lcov.info coverage/server/lcov.info | codeclimate-test-reporter
