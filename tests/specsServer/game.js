@@ -61,6 +61,14 @@ describe('Game', function() {
         expect(game.gameUpdater).not.to.be.null;
     });
 
+    it('does not launch two games', function() {
+        expect(game.gameUpdater).to.be.null;
+        game.launchGame();
+        var gu = game.gameUpdater;
+        game.launchGame();
+        expect(game.gameUpdater).to.equal(gu);
+    });
+
     it('starts game when player connects', function() {
         socket.connectClient();
 

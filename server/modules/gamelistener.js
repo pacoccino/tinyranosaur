@@ -36,7 +36,7 @@ GameListener.prototype.listenEat = function(user) {
             self.game.io.emit('player leave', userIdToEat);
 
             if(userToEat.bot) {
-                self.game.bots.removeBot(userIdToEat);
+                self.game.bots.delete(userIdToEat);
                 if(self.game.bots.bots.length === 0) {
                     self.game.bots.populateBots();
                 }

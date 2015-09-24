@@ -128,6 +128,11 @@ describe('Helpers', function() {
 
         expect(Helpers.vectorNorm(vector)).to.be.closeTo(exp, 0.001);
     });
+
+    it('does not computes norm', function() {
+        expect(Helpers.vectorNorm()).to.be.equal(0);
+    });
+
     it('normalizes 1', function() {
         var vector = [0,0,10];
         var normalized = Helpers.normalize(vector);
@@ -158,6 +163,10 @@ describe('Helpers', function() {
         expect(normalized[2]).to.closeTo(-Math.sqrt(1/2), 0.01);
     });
 
+    it('does not normalizes', function() {
+        expect(Helpers.normalize()).to.be.equal(0);
+    });
+
     it('compute distance between two point', function() {
         var point1 = [10,0,10];
         var point2 = [20,0,20];
@@ -182,5 +191,23 @@ describe('Helpers', function() {
         expect(Helpers.distanceBetween(point2, point1)).to.be.closeTo(10, 0.001);
     });
 
+    it('deltatimer create', function() {
+        var timer = new Helpers.deltaTimer();
+        expect(timer.timestamp).to.be.null;
+    });
+
+    it('deltatimer getdelta', function() {
+        var timer = new Helpers.deltaTimer();
+
+        var ts = Date.now();
+        expect(timer.getDelta()).to.equal(0);
+
+        var delta = timer.getDelta();
+        expect(delta).to.be.gte(0);
+
+        var esp = Date.now() - ts;
+
+        expect(delta).to.be.lte(esp);
+    });
 
 });

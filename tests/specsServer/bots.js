@@ -28,18 +28,24 @@ describe('Bots', function() {
 
         expect(bots.bots.length).to.equal(0);
 
-        var newBot = bots.createBot();
+        var newBot = bots.create();
 
         expect(bots.bots.length).to.equal(1);
         expect(game.room.length).to.equal(1);
         expect(bots.bots[0]).to.equal(newBot);
         expect(game.room[0]).to.equal(newBot);
     });
+
     it('getById', function() {
 
-        var newBot = bots.createBot();
+        bots.create();
         expect(bots.bots.length).to.equal(1);
         expect(bots.getById(bots.bots[0]._id)).to.equal(bots.bots[0]);
+    });
+
+    it('getById noid', function() {
+
+        expect(bots.getById()).to.be.undefined;
     });
 
     it('poputates Bots', function() {
@@ -52,9 +58,9 @@ describe('Bots', function() {
     it('removes bot', function() {
 
         expect(bots.bots.length).to.equal(0);
-        var newBot = bots.createBot();
+        var newBot = bots.create();
         expect(bots.bots.length).to.equal(1);
-        bots.removeBot(newBot);
+        bots.delete(newBot);
         expect(bots.bots.length).to.equal(0);
         expect(game.room.length).to.equal(0);
     });
@@ -62,9 +68,9 @@ describe('Bots', function() {
     it('removes bot not undef', function() {
 
         expect(bots.bots.length).to.equal(0);
-        bots.createBot();
+        bots.create();
         expect(bots.bots.length).to.equal(1);
-        bots.removeBot();
+        bots.delete();
         expect(bots.bots.length).to.equal(1);
         expect(game.room.length).to.equal(1);
     });
@@ -72,9 +78,9 @@ describe('Bots', function() {
     it('removes bot from idf', function() {
 
         expect(bots.bots.length).to.equal(0);
-        var newBot = bots.createBot();
+        var newBot = bots.create();
         expect(bots.bots.length).to.equal(1);
-        bots.removeBot({_id: newBot._id});
+        bots.delete({_id: newBot._id});
         expect(bots.bots.length).to.equal(0);
         expect(game.room.length).to.equal(0);
     });

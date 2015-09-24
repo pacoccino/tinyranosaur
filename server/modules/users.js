@@ -13,30 +13,25 @@ Users.prototype.create = function(cb) {
     this.game.room.push(user);
 
     cb && cb(user);
-
-
 };
 
 
-Users.prototype.delete = function(id, cb) {
+Users.prototype.delete = function(userId, cb) {
+    if(!userId) return;
 
-    var userIndex = _.findIndex(this.users, {_id: id});
+    var userIndex = _.findIndex(this.users, {_id: userId});
     this.users.splice(userIndex, 1);
 
-    var roomIndex = _.findIndex(this.game.room, {_id: id});
+    var roomIndex = _.findIndex(this.game.room, {_id: userId});
     this.game.room.splice(roomIndex, 1);
 
     cb && cb();
 };
 
-Users.prototype.getAll = function(cb) {
-    cb(this.users);
-};
+Users.prototype.getById = function(userId) {
+    if(!userId) return;
 
-Users.prototype.getById = function(id) {
-    var user = _.find(this.users, {_id: id});
-
-    return user;
+    return _.find(this.users, {_id: userId});
 };
 
 Users.prototype.getAllPublic = function(cb) {
@@ -50,6 +45,10 @@ Users.prototype.getAllPublic = function(cb) {
     }
 
     cb(publicList);
+};
+
+Users.prototype.getAll = function(cb) {
+    cb(this.users);
 };
 
 Users.prototype.getAllSync = function() {

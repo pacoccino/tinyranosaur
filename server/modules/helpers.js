@@ -2,8 +2,6 @@ var _ = require('lodash');
 
 var Helpers = {};
 
-var deltaTimestamp = null;
-
 Helpers.scaleVect = function(coef, src) {
     if(!src || !src.length || src.length <= 0) return null;
     var dest = [];
@@ -29,28 +27,6 @@ Helpers.addVect = function(vect1, vect2) {
     return dest;
 };
 
-Helpers.clockDelta = function() {
-
-    var now = new Date(), delta;
-
-    if(deltaTimestamp) {
-        delta = now - deltaTimestamp;
-    }
-    else {
-        delta = 0;
-    }
-
-    deltaTimestamp = now;
-
-    return delta;
-};
-
-Helpers.stopClock = function() {
-
-    deltaTimestamp = null;
-};
-
-
 Helpers.generateInteger = function(max) {
 
     var rand = Math.random();
@@ -64,7 +40,7 @@ Helpers.generateSign = function() {
 };
 
 Helpers.vectorNorm = function(vector) {
-    if (!vector || !vector.length) return;
+    if (!vector || !vector.length) return 0;
 
     var sum = 0;
 
@@ -76,7 +52,7 @@ Helpers.vectorNorm = function(vector) {
 };
 Helpers.normalize = function(vector) {
 
-    if (!vector || !vector.length) return;
+    if (!vector || !vector.length) return 0;
 
     var normalized = [];
     var norm = Helpers.vectorNorm(vector);

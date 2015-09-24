@@ -36,6 +36,10 @@ describe('Users', function () {
         });
     });
 
+    it('getById no id', function () {
+        expect(users.getById()).to.be.undefined;
+    });
+
     it('should getAll', function (done) {
         users.create(function (user) {
             expect(user).to.exist;
@@ -66,6 +70,14 @@ describe('Users', function () {
                     done();
                 });
             });
+        });
+    });
+
+    it('should not delete', function () {
+        users.create(function () {
+            expect(users.users.length).to.be.equal(1);
+            users.delete();
+            expect(users.users.length).to.be.equal(1);
         });
     });
 

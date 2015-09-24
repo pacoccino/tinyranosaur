@@ -53,7 +53,7 @@ describe('GameListener', function() {
 
     it('send game state', function(done) {
 
-        gameListener.game.bots.createBot();
+        gameListener.game.bots.create();
         gameListener.game.users.create();
 
         socket.on('game state', function(state) {

@@ -7,19 +7,6 @@ var Constants = require("../../server/modules/constants.js");
 
 describe('Bot', function() {
 
-    var savedClockDelta;
-
-    beforeEach(function() {
-        savedClockDelta = Helpers.clockDelta;
-        Helpers.clockDelta = function(delta) {
-            return 1000;
-        }
-    });
-
-    afterEach(function() {
-        Helpers.clockDelta = savedClockDelta;
-    });
-
     it('should create', function() {
         var bot = new Bot();
 

@@ -10,7 +10,7 @@ var Bots = function(game) {
 
 
 // creates bot and add it to main game room
-Bots.prototype.createBot = function() {
+Bots.prototype.create = function() {
 
     var bot = new Bot();
     this.bots.push(bot);
@@ -19,19 +19,18 @@ Bots.prototype.createBot = function() {
     return bot;
 };
 
-Bots.prototype.removeBot = function(botId) {
+Bots.prototype.delete = function(botId) {
     if(!botId) return;
 
+    var botsIndex = _.findIndex(this.bots, {_id: botId});
+    this.bots.splice(botsIndex, 1);
 
-    var usersIndex = _.findIndex(this.bots, {_id: botId});
-    this.bots.splice(usersIndex, 1);
     var roomIndex = _.findIndex(this.game.room, {_id: botId});
     this.game.room.splice(roomIndex, 1);
 };
 
 Bots.prototype.getById = function(botId) {
     if(!botId) return;
-
 
     return _.find(this.bots, {_id: botId});
 };
@@ -41,7 +40,7 @@ Bots.prototype.populateBots = function() {
     var nbBots = Constants.nbBots;
 
     for (var i = 0; i < nbBots; i++) {
-        var newBot = this.createBot();
+        var newBot = this.create();
         this.game.io.emit('player new', newBot.toPublic());
     }
 };
@@ -51,7 +50,7 @@ Bots.prototype.killBots = function() {
 
     for (var p = 0; p < nbBots; p++) {
         this.game.io.emit('player leave', this.bots[0]._id);
-        this.removeBot(this.bots[0]);
+        this.delete(this.bots[0]);
     }
 };
 
