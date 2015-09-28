@@ -101,7 +101,9 @@ describe('User', function () {
     it('accepts correct eat', function() {
 
         var user1 = new User();
+        user1.size = 10;
         var user2 = new Bot();
+        user2.size = 1;
         var distance = Constants.eatPerimeter - 1;
         user1.position = [ 0,0,0 ];
         user2.position = [ 0,0,distance ];
@@ -109,10 +111,26 @@ describe('User', function () {
         expect(user1.canEat(user2)).to.be.true;
     });
 
-    it('rejects incorrect eat', function() {
+    it('rejects incorrect eat too big', function() {
 
         var user1 = new User();
-        var user2 = new User();
+        user1.size = 1;
+        var user2 = new Bot();
+        user2.size = 10;
+        var distance = Constants.eatPerimeter - 1;
+        user1.position = [ 0,0,0 ];
+        user2.position = [ 0,0,distance ];
+
+        expect(user1.canEat(user2)).to.be.false;
+    });
+
+
+    it('rejects incorrect eat too far', function() {
+
+        var user1 = new User();
+        user1.size = 10;
+        var user2 = new Bot();
+        user2.size = 1;
         var distance = Constants.eatPerimeter + 1;
         user1.position = [ 0,0,0 ];
         user2.position = [ 0,0,distance ];
@@ -123,11 +141,25 @@ describe('User', function () {
     it('rejects eat user', function() {
 
         var user1 = new User();
+        user1.size = 10;
         var user2 = new User();
+        user2.size = 1;
         var distance = Constants.eatPerimeter - 1;
         user1.position = [ 0,0,0 ];
         user2.position = [ 0,0,distance ];
 
         expect(user1.canEat(user2)).to.be.false;
+    });
+
+
+    it('eat someone and scale', function() {
+
+        var user1 = new User();
+        user1.size = 2;
+        var user2 = new User();
+        user2.size = 3;
+
+        user2.eat(user1);
+        expect(user2.size).to.equal(5);
     });
 });

@@ -35,6 +35,7 @@ GameListener.prototype.listenEat = function(user) {
 
             self.game.io.emit('player leave', userIdToEat);
 
+            user.eat(userToEat);
             if(userToEat.bot) {
                 self.game.bots.delete(userIdToEat);
                 if(self.game.bots.bots.length === 0) {
@@ -61,6 +62,7 @@ GameListener.prototype.listenUpdatePosition = function(user) {
         var options = user.toPublic();
         for (var i = 0; i < self.game.users.users.length; i++) {
             var userTo = self.game.users.users[i];
+            if(userTo === user) continue;
             userTo.socket.volatile.emit('player update', options);
         }
     };

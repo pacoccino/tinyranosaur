@@ -19,6 +19,7 @@ function User( name ) {
 
     this.bot = false;
 
+    this.size = 1;
     this.speed = 10;
 }
 
@@ -29,6 +30,7 @@ User.prototype.toPublic = function() {
     publicUser.bot = this.bot;
     publicUser.position = this.position;
     publicUser.rotation = this.rotation;
+    publicUser.size = this.size;
 
     return publicUser;
 };
@@ -67,10 +69,16 @@ User.prototype.isCorrectMove = function(newPos) {
 User.prototype.canEat = function(userToEat) {
     if(!userToEat) return false;
 
+    if(userToEat.size > this.size) return false;
+
     var distance = Helpers.distanceBetween(userToEat.position, this.position);
 
     // TODO Quand l'interface acceptera de se faire manger
     return userToEat.bot && (distance < Constants.eatPerimeter);
+};
+
+User.prototype.eat = function(userToEat) {
+    this.size += userToEat.size;
 };
 
 module.exports = User;
