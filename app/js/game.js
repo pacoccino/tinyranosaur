@@ -71,4 +71,3 @@ Game.prototype.getRendererElement = function() {
 Game.prototype.getSceneManager = function() {
     return this.sceneManager;
 };
-
