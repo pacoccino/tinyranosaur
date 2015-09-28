@@ -1,53 +1,43 @@
 function Game(THREE) {
 
+}
+
+
+Game.prototype.setAuthentication = function(authentication) {
+
+    this.authentication = authentication;
+};
+Game.prototype.setContainer = function(container) {
+
+    this.container = container;
+};
+
+Game.prototype.onWindowResize = function() {
+
+    this.sceneManager.camera.aspect = window.innerWidth / window.innerHeight;
+    this.sceneManager.camera.updateProjectionMatrix();
+
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+};
+
+Game.prototype.init = function(readyCallback) {
+
+    this.renderer = new THREE.WebGLRenderer();
+
+    // TODO get container size
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
+
+    this.userInput = new UserInput(this.getRendererElement());
+    this.userAction = new UserAction(this);
+
+    this.players = new Players(this);
+
+    this.multiplayer = new Multiplayer_Socket(this);
+
+    this.sceneManager = new MainScene(this);
+
     var self = this;
-    var _renderer, _scene;
-
-    self.init = function(readyCallback) {
-
-        self.clock = new THREE.Clock(true);
-
-        _renderer = new THREE.WebGLRenderer();
-        _renderer.setSize( window.innerWidth, window.innerHeight );
-
-        self.userInput = new UserInput(self.getRendererElement());
-        self.userAction = new UserAction(this);
-
-        self.players = new Players(this);
-
-        self.multiplayer = new Multiplayer_Socket(this);
-
-        _scene = new MainScene(this);
-
-        loadModels(function() {
-            var myPlayer = self.players.new();
-
-            self.myPlayer = myPlayer;
-            self.myPlayer._id = self.authentication.info._id;
-            self.myPlayer.name = self.authentication.info.name;
-
-            _scene.populate();
-
-            readyCallback && readyCallback();
-        });
-
-    };
-
-    self.renderLoop = function() {
-
-        _scene.step();
-
-        _renderer.render( _scene.scene, _scene.camera );
-    };
-
-    self.getRendererElement = function() {
-
-        return _renderer.domElement;
-    };
-
-    self.getScene = function() {
-        return _scene;
-    };
 
     function loadModels(callback) {
 
@@ -77,13 +67,35 @@ function Game(THREE) {
         loadModel(0);
     }
 
-    function onWindowResize(){
+    loadModels(function() {
 
-        _scene.camera.aspect = window.innerWidth / window.innerHeight;
-        _scene.camera.updateProjectionMatrix();
+        self.multiplayer.listen();
 
-        _renderer.setSize( window.innerWidth, window.innerHeight );
-    }
+        self.myPlayer = self.players.new();
+        self.myPlayer._id = self.authentication.info._id;
+        self.myPlayer.name = self.authentication.info.name;
 
-    window.addEventListener( 'resize', onWindowResize, false );
-}
+        self.sceneManager.populate();
+
+        self.container.append( self.getRendererElement());
+
+        readyCallback && readyCallback();
+    });
+};
+
+Game.prototype.renderLoop = function() {
+
+    this.sceneManager.step();
+
+    this.renderer.render( this.sceneManager.scene, this.sceneManager.camera );
+};
+
+Game.prototype.getRendererElement = function() {
+
+    return this.renderer.domElement;
+};
+
+Game.prototype.getSceneManager = function() {
+    return this.sceneManager;
+};
+

@@ -105,7 +105,7 @@ var Tyranosaur = (function() {
             keyboardVector.z = this.lastStrafe * 0.1;
         }
 
-        var camera = this._game.getScene().camera;
+        var camera = this._game.getSceneManager().camera;
         keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), (camera.rotation.y - 3*Math.PI/2));
 
         this.direction = keyboardVector;
@@ -138,7 +138,7 @@ var Tyranosaur = (function() {
 
         poo.position.copy(this.object.position);
 
-        this._game.getScene().scene.add(poo);
+        this._game.getSceneManager().scene.add(poo);
 
         this._poos.push(poo);
     };

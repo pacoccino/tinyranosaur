@@ -12,18 +12,15 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="css/main.css">
-    </head>
-    <body>
-        <!--[if lt IE 10]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
 
         <!-- Vendors -->
         <script src="js/vendor/jquery.js"></script>
         <script src="js/vendor/firebase.js"></script>
         <script src="js/vendor/lodash.js"></script>
+        <script src="js/vendor/three.js"></script>
+        <script src="js/vendor/OBJLoader.js"></script>
 
-        <!-- socket -->
+        <!-- Socket -->
         <script src="/socket.io/socket.io.js"></script>
 
         <!-- Modules -->
@@ -39,9 +36,11 @@
         <script src="js/userAction.js"></script>
         <script src="js/userInput.js"></script>
         <script src="js/tyranosaur.js"></script>
-
-        <!-- RequireJS -->
-        <script data-main="js/main" src="js/vendor/require.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
         <div id="game-container"></div>
 
@@ -55,5 +54,6 @@
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
 
+        <script src="js/main.js"></script>
     </body>
 </html>

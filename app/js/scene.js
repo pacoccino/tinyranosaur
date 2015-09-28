@@ -107,7 +107,7 @@ function MainScene(game) {
     function eatPlayer(player) {
         console.log("I ate" + player._id);
 
-        _game.multiplayer.emit( {
+    _game.multiplayer.emit( {
             type:'player eat',
             params: player._id
         });
