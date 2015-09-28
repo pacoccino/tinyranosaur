@@ -2,17 +2,15 @@ function CameraController(camera, tyranosaur) {
     this.camera = camera;
     this.tyra = tyranosaur;
 
-    this.distance = CameraController._DMAX_;
-    this.theta = 3*Math.PI/2;
+    this.distance = this.destinationDistance();
+    this.theta = this.destinationTheta();
 
     this.moveTimer = new Helpers.deltaTimer();
 }
 
 // Constants
 
-CameraController._DMAX_ = 150;
-CameraController._THETAMAX_ = 1;
-CameraController._HIGH_ = 50;
+CameraController._HIGH_ = 30;
 
 // Class Method
 
@@ -34,10 +32,11 @@ CameraController.prototype.placeCamera = function() {
 };
 
 CameraController.prototype.findPositionFromTyra = function() {
-    var distance = this.computeNewDistance();
+    this.distance = this.computeNewDistance();
+
     this.theta = CameraController.getPositiveAngle(this.computeNewTheta());
-    //this.theta = this.destinationTheta();
-    var addVect = CameraController.getVectorFromPolar(distance, this.theta);
+
+    var addVect = CameraController.getVectorFromPolar(this.distance, this.theta);
 
     var newPosition = new THREE.Vector3();
     newPosition.addVectors(this.tyra.object.position, addVect);
@@ -45,9 +44,27 @@ CameraController.prototype.findPositionFromTyra = function() {
     return newPosition;
 };
 
+/////////////////////////////////////////////
+// Distance
+
 CameraController.prototype.computeNewDistance = function() {
-    return CameraController._DMAX_;
+    var deltaD = this.destinationDistance() - this.distance;
+
+    var deltaDTimed = deltaD * this.moveTimer.getDelta();
+    return this.distance + deltaDTimed;
 };
+
+CameraController.prototype.destinationDistance = function() {
+    var size = this.tyra.object.scale.x;
+
+    var prop = 100;
+
+    return size * prop;
+};
+
+
+/////////////////////////////////////////////
+// Rotation
 
 CameraController.prototype.computeNewTheta = function() {
 
@@ -68,7 +85,7 @@ CameraController.prototype.destinationTheta = function() {
 
 CameraController.prototype.deltaTheta = function() {
 
-    var distanceTheta = this.destinationTheta() - this.theta;
+    var distanceTheta = CameraController.easeFunction(this.destinationTheta(),this.theta);
 
     var raccourci = 0;
     if(Math.abs(distanceTheta) > Math.PI) {
@@ -79,11 +96,11 @@ CameraController.prototype.deltaTheta = function() {
     }
     var deltaTheta = CameraController.angleAdd(distanceTheta, raccourci);
 
-    //var deltaTheta = CameraController._THETAMAX_  * Math.exp(-1/distanceTheta);
 
     return deltaTheta;
 };
 
+/////////////////////////////////////////////
 // Static methods
 
 CameraController.getVectorFromPolar = function(distance, theta) {
@@ -118,5 +135,10 @@ CameraController.getPositiveAngle = function(angle) {
 
 CameraController.angleAdd = function(angle1, angle2) {
     return (angle1 + angle2) % (2*Math.PI);
+};
+
+
+CameraController.easeFunction = function(angle1, angle2) {
+    return angle1 - angle2;
 };
 

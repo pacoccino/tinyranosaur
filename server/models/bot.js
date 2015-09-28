@@ -12,7 +12,6 @@ function Bot() {
     this.bot = true;
 
     this.position = Bot.randomPosition();
-    this.position[1] = 30;
     this.direction = [0,0,1];
 
     this.speed = 50;

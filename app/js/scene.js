@@ -42,7 +42,7 @@ function MainScene(game) {
         var floorMaterial = new THREE.MeshBasicMaterial( { color: 0xEEEEEE, side: THREE.DoubleSide } );
         var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
         var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.position.y = -0.5;
+        floor.position.y = -30;
         floor.rotation.x = Math.PI / 2;
         self.scene.add(floor);
 
@@ -76,7 +76,6 @@ function MainScene(game) {
     // Remplissage de la scene avec les modèles
     self.populate = function() {
 
-        game.myPlayer.tyranosaur.object.position.y = 30;
         self.scene.add(game.myPlayer.tyranosaur.object);
 
         _cameraController = new CameraController(self.camera, game.myPlayer.tyranosaur);

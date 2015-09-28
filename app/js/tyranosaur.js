@@ -35,7 +35,7 @@ var Tyranosaur = (function() {
         this.modelObject = model.object.clone();
         this.setType();
 
-        this.modelObject.rotation.y = 0;
+        this.modelObject.position.y = 0;
         this.modelObject.scale.set(modelScale, modelScale, modelScale);
         this.modelObject.updateMatrix();
 

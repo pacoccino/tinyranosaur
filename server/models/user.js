@@ -12,7 +12,7 @@ function User( name ) {
 
     this.socket = null;
 
-    this.position = [0,30,0];
+    this.position = [0,0,0];
     this.rotation = [0,0,0,"XYZ"];
 
     this.heartTime = null;
