@@ -38,7 +38,6 @@ function Multiplayer_Socket(game) {
         });
 
         _socket.on("player update", function(player) {
-            if(player._id === _auth.info._id) return;
 
             _ed.dispatchEvent( {
                 type: 'player update',

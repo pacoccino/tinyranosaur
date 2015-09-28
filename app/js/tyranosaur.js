@@ -1,8 +1,9 @@
 var Tyranosaur = (function() {
 
     var maxVelocity = 60;
-    var rotateVelocity = 1;
 
+    var modelName = 'dino';
+    var modelScale = 0.5;
 
     function Tyranosaur(game) {
         // Private members
@@ -24,7 +25,7 @@ var Tyranosaur = (function() {
 
         // Constructor
 
-        var model = _.find(GameModels, {name: 'dino'});
+        var model = _.find(GameModels, {name: modelName});
 
         if (!model) {
             console.error("Cannot load tyranosaur");
@@ -35,7 +36,7 @@ var Tyranosaur = (function() {
         this.setType();
 
         this.modelObject.rotation.y = 0;
-        this.modelObject.scale.set(0.5, 0.5, 0.5);
+        this.modelObject.scale.set(modelScale, modelScale, modelScale);
         this.modelObject.updateMatrix();
 
         this.object = new THREE.Object3D();
@@ -45,7 +46,6 @@ var Tyranosaur = (function() {
 
         this._rayCaster = new THREE.Raycaster();
         this._rayCaster.far = 200;
-
     }
 
 

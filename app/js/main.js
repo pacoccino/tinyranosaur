@@ -1,6 +1,5 @@
 var _game, _authentication, _gameContainer;
 
-
 // TODO waterfallize
 authenticate(function() {
     initGame();

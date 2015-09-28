@@ -3,7 +3,7 @@ function Player(game) {
     this._id = Helpers.idGenerator();
     this.name = "";
     this.tyranosaur = new Tyranosaur(this.game);
-    this.size = 10;
+    this.size = 1;
 }
 
 Player.prototype.createFromServer = function(serverPlayer) {
@@ -25,6 +25,10 @@ Player.prototype.updateFromServer = function(serverPlayer) {
     var object = this.tyranosaur.object;
     object.position.fromArray(serverPlayer.position);
     object.rotation.fromArray(serverPlayer.rotation);
+
+    this.size = serverPlayer.size;
+
+    //object.scale.set(this.size, this.size, this.size);
 };
 
 

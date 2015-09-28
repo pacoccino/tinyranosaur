@@ -15,8 +15,8 @@ var ModelLoader = function() {
 
     this.loadingManager = new THREE.LoadingManager();
 
-    this.OBJLoader = new THREE.OBJLoader( loadingManager );
-    this.JSONLoader = new THREE.ObjectLoader( loadingManager );
+    this.OBJLoader = new THREE.OBJLoader( this.loadingManager );
+    this.JSONLoader = new THREE.ObjectLoader( this.loadingManager );
 
     this.loadingManager.onProgress = function ( item, loaded, total ) {
 
@@ -27,7 +27,7 @@ var ModelLoader = function() {
 ModelLoader.prototype.loadModels = function(callback) {
 
     // TODO Asyncify
-    var loader;
+    var loader, self = this;
 
     var loadModel = function(index) {
         if(index >= GameModels.length) {
@@ -38,13 +38,16 @@ ModelLoader.prototype.loadModels = function(callback) {
         var model = GameModels[index];
         switch(model.type) {
             case 'json':
-                loader = this.JSONLoader;
+                loader = self.JSONLoader;
                 break;
             case 'obj':
-                loader = this.OBJLoader;
+                loader = self.OBJLoader;
                 break;
             default:
                 console.log('Unknown model format');
+                index++;
+                loadModel(index);
+                return;
         }
 
         loader.load( model.url, function ( object ) {
