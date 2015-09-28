@@ -24,7 +24,7 @@ Game.prototype.init = function(readyCallback) {
 
     this.multiplayer = new Multiplayer_Socket(this);
 
-    this.sceneManager = new MainScene(this);
+    this.sceneManager = new SceneManager(this);
 
     var self = this;
 
@@ -40,6 +40,8 @@ Game.prototype.init = function(readyCallback) {
 
         self.sceneManager.populate();
 
+        self.userAction.addListeners();
+
         self.container.append( self.getRendererElement());
 
         readyCallback && readyCallback();
@@ -47,6 +49,10 @@ Game.prototype.init = function(readyCallback) {
 };
 
 Game.prototype.renderLoop = function() {
+
+
+    this.userAction.updateActions();
+    this.userAction.doActions();
 
     this.sceneManager.step();
 

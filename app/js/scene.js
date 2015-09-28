@@ -1,12 +1,10 @@
-function MainScene(game) {
+function SceneManager(game) {
 
     var self = this;
-    var _game = game;
 
-    var _sceneReady = false;
+    this._game = game;
 
-    var _userAction = _game.userAction;
-    var _cameraController;
+    this._sceneReady = false;
 
     // Construction initiale de la scene
     var constructor = function() {
@@ -16,12 +14,6 @@ function MainScene(game) {
         // Camera
 
         self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-
-        /*
-        self.camera.position.x = -200;
-        self.camera.position.y = 100;
-        self.camera.rotation.y = -Math.PI/2;
-         */
 
         // Lumières
 
@@ -53,114 +45,110 @@ function MainScene(game) {
         var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x156215, side: THREE.BackSide } );
         var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
         self.scene.add(skyBox);
-
     };
-
-    // Callback a chaque render
-    self.step = function() {
-
-        if(!_sceneReady) return;
-
-        _userAction.updateActions();
-        _userAction.doActions();
-
-        game.myPlayer.tyranosaur.moveFrame();
-
-        _cameraController.placeCamera();
-
-        checkIfICollide();
-
-        updateMultiplayerState_Throttler(game.myPlayer.tyranosaur);
-    };
-
-    // Remplissage de la scene avec les modèles
-    self.populate = function() {
-
-        self.scene.add(game.myPlayer.tyranosaur.object);
-
-        _cameraController = new CameraController(self.camera, game.myPlayer.tyranosaur);
-
-        updateMultiplayerState(game.myPlayer.tyranosaur);
-
-        _game.multiplayer.on('player new', addPlayer);
-        _game.multiplayer.on('player update', updatePlayer);
-        _game.multiplayer.on('player leave', removePlayer);
-
-        _sceneReady = true;
-        _userAction.addListeners();
-    };
-
-
-
-    function checkIfICollide() {
-        var players = game.players.getAll();
-
-        for (var i = 0; i < players.length; i++) {
-            var player = players[i];
-            if(player._id != game.myPlayer._id && game.myPlayer.tyranosaur.collideWith(player.tyranosaur)) {
-                eatPlayer(player);
-            }
-        }
-    }
-
-    function eatPlayer(player) {
-        console.log("I ate" + player._id);
-
-    _game.multiplayer.emit( {
-            type:'player eat',
-            params: player._id
-        });
-    }
-
-    function addPlayer(event) {
-
-        var player = _game.players.new();
-        player.createFromServer(event.player);
-        player.updateFromServer(event.player);
-
-        self.scene.add(player.tyranosaur.object);
-    }
-
-    function updatePlayer(event) {
-        var userId = event.player._id;
-        var player = _game.players.getById(userId);
-        if(!player) {
-            console.error("Update without knowing player");
-            return;
-        }
-        player.updateFromServer(event.player);
-    }
-
-    function removePlayer(event) {
-        var userId = event._id;
-        var player = _game.players.getById(userId);
-        if(!player) {
-            console.error("Remove without knowing player");
-            return;
-        }
-
-        self.scene.remove(player.tyranosaur.object);
-
-        _game.players.delete(player);
-
-    }
-
-    var updateMultiplayerState_Throttler = _.throttle(updateMultiplayerState, GameConfig.updateInterval);
-    function updateMultiplayerState(tyranosaur) {
-        if(tyranosaur.hasMoved) {
-
-            var object = tyranosaur.object;
-
-            _game.multiplayer.emit( {
-                type:'player update',
-                params: {
-                    "position": object.position.toArray(),
-                    "rotation": object.rotation.toArray()
-                }
-            });
-            tyranosaur.hasMoved = false;
-        }
-    }
 
     constructor();
+
+    this._updateMultiplayerState_Throttler = _.throttle(this.updateMultiplayerState, GameConfig.updateInterval);
 }
+
+// Callback a chaque render
+SceneManager.prototype.step = function() {
+
+    if(!this._sceneReady) return;
+
+    this._cameraController.placeCamera();
+
+    this.checkIfICollide();
+
+    this._updateMultiplayerState_Throttler();
+};
+
+// Remplissage de la scene avec les modèles
+SceneManager.prototype.populate = function() {
+
+    this.scene.add(this._game.myPlayer.tyranosaur.object);
+
+    this._cameraController = new CameraController(this.camera, this._game.myPlayer);
+
+    this.updateMultiplayerState(this._game.myPlayer.tyranosaur);
+
+    this._game.multiplayer.on('player new', this.addPlayer.bind(this));
+    this._game.multiplayer.on('player update', this.updatePlayer.bind(this));
+    this._game.multiplayer.on('player leave', this.removePlayer.bind(this));
+
+    this._sceneReady = true;
+};
+
+
+
+SceneManager.prototype.checkIfICollide = function() {
+    var players = this._game.players.getAll();
+
+    for (var i = 0; i < players.length; i++) {
+        var player = players[i];
+        if(player._id != this._game.myPlayer._id && this._game.myPlayer.tyranosaur.collideWith(player.tyranosaur)) {
+            this.eatPlayer(player);
+        }
+    }
+};
+
+SceneManager.prototype.eatPlayer = function(player) {
+    console.log("I ate" + player._id);
+
+    this._game.multiplayer.emit( {
+        type:'player eat',
+        params: player._id
+    });
+};
+
+SceneManager.prototype.addPlayer = function(event) {
+
+    var player = this._game.players.new();
+    player.createFromServer(event.player);
+    player.updateFromServer(event.player);
+
+    this.scene.add(player.tyranosaur.object);
+};
+
+SceneManager.prototype.updatePlayer = function(event) {
+    var userId = event.player._id;
+    var player = this._game.players.getById(userId);
+    if(!player) {
+        console.error("Update without knowing player");
+        return;
+    }
+    player.updateFromServer(event.player);
+};
+
+SceneManager.prototype.removePlayer = function(event) {
+    var userId = event._id;
+    var player = this._game.players.getById(userId);
+    if(!player) {
+        console.error("Remove without knowing player");
+        return;
+    }
+
+    this.scene.remove(player.tyranosaur.object);
+
+    this._game.players.delete(player);
+
+};
+
+SceneManager.prototype.updateMultiplayerState = function() {
+    var tyranosaur = this._game.myPlayer.tyranosaur;
+
+    if(tyranosaur.hasMoved) {
+
+        var object = tyranosaur.object;
+
+        this._game.multiplayer.emit( {
+            type:'player update',
+            params: {
+                "position": object.position.toArray(),
+                "rotation": object.rotation.toArray()
+            }
+        });
+        tyranosaur.hasMoved = false;
+    }
+};

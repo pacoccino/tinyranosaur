@@ -120,10 +120,6 @@ var Tyranosaur = (function() {
         this.object.rotation.copy(this.fromDirectionToRotation());
     };
 
-    Tyranosaur.prototype.moveFrame = function() {
-
-    };
-
     Tyranosaur.prototype.poo = function () {
         if(this._poos.length > 0) return;
 

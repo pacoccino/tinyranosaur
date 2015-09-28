@@ -5,7 +5,7 @@ describe('Players class', function() {
             var player = new Player(game);
             expect(player._id).toBeDefined();
             expect(player.name).toBe("");
-            expect(player.size).toBe(10);
+            expect(player.size).toBe(1);
             expect(player.tyranosaur).toBeDefined();
             expect(player.tyranosaur instanceof Tyranosaur).toBeTruthy();
         });

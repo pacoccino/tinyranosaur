@@ -1,6 +1,7 @@
-function CameraController(camera, tyranosaur) {
+function CameraController(camera, player) {
     this.camera = camera;
-    this.tyra = tyranosaur;
+    this.player = player;
+    this.tyra = player.tyranosaur;
 
     this.distance = this.destinationDistance();
     this.theta = this.destinationTheta();
@@ -10,6 +11,7 @@ function CameraController(camera, tyranosaur) {
 
 // Constants
 
+CameraController._PROP_DIST_SIZE_ = 100;
 CameraController._HIGH_ = 30;
 
 // Class Method
@@ -55,11 +57,9 @@ CameraController.prototype.computeNewDistance = function() {
 };
 
 CameraController.prototype.destinationDistance = function() {
-    var size = this.tyra.object.scale.x;
+    var size = this.player.size;
 
-    var prop = 100;
-
-    return size * prop;
+    return size * CameraController._PROP_DIST_SIZE_;
 };
 
 

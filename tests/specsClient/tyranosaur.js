@@ -23,13 +23,6 @@ describe('Tyranosaur class', function() {
         //expect(modelObject.rotation.y).toBe(-Math.PI/2);
     });
 
-    it('moveFrame', function() {
-        var tyra = new Tyranosaur(game);
-
-        tyra.moveFrame();
-
-    });
-
     it('getDirection', function() {
         var tyra = new Tyranosaur(game), direction;
 
