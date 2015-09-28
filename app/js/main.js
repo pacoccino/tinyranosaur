@@ -1,5 +1,4 @@
-var game;
-var _authentication, _gameContainer;
+var _game, _authentication, _gameContainer;
 
 
 // TODO waterfallize
@@ -21,16 +20,16 @@ function authenticate(callback) {
 
 function initGame() {
 
-    game = new Game(THREE);
+    _game = new Game();
 
 
-    _gameContainer = $("#game-container");
-    game.setContainer(_gameContainer);
+    _gameContainer = $("#_game-container");
+    _game.setContainer(_gameContainer);
 
     // TODO Rename
-    game.setAuthentication(_authentication);
+    _game.setAuthentication(_authentication);
 
-    game.init(function() {
+    _game.init(function() {
 
         animate();
     });
@@ -39,6 +38,6 @@ function initGame() {
 function animate() {
     requestAnimationFrame( animate );
 
-    game.renderLoop();
+    _game.renderLoop();
 }
 

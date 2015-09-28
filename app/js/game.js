@@ -1,5 +1,4 @@
-function Game(THREE) {
-
+function Game() {
 }
 
 
@@ -39,35 +38,9 @@ Game.prototype.init = function(readyCallback) {
 
     var self = this;
 
-    function loadModels(callback) {
+    var modelLoader = new ModelLoader();
 
-        var manager = new THREE.LoadingManager();
-        var loaderObj = new THREE.ObjectLoader(manager);
-
-        manager.onProgress = function ( item, loaded, total ) {
-
-            console.log( item, loaded, total );
-        };
-
-        var loadModel = function(index) {
-            if(index >= GameModels.length) {
-                callback && callback();
-                return;
-            }
-
-            var model = GameModels[index];
-            loaderObj.load( model.url, function ( object ) {
-                model.object = object;
-
-                index++;
-                loadModel(index);
-            });
-        };
-
-        loadModel(0);
-    }
-
-    loadModels(function() {
+    modelLoader.loadModels(function() {
 
         self.multiplayer.listen();
 
