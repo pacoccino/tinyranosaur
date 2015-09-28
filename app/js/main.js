@@ -22,11 +22,11 @@ function initGame() {
     _game = new Game();
 
 
-    _gameContainer = $("#_game-container");
-    _game.setContainer(_gameContainer);
+    _gameContainer = $("#game-container");
+    _game.container = _gameContainer;
 
     // TODO Rename
-    _game.setAuthentication(_authentication);
+    _game.authentication = _authentication;
 
     _game.init(function() {
 

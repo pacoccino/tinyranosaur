@@ -28,7 +28,7 @@ Player.prototype.updateFromServer = function(serverPlayer) {
 
     this.size = serverPlayer.size;
 
-    //object.scale.set(this.size, this.size, this.size);
+    object.scale.set(this.size, this.size, this.size);
 };
 
 

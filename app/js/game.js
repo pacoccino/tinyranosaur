@@ -1,16 +1,6 @@
 function Game() {
 }
 
-
-Game.prototype.setAuthentication = function(authentication) {
-
-    this.authentication = authentication;
-};
-Game.prototype.setContainer = function(container) {
-
-    this.container = container;
-};
-
 Game.prototype.onWindowResize = function() {
 
     this.sceneManager.camera.aspect = window.innerWidth / window.innerHeight;
