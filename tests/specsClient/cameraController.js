@@ -136,14 +136,16 @@ describe('CameraController', function() {
     });
 
     xit('computeNewDistance', function() {
-        expect(cameraController.computeNewDistance()).toBe(CameraController._PROP_DIST_SIZE_);
+        deltaT = 0.5;
+        // TODO
+        expect(cameraController.computeNewDistance(deltaT)).toBe(CameraController._PROP_DIST_SIZE_);
     });
 
     it('computeNewTheta', function() {
         fakePlayer.tyranosaur.direction = new THREE.Vector3(1,0,0);
         cameraController.theta = 0;
         deltaT = 0.5;
-        expect(cameraController.computeNewTheta()).toBe(-Math.PI/4);
+        expect(cameraController.computeNewTheta(deltaT)).toBe(-Math.PI/4);
     });
 
     it('findPositionFromTyra 1', function() {
