@@ -31,12 +31,11 @@ GameListener.prototype.listenEat = function(user) {
         userToEat = self.game.users.getById(userIdToEat);
         userToEat = userToEat || self.game.bots.getById(userIdToEat);
 
-        // TODO this calls ?
-        if (userToEat && user.canEat.apply(user, [userToEat])) {
+        if (userToEat && user.canEat(userToEat)) {
 
             self.game.io.emit('player leave', userIdToEat);
 
-            user.eat.apply(user, [userToEat]);
+            user.eat(userToEat);
             user.socket.emit('player update', user.toPublic());
 
             if(userToEat.bot) {
