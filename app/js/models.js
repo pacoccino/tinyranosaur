@@ -27,15 +27,11 @@ var ModelLoader = function() {
 ModelLoader.prototype.loadModels = function(callback) {
 
     // TODO Asyncify
-    var loader, self = this;
+    var self = this;
 
-    var loadModel = function(index) {
-        if(index >= GameModels.length) {
-            callback && callback();
-            return;
-        }
+    var loadModel = function(model, loaded) {
 
-        var model = GameModels[index];
+        var loader;
         switch(model.type) {
             case 'json':
                 loader = self.JSONLoader;
@@ -45,18 +41,19 @@ ModelLoader.prototype.loadModels = function(callback) {
                 break;
             default:
                 console.log('Unknown model format');
-                index++;
-                loadModel(index);
+                loaded();
                 return;
         }
 
         loader.load( model.url, function ( object ) {
             model.object = object;
 
-            index++;
-            loadModel(index);
+            loaded();
         });
     };
 
-    loadModel(0);
+    async.each(GameModels, loadModel, function() {
+
+        callback && callback();
+    });
 };

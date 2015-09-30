@@ -9,7 +9,8 @@
             "require.js": "requirejs/require.js",
             "jquery.js": "jquery/dist/jquery.js",
             "lodash.js": "lodash/lodash.js",
-            "firebase.js": "firebase/firebase.js"
+            "firebase.js": "firebase/firebase.js",
+            "async.js": "async/dist/async.js"
         }
     }
 }
