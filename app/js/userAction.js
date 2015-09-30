@@ -60,7 +60,7 @@ UserAction.prototype.updateActions = function() {
     }
 };
 
-
+// RENAME -> TRIGGER
 UserAction.prototype.registerListener = function(action, listener) {
     if(this.actions[action]) {
         if(!this.actions[action].listeners) {
@@ -107,4 +107,6 @@ UserAction.prototype.addListeners = function() {
             self.game.myPlayer.tyranosaur.resetMoveTime();
         }
     })
+
+    // TODO RESET TOUCHMOVE TIME / Activate triggers start & end
 };
