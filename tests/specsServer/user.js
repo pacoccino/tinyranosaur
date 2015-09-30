@@ -19,7 +19,7 @@ describe('User', function () {
         expect(user.position.length).to.equal(3);
         expect(user.rotation).to.exist;
         expect(user.rotation.length).to.equal(4)
-        expect(user.position[1]).to.equal(30);
+        expect(user.position[1]).to.equal(0);
         expect(user.rotation[3]).to.equal("XYZ");
     });
 

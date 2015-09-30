@@ -20,7 +20,7 @@ describe('Bot', function() {
         expect(bot.direction[2]).to.equal(1);
 
         expect(Math.abs(bot.position[0])).to.be.lte(Constants.mapSize.x);
-        expect(bot.position[1]).to.be.equal(30);
+        expect(bot.position[1]).to.be.equal(0);
         expect(Math.abs(bot.position[2])).to.be.lte(Constants.mapSize.y);
     });
 
