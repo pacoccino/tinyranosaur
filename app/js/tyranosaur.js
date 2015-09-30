@@ -67,10 +67,28 @@ var Tyranosaur = (function() {
         var material = new THREE.MeshLambertMaterial({color: color});
         this.modelObject.material = material;
     };
+    Tyranosaur.prototype.moveRelative = function(dx, dz) {
+
+        var moveVector = new THREE.Vector3(dx,0,dz);
+
+        var camera = this._game.getSceneManager().camera;
+        moveVector.applyAxisAngle(new THREE.Vector3(0,1,0), (camera.rotation.y - 3*Math.PI/2));
+
+        this.direction = moveVector;
+
+        var delta = this.moveTimer.getDelta();
+
+        var movement = new THREE.Vector3();
+        movement.copy(this.direction);
+        movement.multiplyScalar(delta * maxVelocity);
+
+        this.object.position.add(movement);
+        this.object.rotation.copy(this.fromDirectionToRotation());
+    };
 
     Tyranosaur.prototype.moveAsKeyboard = function(keys) {
 
-        var keyboardVector = new THREE.Vector3(0,0,0);
+        var dx=0, dz=0;
 
         if(!keys.length) {
             keys = [keys];
@@ -83,41 +101,29 @@ var Tyranosaur = (function() {
 
             switch (key) {
                 case 'UP':
-                    keyboardVector.x += 1;
+                    dx += 1;
                     break;
                 case 'DOWN':
-                    keyboardVector.x += -1;
+                    dx += -1;
                     break;
                 case 'LEFT':
-                    keyboardVector.z += -1;
+                    dz += -1;
                     break;
                 case 'RIGHT':
-                    keyboardVector.z += 1;
+                    dz += 1;
                     break;
             }
         }
 
-        if(keyboardVector.z !== 0) {
-            this.lastStrafe = keyboardVector.z;
+        if(dz !== 0) {
+            this.lastStrafe = dz;
         }
-        else if(keyboardVector.x === -1) {
+        else if(dx === -1) {
             this.lastStrafe = this.lastStrafe || 1;
-            keyboardVector.z = this.lastStrafe * 0.1;
+            dz = this.lastStrafe * 0.1;
         }
 
-        var camera = this._game.getSceneManager().camera;
-        keyboardVector.applyAxisAngle(new THREE.Vector3(0,1,0), (camera.rotation.y - 3*Math.PI/2));
-
-        this.direction = keyboardVector;
-
-        var delta = this.moveTimer.getDelta();
-
-        var movement = new THREE.Vector3();
-        movement.copy(this.direction);
-        movement.multiplyScalar(delta * maxVelocity);
-
-        this.object.position.add(movement);
-        this.object.rotation.copy(this.fromDirectionToRotation());
+        this.moveRelative(dx, dz);
     };
 
     Tyranosaur.prototype.poo = function () {

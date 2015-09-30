@@ -26,7 +26,6 @@ var ModelLoader = function() {
 
 ModelLoader.prototype.loadModels = function(callback) {
 
-    // TODO Asyncify
     var self = this;
 
     var loadModel = function(model, loaded) {

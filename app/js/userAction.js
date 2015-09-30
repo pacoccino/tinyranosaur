@@ -88,6 +88,10 @@ UserAction.prototype.doActions = function() {
     if(this.actions['MOVE'].active) {
         this.game.myPlayer.tyranosaur.moveAsKeyboard(this.actions['MOVE'].activeValues);
     }
+
+    if(this.userInput.touchData) {
+        this.game.myPlayer.tyranosaur.moveRelative(this.userInput.touchData.devY, this.userInput.touchData.devX);
+    }
 };
 
 

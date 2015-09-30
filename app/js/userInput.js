@@ -5,8 +5,6 @@ function UserInput (domElement) {
 
     self.domElement = domElement;
 
-    self.ed = new THREE.EventDispatcher();
-
     self.KEYS = {
         UP: {
             active: false,
@@ -34,6 +32,8 @@ function UserInput (domElement) {
             deltaY: 0
         }
     };
+
+    self.touchData = null;
 
     function onMouseDown(event) {
         self.KEYS.MOUSE.active = true;
@@ -74,14 +74,51 @@ function UserInput (domElement) {
             event.preventDefault();
     }
 
+    function onTouchStart(event) {
+
+        var touch = event.touches[0];
+
+        if(touch)
+            self.touch('start', touch.pageX, touch.pageY);
+
+        event.preventDefault();
+    };
+
+    function onTouchEnd(event) {
+
+        var touch = event.touches[0];
+
+        self.touch('end');
+
+        event.preventDefault();
+    };
+
+    function onTouchMove(event) {
+
+        var touch = event.touches[0];
+
+        if(touch)
+            self.touch('move', touch.pageX, touch.pageY);
+
+        event.preventDefault();
+    };
+
+    // Ignore right click
     self.domElement.addEventListener('contextmenu', ignore, false);
 
+    // Mouse
     self.domElement.addEventListener('mousedown', onMouseDown, false);
     self.domElement.addEventListener('mouseup', onMouseUp, false);
     self.domElement.addEventListener('mousemove', onMouseMove, false);
     self.domElement.addEventListener('mousewheel', onMouseWheel, false);
     self.domElement.addEventListener('DOMMouseScroll', onMouseWheel, false); // firefox
 
+    // Touch
+    self.domElement.addEventListener('touchstart', onTouchStart, false);
+    self.domElement.addEventListener('touchmove', onTouchMove, false);
+    self.domElement.addEventListener('touchend', onTouchMove, false);
+
+    // Keyboard
     window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('keyup', onKeyUp, false);
     window.addEventListener('blur', dropKeys, false);
@@ -92,9 +129,52 @@ function UserInput (domElement) {
 UserInput.prototype.dropKeys = function() {
 
     for (var keyName in this.KEYS) {
-        if (this.KEYS.hasOwnProperty(keyName))
+        if (this.KEYS.hasOwnProperty(keyName)) {
             var key = this.KEYS[keyName];
-        key.active = false;
+            key.active = false;
+        }
+    }
+
+    this.touchData = null;
+};
+
+UserInput.prototype.touch = function(action, x, y) {
+
+    var self = this;
+
+    function wrapDistance(distance) {
+
+        var max = 100;
+
+        return Math.min(distance, max)/max;
+    }
+
+    function initTouch(x,y) {
+        self.touchData = {};
+        self.touchData.initX = x;
+        self.touchData.initY = y;
+    }
+    function updateTouch(x,y) {
+        self.touchData.x = x;
+        self.touchData.y = y;
+        self.touchData.devX = wrapDistance(  x - self.touchData.initX );
+        self.touchData.devY = wrapDistance(-(y - self.touchData.initY));
+        console.log(self.touchData.initX)
+        console.log(self.touchData.x)
+    }
+    function deleteTouch() {
+        self.touchData = null;
+    }
+
+    if(action === 'start') {
+        initTouch(x,y);
+        updateTouch(x,y);
+    }
+    else if(action === 'move') {
+        updateTouch(x,y);
+    }
+    else if(action === 'end') {
+        deleteTouch();
     }
 };
 
@@ -138,7 +218,7 @@ Number.isInteger = Number.isInteger || function(value) {
         return typeof value === "number" &&
             isFinite(value) &&
             Math.floor(value) === value;
-    };
+};
 
 UserInput.isSameCode = function(eventCode, keyCode) {
     var keyCharCode = 0;
