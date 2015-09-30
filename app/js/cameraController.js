@@ -34,9 +34,11 @@ CameraController.prototype.placeCamera = function() {
 };
 
 CameraController.prototype.findPositionFromTyra = function() {
-    this.distance = this.computeNewDistance();
+    var deltaTime = this.moveTimer.getDelta();
 
-    this.theta = CameraController.getPositiveAngle(this.computeNewTheta());
+    this.distance = this.computeNewDistance(deltaTime);
+
+    this.theta = CameraController.getPositiveAngle(this.computeNewTheta(deltaTime));
 
     var addVect = CameraController.getVectorFromPolar(this.distance, this.theta);
 
@@ -49,10 +51,10 @@ CameraController.prototype.findPositionFromTyra = function() {
 /////////////////////////////////////////////
 // Distance
 
-CameraController.prototype.computeNewDistance = function() {
+CameraController.prototype.computeNewDistance = function(deltaTime) {
     var deltaD = this.destinationDistance() - this.distance;
 
-    var deltaDTimed = deltaD * this.moveTimer.getDelta();
+    var deltaDTimed = deltaD * deltaTime;
     return this.distance + deltaDTimed;
 };
 
@@ -66,11 +68,11 @@ CameraController.prototype.destinationDistance = function() {
 /////////////////////////////////////////////
 // Rotation
 
-CameraController.prototype.computeNewTheta = function() {
+CameraController.prototype.computeNewTheta = function(deltaTime) {
 
     var deltaTheta = this.deltaTheta();
 
-    var deltaThetaTimed = deltaTheta * this.moveTimer.getDelta();
+    var deltaThetaTimed = deltaTheta * deltaTime;
 
     return CameraController.angleAdd(deltaThetaTimed, this.theta);
 };
