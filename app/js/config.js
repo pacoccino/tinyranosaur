@@ -1,3 +1,6 @@
+var PlatformConfig = {};
+PlatformConfig.Domain = "tinyranosaur.herokuapp.com";
+
 var GameConfig = {};
 
 GameConfig.updateInterval = 30;
