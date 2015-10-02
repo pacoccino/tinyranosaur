@@ -26,7 +26,7 @@ Player.prototype.updateFromServer = function(serverPlayer) {
     object.position.fromArray(serverPlayer.position);
     object.rotation.fromArray(serverPlayer.rotation);
 
-    this.size = serverPlayer.size;
+    //this.size = serverPlayer.size;
 
     object.scale.set(this.size, this.size, this.size);
 };
