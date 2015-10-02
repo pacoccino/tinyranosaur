@@ -7,6 +7,8 @@
     "jquery": "",
     "lodash": "~3.10.0",
     "firebase": "~2.2.9",
-    "async": "~1.4.2"
+    "async": "~1.4.2",
+    "stats.js": "*",
+    "dat.gui": "*"
   }
 }

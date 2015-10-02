@@ -10,6 +10,8 @@
             "jquery.js": "jquery/dist/jquery.js",
             "lodash.js": "lodash/lodash.js",
             "firebase.js": "firebase/firebase.js",
+            "dat.gui.js": "dat.gui/dat.gui.js",
+            "stats.js": "stats.js/build/stats.min.js",
             "async.js": "async/dist/async.js"
         }
     }
