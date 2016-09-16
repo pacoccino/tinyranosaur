@@ -37,7 +37,7 @@ $ npm start
 * Intro scene
 * Bundling
 * Poo to slow down ennemies
-* Eat ennemies
+* Eat ennemies (ok)
 * Move players with animations
 
 **SERVER**
@@ -46,6 +46,6 @@ $ npm start
 
 **Next**
 * Mouth/2nd finger on mobile controlling camera
-* Camera smoothly following player
+* Camera smoothly following player (ok)
 * Fix socket errors, disconnection, multiple connections
 * Forget time without keypress
